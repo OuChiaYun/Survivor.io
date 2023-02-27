@@ -53,8 +53,8 @@ void CGameStateRun::OnMove()							// ²¾°Ê¹CÀ¸¤¸¯À
 
 	if (phase == 6) {
 		if (ball.GetSelectShowBitmap() == 0) {
-			ball.ToggleAnimation();
 			ball.SetAnimation(1000, TRUE);
+			ball.ToggleAnimation();
 		}
 		//if (ball.GetSelectShowBitmap() == 3) {
 		//; ; ball.SetAnimation(0, TRUE);
@@ -152,7 +152,6 @@ void CGameStateRun::OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags)
 			}
 		}
 	}
-
 
 	if (nChar == VK_UP) {
 		character.SetTopLeft(character.Left(), character.Top() - 10);
