@@ -49,16 +49,13 @@ void CGameStateRun::OnMove()							// ²¾°Ê¹CÀ¸¤¸¯À
 			}
 		}
 	}
-
-
 	if (phase == 6) {
 		if (ball.GetSelectShowBitmap() == 0) {
-			ball.SetAnimation(1000, TRUE);
+			//ball.SetAnimation(1000,TRUE);
 			ball.ToggleAnimation();
+		
 		}
-		//if (ball.GetSelectShowBitmap() == 3) {
-		//; ; ball.SetAnimation(0, TRUE);
-		//}
+		
 	}
 }
 
@@ -154,22 +151,22 @@ void CGameStateRun::OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags)
 	}
 
 	if (nChar == VK_UP) {
-		character.SetTopLeft(character.Left(), character.Top() - 10);
+		character.SetTopLeft(character.Left(), character.Top() - 15);
 		//character.Height;
 	}
 
 	if (nChar == VK_DOWN) {
-		character.SetTopLeft(character.Left(), character.Top() + 10);
+		character.SetTopLeft(character.Left(), character.Top() + 15);
 		//character.Height;
 	}
 
 	if (nChar == VK_RIGHT) {
-		character.SetTopLeft(character.Left() + 10, character.Top());
+		character.SetTopLeft(character.Left() + 15, character.Top());
 		//character.Height;
 	}
 
 	if (nChar == VK_LEFT) {
-		character.SetTopLeft(character.Left() - 10, character.Top());
+		character.SetTopLeft(character.Left() - 15, character.Top());
 		//character.Height;
 	}
 }
@@ -224,15 +221,16 @@ void CGameStateRun::show_image_by_phase() {
 		}
 		if (phase == 6 && sub_phase == 1) {
 			ball.ShowBitmap();
+			ball.SetAnimation(1000, TRUE);
 			//ball.ToggleAnimation();
-			//ball.SetAnimation(500, FALSE);
+			//ball.SetAnimation(1000, TRUE);
 			//if (!_once) isAnimation = true;
 			//once = _once;
-			//delayCount = delay; setanmate
+			//delayCount = delay; setanmate 
 
 			//selector = 0;
 			//isAnimation = true;
-			//isAnimationDone = false;
+			//isAnimationDone = false; tf
 			//b  toggle
 		}
 	}
