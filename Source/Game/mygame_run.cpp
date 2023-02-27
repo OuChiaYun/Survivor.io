@@ -152,10 +152,7 @@ void CGameStateRun::OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags)
 			}
 		}
 	}
-}
 
-void CGameStateRun::OnKeyUp(UINT nChar, UINT nRepCnt, UINT nFlags)
-{
 
 	if (nChar == VK_UP) {
 		character.SetTopLeft(character.Left(), character.Top() - 10);
@@ -176,6 +173,10 @@ void CGameStateRun::OnKeyUp(UINT nChar, UINT nRepCnt, UINT nFlags)
 		character.SetTopLeft(character.Left() - 10, character.Top());
 		//character.Height;
 	}
+}
+
+void CGameStateRun::OnKeyUp(UINT nChar, UINT nRepCnt, UINT nFlags)
+{
 }
 
 void CGameStateRun::OnLButtonDown(UINT nFlags, CPoint point)  // 處理滑鼠的動作
