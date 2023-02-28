@@ -31,11 +31,6 @@ void CGameStateRun::OnMove()							// 移動遊戲元素
 	//2. character.Top()+character.Height(), character.Left()
 	//3. character.Top(), character.Left()+ character.Width()
 	//4. character.Top() + character.Height(), character.Left()
-	//OnKeyDown(VK_RETURN, 0, 0);
-	//if (character.Top() + character.Height() >= chest_and_key.Top() && character.Top() + character.Height() <= chest_and_key.Top()+ chest_and_key.Height()
-		//&& character.Left() + character.Width() >= chest_and_key.Left() && character.Left() + character.Width() <= chest_and_key.Left()+ chest_and_key.Width()) {
-		//chest_and_key.SelectShowBitmap(1);
-	//}
 	if (character.Top() + character.Height() >= chest_and_key.Top()
 		&& character.Left() + character.Width() >= chest_and_key.Left()) {
 		chest_and_key.SelectShowBitmap(1);
@@ -49,14 +44,7 @@ void CGameStateRun::OnMove()							// 移動遊戲元素
 			}
 		}
 	}
-	if (phase == 6) {
-		if (ball.GetSelectShowBitmap() == 0) {
-			//ball.SetAnimation(1000,TRUE);
-			ball.ToggleAnimation();
-		
-		}
-		
-	}
+	
 }
 
 void CGameStateRun::OnInit()  								// 遊戲的初值及圖形設定
@@ -88,6 +76,7 @@ void CGameStateRun::OnInit()  								// 遊戲的初值及圖形設定
 
 	ball.LoadBitmapByString({ "resources/ball-3.bmp", "resources/ball-2.bmp", "resources/ball-1.bmp", "resources/ball-ok.bmp" });
 	ball.SetTopLeft(150, 430);
+	ball.SetAnimation(100, FALSE);
 
 	for (int i = 0; i < 3; i++) {
 		door[i].LoadBitmapByString({ "resources/door_close.bmp", "resources/door_open.bmp" }, RGB(255, 255, 255));
@@ -220,8 +209,15 @@ void CGameStateRun::show_image_by_phase() {
 			}
 		}
 		if (phase == 6 && sub_phase == 1) {
+		
+
 			ball.ShowBitmap();
-			ball.SetAnimation(1000, TRUE);
+			if (ball.IsAnimationDone() && ball.IsAnimation()) {
+			
+				ball.SetAnimation(1000, TRUE);
+				ball.ToggleAnimation();
+			}
+
 			//ball.ToggleAnimation();
 			//ball.SetAnimation(1000, TRUE);
 			//if (!_once) isAnimation = true;
