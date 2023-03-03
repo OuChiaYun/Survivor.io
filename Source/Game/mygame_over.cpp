@@ -18,8 +18,8 @@ CGameStateOver::CGameStateOver(CGame *g): CGameState(g)
 }
 
 void CGameStateOver::OnMove()
-{
-	
+{	
+
 }
 
 void CGameStateOver::OnBeginState()
@@ -38,7 +38,7 @@ void CGameStateOver::OnShow()
 
 void CGameStateOver::OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags)
 {
-	
+	exit(0);
 }
 
 
