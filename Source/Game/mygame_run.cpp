@@ -27,24 +27,29 @@ void CGameStateRun::OnBeginState()
 
 void CGameStateRun::OnMove()							// 移動遊戲元素
 {
-	//1. character.Top(), character.Left()
-	//2. character.Top()+character.Height(), character.Left()
-	//3. character.Top(), character.Left()+ character.Width()
-	//4. character.Top() + character.Height(), character.Left()
-	if (character.Top() + character.Height() >= chest_and_key.Top()
-		&& character.Left() + character.Width() >= chest_and_key.Left()) {
+	if (character.Top() + character.Height() >= 430 && 
+		( (150 <= character.Left() && character.Left() <= 150 + chest_and_key.Width() ) 
+			|| (150 <= character.Left() + character.Width() && character.Left() + character.Width() <= 150 + chest_and_key.Width()) ) ){
 		chest_and_key.SelectShowBitmap(1);
 	}
-
-	if (phase == 5) {
-		for (int i = 0; i < 3; i++) {
-			if (character.Top() + character.Height() >= door[i].Top() && character.Top() + character.Height() <= door[i].Top() + chest_and_key.Height()
-				&& character.Left() + character.Width() >= door[i].Left() && character.Left() + character.Width() <= door[i].Left() + chest_and_key.Width()) {
-				door[i].SelectShowBitmap(1);
-			}
+	if(phase == 5){
+		if (character.Left() + character.Width() >= door[0].Left()) {
+			door[0].SelectShowBitmap(1);
+		}
+		if (character.Left() + character.Width() >= door[1].Left()) {
+			door[1].SelectShowBitmap(1);
+		}
+		if (character.Left() + character.Width() >= door[2].Left()) {
+			door[2].SelectShowBitmap(1);
+	}
+	}
+	if (phase == 6) {
+		if (ball.IsAnimationDone() && ball.IsAnimation()) {
+			ball.SetAnimation(1000, TRUE);
+			ball.ShowBitmap();
+			ball.ToggleAnimation();
 		}
 	}
-	
 }
 
 void CGameStateRun::OnInit()  								// 遊戲的初值及圖形設定
@@ -73,11 +78,11 @@ void CGameStateRun::OnInit()  								// 遊戲的初值及圖形設定
 
 	bee.LoadBitmapByString({ "resources/bee_1.bmp", "resources/bee_2.bmp" });
 	bee.SetTopLeft(462, 265);
+	bee.SetAnimation(2, 0);
 
 	ball.LoadBitmapByString({ "resources/ball-3.bmp", "resources/ball-2.bmp", "resources/ball-1.bmp", "resources/ball-ok.bmp" });
 	ball.SetTopLeft(150, 430);
-	ball.SetAnimation(100, FALSE);
-
+	ball.SetAnimation(200, FALSE);
 	for (int i = 0; i < 3; i++) {
 		door[i].LoadBitmapByString({ "resources/door_close.bmp", "resources/door_open.bmp" }, RGB(255, 255, 255));
 		door[i].SetTopLeft(462 - 100 * i, 265);
@@ -138,31 +143,24 @@ void CGameStateRun::OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags)
 			}
 		}
 	}
-
-	if (nChar == VK_UP) {
-		character.SetTopLeft(character.Left(), character.Top() - 15);
-		//character.Height;
+	else if (nChar == VK_DOWN) {
+		character.SetTopLeft(character.Left(), character.Top() + 20);
 	}
-
-	if (nChar == VK_DOWN) {
-		character.SetTopLeft(character.Left(), character.Top() + 15);
-		//character.Height;
+	else if (nChar == VK_UP) {
+		character.SetTopLeft(character.Left(), character.Top() - 20);
 	}
-
-	if (nChar == VK_RIGHT) {
-		character.SetTopLeft(character.Left() + 15, character.Top());
-		//character.Height;
+	else if (nChar == VK_LEFT) {
+		character.SetTopLeft(character.Left() - 20, character.Top());
 	}
-
-	if (nChar == VK_LEFT) {
-		character.SetTopLeft(character.Left() - 15, character.Top());
-		//character.Height;
+	else if (nChar == VK_RIGHT) {
+		character.SetTopLeft(character.Left() + 20, character.Top());
 	}
 }
 
 void CGameStateRun::OnKeyUp(UINT nChar, UINT nRepCnt, UINT nFlags)
 {
 }
+
 
 void CGameStateRun::OnLButtonDown(UINT nFlags, CPoint point)  // 處理滑鼠的動作
 {
@@ -200,8 +198,6 @@ void CGameStateRun::show_image_by_phase() {
 		}
 		if (phase == 4 && sub_phase == 1) {
 			bee.ShowBitmap();
-			//bee.ToggleAnimation();
-			bee.SetAnimation(200,FALSE);
 		}
 		if (phase == 5 && sub_phase == 1) {
 			for (int i = 0; i < 3; i++) {
@@ -209,35 +205,21 @@ void CGameStateRun::show_image_by_phase() {
 			}
 		}
 		if (phase == 6 && sub_phase == 1) {
-		
-
 			ball.ShowBitmap();
-			if (ball.IsAnimationDone() && ball.IsAnimation()) {
-			
-				ball.SetAnimation(1000, TRUE);
-				ball.ToggleAnimation();
-			}
-
-			//ball.ToggleAnimation();
-			//ball.SetAnimation(1000, TRUE);
-			//if (!_once) isAnimation = true;
-			//once = _once;
-			//delayCount = delay; setanmate 
-
-			//selector = 0;
-			//isAnimation = true;
-			//isAnimationDone = false; tf
-			//b  toggle
+			//ball.SetAnimation(1000, 0);
+			//ball.ShowBitmap();
+			//if (ball.GetSelectShowBitmap() == 3) {
+				//ball.SetAnimation(0, 1);
+			//}
 		}
 	}
-
 }
 
 void CGameStateRun::show_text_by_phase() {
 	CDC *pDC = CDDraw::GetBackCDC();
 	CFont* fp;
 
-	CTextDraw::ChangeFontLog(pDC, fp, 13, "微軟正黑體", RGB(0, 0, 0), 800);
+	CTextDraw::ChangeFontLog(pDC, fp, 21, "微軟正黑體", RGB(0, 0, 0), 800);
 
 	if (phase == 1 && sub_phase == 1) {
 		CTextDraw::Print(pDC, 237, 128, "修改你的主角！");
@@ -301,5 +283,5 @@ bool CGameStateRun::validate_phase_5() {
 }
 
 bool CGameStateRun::validate_phase_6() {
-	return ball.IsAnimationDone() && !ball.IsAnimation(); //tf
+	return ball.IsAnimationDone() && !ball.IsAnimation();
 }
