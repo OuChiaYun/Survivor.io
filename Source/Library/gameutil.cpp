@@ -422,4 +422,6 @@ namespace game_framework {
 		fp = pDC->SelectObject(&f);
 	}
 
+
+
 }         

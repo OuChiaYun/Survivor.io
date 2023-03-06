@@ -92,11 +92,13 @@ namespace game_framework {
 		void OnShow();		// 顯示這個狀態的遊戲畫面
 	private:
 		CMovingBitmap background;
+		CMovingBitmap background2;
 		CMovingBitmap character;
 		CMovingBitmap opera;
 		CMovingBitmap goal;
 		void show_img();
 		void show_text();
+		void item_move(CMovingBitmap &item);
 	};
 
 	/////////////////////////////////////////////////////////////////////////////

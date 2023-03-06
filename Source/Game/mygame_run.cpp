@@ -28,20 +28,24 @@ void CGameStateRun::OnBeginState()
 void CGameStateRun::OnMove()							// 移動遊戲元素
 {
 
-	background.SetTopLeft(background.GetLeft() - int((opera.GetLeft()- 437)*0.2), background.GetTop() - int((opera.GetTop() - 682)*0.2));
-	
+	//background.SetTopLeft(background.GetLeft() - int((opera.GetLeft()- 437)*0.2), background.GetTop() - int((opera.GetTop() - 682)*0.2));
+	item_move(background);
+	item_move(background2);
 }
 
 void CGameStateRun::OnInit()  								// 遊戲的初值及圖形設定
 {
-	background.LoadBitmapByString({"Resources/Hills.bmp"});
+	background.LoadBitmapByString({"Resources/background2.bmp"});
 	background.SetTopLeft(0, 0);
+	background2.LoadBitmapByString({ "Resources/background2.bmp" });
+	background2.SetTopLeft(0, 4000);
+
 	
 	
 	character.LoadBitmapByString({ "Resources/witch.bmp" },RGB(255,255,255));
 	character.SetTopLeft(481, 252);
 
-	opera.LoadBitmapByString({ "Resources/operator.bmp" }, RGB(255, 255, 255));
+	opera.LoadBitmapByString({ "Resources/operator2.bmp" }, RGB(105, 106, 106));
 	opera.SetTopLeft(437, 682);
 
 	goal.LoadBitmapByString({ "Resources/goal.bmp" }, RGB(255, 255, 255));
@@ -136,12 +140,35 @@ void CGameStateRun::OnShow()
 
 void CGameStateRun::show_img() {
 	background.ShowBitmap();
+	background2.ShowBitmap();
 	character.ShowBitmap();
 	opera.ShowBitmap();
-	goal.ShowBitmap();
+	//goal.ShowBitmap();
 
 }
 
 void CGameStateRun::show_text() {
 	
+}
+
+void CGameStateRun::item_move(CMovingBitmap &item) {
+	if (item.GetLeft() >= character.GetLeft()) {
+		if ((opera.GetLeft() - 437) > 0) {
+			item.SetTopLeft(item.GetLeft() - int((opera.GetLeft() - 437)*0.2), item.GetTop() - int((opera.GetTop() - 682)*0.2));
+		}
+		else {
+			item.SetTopLeft(item.GetLeft(), item.GetTop() - int((opera.GetTop() - 682)*0.2));
+		}
+	}
+	else if (item.GetLeft() + item.GetWidth() <= character.GetLeft()+character.GetWidth()) {
+		if ((opera.GetLeft() - 437) < 0) {
+			item.SetTopLeft(item.GetLeft() - int((opera.GetLeft() - 437)*0.2), item.GetTop() - int((opera.GetTop() - 682)*0.2));
+		}
+		else {
+			item.SetTopLeft(item.GetLeft(), item.GetTop() - int((opera.GetTop() - 682)*0.2));
+		}
+	}
+	else {
+		item.SetTopLeft(item.GetLeft() - int((opera.GetLeft() - 437)*0.2), item.GetTop() - int((opera.GetTop() - 682)*0.2));
+	}
 }
