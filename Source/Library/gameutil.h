@@ -121,7 +121,6 @@ namespace game_framework {
 		/* Toggle function */
 		void  ToggleAnimation();
 
-
 	protected:
 		//! 當前幀的索引值。
 		int frameIndex = 0;

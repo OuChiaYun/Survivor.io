@@ -96,8 +96,10 @@ namespace game_framework {
 		CMovingBitmap character;
 		CMovingBitmap opera;
 		CMovingBitmap goal;
+		CMovingBitmap energy[100];
 		void show_img();
 		void show_text();
+		void background_move(CMovingBitmap &item);
 		void item_move(CMovingBitmap &item);
 	};
 
