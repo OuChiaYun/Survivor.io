@@ -46,12 +46,12 @@ void CGameStateRun::OnMove()							// 移動遊戲元素
 void CGameStateRun::OnInit()  								// 遊戲的初值及圖形設定
 {
 	background.LoadBitmapByString({"Resources/background.bmp"});
-	background.SetTopLeft(0, 0);
+	background.SetTopLeft(-1500, -1500);
 	background2.LoadBitmapByString({ "Resources/background.bmp" });
 	background2.SetTopLeft(0, 4000);
 
 	character.LoadBitmapByString({ "Resources/witch.bmp" },RGB(255,255,255));
-	character.SetTopLeft(481, 252);
+	character.SetTopLeft(461, 252);
 
 	opera.LoadBitmapByString({ "Resources/operator.bmp" }, RGB(105, 106, 106));
 	opera.SetTopLeft(437, 682);
@@ -63,8 +63,8 @@ void CGameStateRun::OnInit()  								// 遊戲的初值及圖形設定
 
 	srand((unsigned)time(NULL));
 	/* 指定亂數範圍 */
-	int min = 0;
-	int max = 1100;
+	int min = -1480;
+	int max = 1480;
 	for (int i = 0; i < 100; i++) {
 		energy[i].LoadBitmapByString({ "Resources/energy.bmp", "Resources/energy_ignore.bmp" }, RGB(255, 255, 255));
 		/* 產生 [min , max] 的整數亂數 */
