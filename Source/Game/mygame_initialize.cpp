@@ -47,11 +47,13 @@ void CGameStateInit::OnLButtonDown(UINT nFlags, CPoint point)
 		if (select_scene1.GetLeft() <= point.x && point.x <= select_scene1.GetLeft() + select_scene1.GetWidth()
 			&& select_scene1.GetTop() <= point.y && point.y <= select_scene1.GetTop() + 300) {
 			selected1.SetFrameIndexOfBitmap(1);
+			Sleep(1000);
 		}
 		else {
 			selected1.SetFrameIndexOfBitmap(0);
 		}
 	}
+	select = 1;
 	GotoGameState(GAME_STATE_RUN);		// 切換至GAME_STATE_RUN
 }
 

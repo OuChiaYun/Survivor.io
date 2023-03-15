@@ -62,6 +62,7 @@ namespace game_framework {
 		void OnBeginState();							// 設定每次重玩所需的變數
 		void OnKeyUp(UINT, UINT, UINT); 				// 處理鍵盤Up的動作
 		void OnLButtonDown(UINT nFlags, CPoint point);  // 處理滑鼠的動作
+		friend CGameStateRun;
 	protected:
 		void OnShow();									// 顯示這個狀態的遊戲畫面
 	private:
@@ -70,6 +71,7 @@ namespace game_framework {
 		CMovingBitmap select_scene2;
 		CMovingBitmap selected1;
 		CMovingBitmap selected2;
+		int select = 0;
 	};
 
 	/////////////////////////////////////////////////////////////////////////////
@@ -101,10 +103,12 @@ namespace game_framework {
 		CMovingBitmap goal;
 		CMovingBitmap energy[100];
 		CMovingBitmap energy_bar;
+		CMovingBitmap bullet;
 		void show_img();
 		void show_text();
 		void background_move(CMovingBitmap &item);
 		void item_move(CMovingBitmap &item);
+		void attack_bullet();
 	};
 
 	/////////////////////////////////////////////////////////////////////////////

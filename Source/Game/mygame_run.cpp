@@ -44,10 +44,18 @@ void CGameStateRun::OnMove()							// 移動遊戲元素
 
 void CGameStateRun::OnInit()  								// 遊戲的初值及圖形設定
 {
-	background.LoadBitmapByString({ "Resources/Hills.bmp" });
-	background.SetTopLeft(0, 0);
-	background2.LoadBitmapByString({ "Resources/Hills.bmp" });
-	background2.SetTopLeft(0, 4000);
+	if (select == 0) {
+		background.LoadBitmapByString({ "Resources/Hills.bmp" });
+		background.SetTopLeft(0, 0);
+		background2.LoadBitmapByString({ "Resources/Hills.bmp" });
+		background2.SetTopLeft(0, 4000);
+	}
+	else {
+		background.LoadBitmapByString({ "Resources/background.bmp" });
+		background.SetTopLeft(0, 0);
+		background2.LoadBitmapByString({ "Resources/background.bmp" });
+		background2.SetTopLeft(0, 4000);
+	}
 
 	character.LoadBitmapByString({ "Resources/witch.bmp" }, RGB(255, 255, 255));
 	character.SetTopLeft(481, 252);
@@ -71,6 +79,9 @@ void CGameStateRun::OnInit()  								// 遊戲的初值及圖形設定
 		int y = rand() % (max - min + 1) + min;
 		energy[i].SetTopLeft(x, y);
 	}
+
+	bullet.LoadBitmapByString({ "Resources/bullet.bmp" }, RGB(255, 255, 255));
+	bullet.SetTopLeft(481, 210);
 }
 
 void CGameStateRun::OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags)
@@ -116,7 +127,6 @@ void CGameStateRun::OnMouseMove(UINT nFlags, CPoint point)	// 處理滑鼠的動
 		opera.SetTopLeft(437, 682);
 	}
 	else {
-
 		if (point.x < 517) {
 			if (opera.GetLeft() > 380) {
 				opera.SetTopLeft((opera.GetLeft() - 6), opera.GetTop());
@@ -166,6 +176,7 @@ void CGameStateRun::show_img() {
 		energy[i].ShowBitmap();
 	}
 	energy_bar.ShowBitmap();
+	bullet.ShowBitmap();
 }
 
 void CGameStateRun::show_text() {
@@ -231,4 +242,10 @@ void CGameStateRun::item_move(CMovingBitmap &item) {
 		energy_bar.SetFrameIndexOfBitmap(energy_bar.GetFrameIndexOfBitmap() + 1);
 	}
 
+}
+
+void CGameStateRun::attack_bullet() {
+	while (bullet.GetTop() >= 0) {
+		bullet.SetTopLeft(481, bullet.GetTop()-1);
+	}
 }
