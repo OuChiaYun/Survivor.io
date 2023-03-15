@@ -234,6 +234,21 @@ namespace game_framework {
 		圖片顯示幀的索引值以 0 開始。
 		\param frameIndex 圖片顯示幀的索引值。
 	*/
+	//////////////////////////////
+	void CMovingBitmap::set_center(int x, int y) {
+
+
+		center_x = x;
+		center_y = y;
+	}
+	int CMovingBitmap::get_center_x() {
+		return center_x;
+	
+	};
+	int CMovingBitmap::get_center_y() {
+		return center_y;
+	}
+	/////////////////////////////
 	void CMovingBitmap::SetFrameIndexOfBitmap(int frameIndex) {
 		GAME_ASSERT(frameIndex < (int) surfaceID.size(), "選擇圖片時索引出界");
 		this->frameIndex = frameIndex;

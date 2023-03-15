@@ -100,7 +100,10 @@ namespace game_framework {
 		/* Show the bitmap with or without factor. */
 		void  ShowBitmap();					// 將圖貼到螢幕
 		void  ShowBitmap(double factor);	// 將圖貼到螢幕 factor < 1時縮小，>1時放大。注意：需要VGA卡硬體的支援，否則會很慢
-		
+		//
+		void set_center(int x, int y);
+		int get_center_x();
+		int get_center_y();
 		/* Getter */
 		int   GetFrameIndexOfBitmap();
 		int   GetFrameSizeOfBitmap();
@@ -143,6 +146,9 @@ namespace game_framework {
 		string   imageFileName = "";
 		//! 儲存物件過濾的圖片顏色
 		COLORREF filterColor = CLR_INVALID;
+		//
+		int center_x = 0;
+		int center_y = 0;
 
 	private:
 		void InitializeRectByBITMAP(BITMAP bitmap);
