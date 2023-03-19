@@ -1,3 +1,4 @@
+#pragma once
 /*
  * gamelib.h: 本檔案儲遊戲相關的class的interface
  * Copyright (C) 2002-2008 Woei-Kae Chen <wkc@csie.ntut.edu.tw>
@@ -100,10 +101,18 @@ namespace game_framework {
 		/* Show the bitmap with or without factor. */
 		void  ShowBitmap();					// 將圖貼到螢幕
 		void  ShowBitmap(double factor);	// 將圖貼到螢幕 factor < 1時縮小，>1時放大。注意：需要VGA卡硬體的支援，否則會很慢
-		//
+		
+
+
+		////////////
 		void set_center(int x, int y);
 		int get_center_x();
 		int get_center_y();
+		void item_hit(CMovingBitmap &character,CMovingBitmap &item);
+
+		int center_x = 0;
+		int center_y = 0;
+		//////////////
 		/* Getter */
 		int   GetFrameIndexOfBitmap();
 		int   GetFrameSizeOfBitmap();
@@ -139,16 +148,13 @@ namespace game_framework {
 		bool isBitmapLoaded = false;	// whether a bitmap has been loaded
 		//! 儲存物件動畫是否為單次動畫
 		bool isOnce = false;
-		CRect    location;			// location of the bitmap
+		vector<CRect>    locations;			// location of the bitmap
 		vector<unsigned> surfaceID;
 		clock_t last_time = clock();
 		//! 儲存物件讀取的圖片路徑
 		string   imageFileName = "";
 		//! 儲存物件過濾的圖片顏色
 		COLORREF filterColor = CLR_INVALID;
-		//
-		int center_x = 0;
-		int center_y = 0;
 
 	private:
 		void InitializeRectByBITMAP(BITMAP bitmap);

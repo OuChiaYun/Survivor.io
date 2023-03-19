@@ -96,11 +96,15 @@ namespace game_framework {
 		CMovingBitmap character;
 		CMovingBitmap opera;
 		CMovingBitmap goal;
-		CMovingBitmap energy[100];
+
+		vector <CMovingBitmap> energy;
+		vector<CMovingBitmap> monster;
 		void show_img();
 		void show_text();
 		void background_move();
 		void item_move(CMovingBitmap &item);
+		void monster_move(CMovingBitmap &monster);
+		void random_born_item(vector<CMovingBitmap>&item,vector<string> str, vector<int>rgb);
 	};
 
 	/////////////////////////////////////////////////////////////////////////////

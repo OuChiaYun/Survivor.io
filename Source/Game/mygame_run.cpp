@@ -34,24 +34,31 @@ void CGameStateRun::OnMove()							// 移動遊戲元素
 
 	//background.SetTopLeft(background.GetLeft() - int((opera.GetLeft()- 437)*0.2), background.GetTop() - int((opera.GetTop() - 682)*0.2));
 	background_move();
+	show_img();
 	//background_move(background2);
 
 	for (int i = 0; i < 100; i++) {
 		item_move(energy[i]);
+		character.item_hit(character,energy[i]);
 	}
-	//item_move(goal);
-	
+	for (int i = 0; i < 40; i++) {
+		item_move(monster[i]);
+		monster_move(monster[i]);
+	}
+
+
 }
 
 void CGameStateRun::OnInit()  								// 遊戲的初值及圖形設定
 {
-	background.LoadBitmapByString({"Resources/background.bmp"});
+	background.LoadBitmapByString({ "Resources/background.bmp" });
 	background.SetTopLeft(-1500, -1500);
 	background2.LoadBitmapByString({ "Resources/background.bmp" });
 	background2.SetTopLeft(0, 4000);
 
-	character.LoadBitmapByString({ "Resources/witch.bmp" },RGB(255,255,255));
+	character.LoadBitmapByString({ "Resources/witch.bmp" }, RGB(255, 255, 255));
 	character.SetTopLeft(461, 252);
+	character.set_center(501,300); //40 49
 
 	opera.LoadBitmapByString({ "Resources/operator.bmp" }, RGB(105, 106, 106));
 	opera.SetTopLeft(437, 682);
@@ -63,43 +70,27 @@ void CGameStateRun::OnInit()  								// 遊戲的初值及圖形設定
 
 	srand((unsigned)time(NULL));
 	/* 指定亂數範圍 */
-	int min = -1480;
-	int max = 1480;
+	int min = -1450;
+	int max = 1450;
 	for (int i = 0; i < 100; i++) {
-		energy[i].LoadBitmapByString({ "Resources/energy.bmp", "Resources/energy_ignore.bmp" }, RGB(255, 255, 255));
-		/* 產生 [min , max] 的整數亂數 */
-		int x = rand() % (max - min + 1) + min;
-		int y = rand() % (max - min + 1) + min;
-		energy[i].SetTopLeft(x, y);
+		random_born_item(energy, { "Resources/energy.bmp", "Resources/energy_ignore.bmp" }, {255,255,255});
+
+	}
+	for (int i = 0; i < 40; i++) {
+		int arr[] = { 1,2,3 };
+		random_born_item(monster, { "Resources/monster.bmp", "Resources/energy_ignore.bmp" }, { 255,255,255 });
+
 	}
 }
 
 void CGameStateRun::OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags)
 {
-	if (nChar == VK_UP) {
-		character.SetTopLeft(character.GetLeft(), character.GetTop() - 15);
-		//character.Height;
-	}
 
-	if (nChar == VK_DOWN) {
-		character.SetTopLeft(character.GetLeft(), character.GetTop() + 15);
-		//character.Height;
-	}
-
-	if (nChar == VK_RIGHT) {
-		character.SetTopLeft(character.GetLeft() + 15, character.GetTop());
-		//character.Height;
-	}
-
-	if (nChar == VK_LEFT) {
-		character.SetTopLeft(character.GetLeft() - 15, character.GetTop());
-		//character.Height;
-	}
 }
 
 void CGameStateRun::OnKeyUp(UINT nChar, UINT nRepCnt, UINT nFlags)
 {
-	
+
 }
 
 void CGameStateRun::OnLButtonDown(UINT nFlags, CPoint point)  // 處理滑鼠的動作
@@ -122,7 +113,7 @@ void CGameStateRun::OnMouseMove(UINT nFlags, CPoint point)	// 處理滑鼠的動
 		if (point.x < 491) {
 			if (opera.get_center_x() > 451) {
 				opera.SetTopLeft((opera.GetLeft() - 6), opera.GetTop());
-				opera.set_center(opera.get_center_x()-6, opera.get_center_y());
+				opera.set_center(opera.get_center_x() - 6, opera.get_center_y());
 			}
 		}
 		if (point.x > 491) {
@@ -137,7 +128,7 @@ void CGameStateRun::OnMouseMove(UINT nFlags, CPoint point)	// 處理滑鼠的動
 			if (opera.get_center_y() > 686) {
 				//opera.SetTopLeft(opera.GetLeft(), (opera.GetTop() - 6));
 				opera.SetTopLeft(opera.GetLeft(), (opera.GetTop() - 6));
-				opera.set_center(opera.get_center_x(), opera.get_center_y()-6);
+				opera.set_center(opera.get_center_x(), opera.get_center_y() - 6);
 			}
 		}
 		if ((point.y) > 736) {
@@ -161,8 +152,8 @@ void CGameStateRun::OnRButtonUp(UINT nFlags, CPoint point)	// 處理滑鼠的動
 
 void CGameStateRun::OnShow()
 {
-	show_img();
 	show_text();
+	show_img();
 }
 
 void CGameStateRun::show_img() {
@@ -173,60 +164,64 @@ void CGameStateRun::show_img() {
 	for (int i = 0; i < 100; i++) {
 		energy[i].ShowBitmap();
 	}
+
+	//if(monster.size()>0){
+		for (int i = 0;i < 30; i++) {
+			monster[i].ShowBitmap();
+		}
+	//}
 }
 
 void CGameStateRun::show_text() {
-	
+
 }
 
 void CGameStateRun::background_move() {
 
-	//if (item == background) {
-	
-		if (background.GetLeft() > character.GetLeft()) { //character->item
-			if ((opera.GetLeft() - 437) > 0) { //turn right
-				background.SetTopLeft(background.GetLeft() - int((opera.GetLeft() - 437)*0.2), background.GetTop() - int((opera.GetTop() - 682)*0.2));
-			}
-			else {
-				background.SetTopLeft(background.GetLeft(), background.GetTop() - int((opera.GetTop() - 682)*0.2));
-
-			}
-		}
-		else if (background.GetLeft() + background.GetWidth() < character.GetLeft() + character.GetWidth()) { //item->character
-			if ((opera.GetLeft() - 437) < 0) { //turn left
-				background.SetTopLeft(background.GetLeft() - int((opera.GetLeft() - 437)*0.2), background.GetTop() - int((opera.GetTop() - 682)*0.2));
-
-			}
-			else {
-				background.SetTopLeft(background.GetLeft(), background.GetTop() - int((opera.GetTop() - 682)*0.2));
-
-			}
-		}
-		else if (background.GetTop() > character.GetTop()) { //character->item
-			if ((opera.GetTop() ) > 682) { //turn right
-				background.SetTopLeft(background.GetLeft() - int((opera.GetLeft() - 437)*0.2), background.GetTop() - int((opera.GetTop() - 682)*0.2));
-			}
-			else {
-				background.SetTopLeft(background.GetLeft() - int((opera.GetLeft() - 437)*0.2), background.GetTop() );
-
-			}
-		}
-		else if (background.GetTop()+background.GetHeight() < character.GetTop()+character.GetHeight()) { //character->item
-			if ((opera.GetTop()) < 682) { //turn right
-				background.SetTopLeft(background.GetLeft() - int((opera.GetLeft() - 437)*0.2), background.GetTop() - int((opera.GetTop() - 682)*0.2));
-			}
-			else {
-				background.SetTopLeft(background.GetLeft() - int((opera.GetLeft() - 437)*0.2), background.GetTop());
-
-			}
+	if (background.GetLeft() > character.GetLeft()) { //character->item
+		if ((opera.GetLeft() - 437) > 0) { //turn right
+			background.SetTopLeft(background.GetLeft() - int((opera.GetLeft() - 437)*0.2), background.GetTop() - int((opera.GetTop() - 682)*0.2));
 		}
 		else {
+			background.SetTopLeft(background.GetLeft(), background.GetTop() - int((opera.GetTop() - 682)*0.2));
+
+		}
+	}
+	else if (background.GetLeft() + background.GetWidth() < character.GetLeft() + character.GetWidth()) { //item->character
+		if ((opera.GetLeft() - 437) < 0) { //turn left
 			background.SetTopLeft(background.GetLeft() - int((opera.GetLeft() - 437)*0.2), background.GetTop() - int((opera.GetTop() - 682)*0.2));
 
 		}
+		else {
+			background.SetTopLeft(background.GetLeft(), background.GetTop() - int((opera.GetTop() - 682)*0.2));
+
+		}
+	}
+	else if (background.GetTop() > character.GetTop()) { //character->item
+		if ((opera.GetTop()) > 682) { //turn right
+			background.SetTopLeft(background.GetLeft() - int((opera.GetLeft() - 437)*0.2), background.GetTop() - int((opera.GetTop() - 682)*0.2));
+		}
+		else {
+			background.SetTopLeft(background.GetLeft() - int((opera.GetLeft() - 437)*0.2), background.GetTop());
+
+		}
+	}
+	else if (background.GetTop() + background.GetHeight() < character.GetTop() + character.GetHeight()) { //character->item
+		if ((opera.GetTop()) < 682) { //turn right
+			background.SetTopLeft(background.GetLeft() - int((opera.GetLeft() - 437)*0.2), background.GetTop() - int((opera.GetTop() - 682)*0.2));
+		}
+		else {
+			background.SetTopLeft(background.GetLeft() - int((opera.GetLeft() - 437)*0.2), background.GetTop());
+
+		}
+	}
+	else {
+		background.SetTopLeft(background.GetLeft() - int((opera.GetLeft() - 437)*0.2), background.GetTop() - int((opera.GetTop() - 682)*0.2));
+
+	}
 
 
-	
+
 }
 
 void CGameStateRun::item_move(CMovingBitmap &item) {
@@ -238,7 +233,7 @@ void CGameStateRun::item_move(CMovingBitmap &item) {
 
 
 	if (background.GetLeft() >= character.GetLeft()) { //character->item
-		if ((opera.GetLeft() - 437) > 0) { //turn right
+		if (opera.GetLeft()  > 437) { //turn right
 			item.SetTopLeft(item.GetLeft() - int((opera.GetLeft() - 437)*0.2), item.GetTop() - int((opera.GetTop() - 682)*0.2));
 		}
 		else {
@@ -246,7 +241,7 @@ void CGameStateRun::item_move(CMovingBitmap &item) {
 		}
 	}
 	else if (background.GetLeft() + background.GetWidth() <= character.GetLeft() + character.GetWidth()) { //item->character
-		if ((opera.GetLeft() - 437) < 0) { //turn left
+		if ((opera.GetLeft()) < 437) { //turn left
 			item.SetTopLeft(item.GetLeft() - int((opera.GetLeft() - 437)*0.2), item.GetTop() - int((opera.GetTop() - 682)*0.2));
 		}
 		else {
@@ -255,7 +250,7 @@ void CGameStateRun::item_move(CMovingBitmap &item) {
 	}
 
 	else if (background.GetTop() >= character.GetTop()) { //character->item
-		if (opera.GetTop()  > 682) { //turn right
+		if (opera.GetTop() > 682) { //turn right
 			item.SetTopLeft(item.GetLeft() - int((opera.GetLeft() - 437)*0.2), item.GetTop() - int((opera.GetTop() - 682)*0.2));
 		}
 		else {
@@ -273,12 +268,54 @@ void CGameStateRun::item_move(CMovingBitmap &item) {
 	else {
 
 		item.SetTopLeft(item.GetLeft() - int((opera.GetLeft() - 437)*0.2), item.GetTop() - int((opera.GetTop() - 682)*0.2));
-		//goal.SetTopLeft(goal.GetLeft() - int((opera.GetLeft() - 437)*0.2), goal.GetTop() - int((opera.GetTop() - 682)*0.2));
 
 	}
 
-	if (451 <= x && x <= 511 && 222 <= y && y <= 282) {
+
+}
+
+void CMovingBitmap::item_hit(CMovingBitmap &character,CMovingBitmap &item) {
+	if (IsOverlap(character, item)) {
 		item.SetFrameIndexOfBitmap(1);
 	}
+}
+
+void CGameStateRun::monster_move(CMovingBitmap &monster) {
+
+	int ax = int((monster.GetLeft() - character.GetLeft())*0.01), ay = int((monster.GetTop() - character.GetTop())*0.01);
+
+	if (monster.GetLeft() < character.GetLeft()) {
+		ax = 1;
+	}
+	else if (monster.GetLeft() > character.GetLeft()) {
+		ax = -1;
+	}
+
+	if (monster.GetTop() < character.GetTop()) {
+		ay = 1;
+	}
+	else if (monster.GetTop() > character.GetTop()) {
+		ay = -1;
+	}
+
+	
+	monster.SetTopLeft(monster.GetLeft() + ax, monster.GetTop() + ay);
+	monster.set_center(monster.GetLeft()+45,monster.GetTop()+57);
+};
+
+void CGameStateRun::random_born_item(vector<CMovingBitmap> &item, vector<string> str, vector<int>rgb) {
+
+	int min = -1450;
+	int max = 1450;
+	int tail = item.size();
+
+	item.push_back(CMovingBitmap());
+	item[tail].LoadBitmapByString(str, RGB(rgb[0], rgb[1], rgb[2]));
+	/* 產生 [min , max] 的整數亂數 */
+	int x = rand() % (max - min + 1) + min;
+	int y = rand() % (max - min + 1) + min;
+	item[tail].SetTopLeft(x, y);
+	item[tail].set_center(x + 45, y + 57);
+
 
 }
