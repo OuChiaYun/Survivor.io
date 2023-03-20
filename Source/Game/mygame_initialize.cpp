@@ -53,7 +53,7 @@ void CGameStateInit::OnLButtonDown(UINT nFlags, CPoint point)
 			selected1.SetFrameIndexOfBitmap(0);
 		}
 	}
-	select = 1;
+	background_select = 1;
 	GotoGameState(GAME_STATE_RUN);		// 切換至GAME_STATE_RUN
 }
 

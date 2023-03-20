@@ -71,7 +71,7 @@ namespace game_framework {
 		CMovingBitmap select_scene2;
 		CMovingBitmap selected1;
 		CMovingBitmap selected2;
-		int select = 0;
+		int background_select = 0;
 	};
 
 	/////////////////////////////////////////////////////////////////////////////
@@ -79,7 +79,7 @@ namespace game_framework {
 	// 每個Member function的Implementation都要弄懂
 	/////////////////////////////////////////////////////////////////////////////
 
-	class CGameStateRun : public CGameState {
+	class CGameStateRun : public CGameState, public CGameStateInit {
 	public:
 		CGameStateRun(CGame *g);
 		~CGameStateRun();

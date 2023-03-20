@@ -44,13 +44,13 @@ void CGameStateRun::OnMove()							// 移動遊戲元素
 
 void CGameStateRun::OnInit()  								// 遊戲的初值及圖形設定
 {
-	if (select == 0) {
+	if (background_select == 0) {
 		background.LoadBitmapByString({ "Resources/Hills.bmp" });
 		background.SetTopLeft(0, 0);
 		background2.LoadBitmapByString({ "Resources/Hills.bmp" });
 		background2.SetTopLeft(0, 4000);
 	}
-	else {
+	else if (background_select == 1) {
 		background.LoadBitmapByString({ "Resources/background.bmp" });
 		background.SetTopLeft(0, 0);
 		background2.LoadBitmapByString({ "Resources/background.bmp" });
