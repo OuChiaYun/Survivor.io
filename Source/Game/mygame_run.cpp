@@ -31,6 +31,7 @@ void CGameStateRun::OnBeginState()
 
 void CGameStateRun::OnMove()							// 移動遊戲元素
 {
+	timer += 1;
 
 	//background.SetTopLeft(background.GetLeft() - int((opera.GetLeft()- 437)*0.2), background.GetTop() - int((opera.GetTop() - 682)*0.2));
 	background_move();
@@ -41,9 +42,25 @@ void CGameStateRun::OnMove()							// 移動遊戲元素
 		item_move(energy[i]);
 		character.item_hit(character,energy[i]);
 	}
-	for (int i = 0; i < 40; i++) {
+	for (int i = 0;i< int(monster.size()); i++) {
 		item_move(monster[i]);
-		monster_move(monster[i]);
+
+		if (!monster[i].IsOverlap(character,monster[i])) {
+			monster_move(monster[i]);
+		}
+		else {
+			//goal.SetTopLeft(goal.GetLeft() - 3, goal.GetTop());
+			hit_count += 1;
+			if (energy_bar.GetFrameIndexOfBitmap()>0 && hit_count >800) {
+				energy_bar.SetFrameIndexOfBitmap(energy_bar.GetFrameIndexOfBitmap() - 1);
+				hit_count = 0;
+			}
+		}
+	}
+	if (timer > 100 && int(monster.size())<80) {
+		random_born_item(monster, { "Resources/m1.bmp","Resources/m2.bmp","Resources/m3.bmp","Resources/m4.bmp","Resources/m5.bmp","Resources/m6.bmp","Resources/m7.bmp" }, { 255,255,255 });
+		monster[monster.size()-1].SetAnimation(50, false);
+		timer = 0;
 	}
 
 
@@ -60,27 +77,28 @@ void CGameStateRun::OnInit()  								// 遊戲的初值及圖形設定
 	character.SetTopLeft(461, 252);
 	character.set_center(501,300); //40 49
 
-	opera.LoadBitmapByString({ "Resources/operator.bmp" }, RGB(105, 106, 106));
-	opera.SetTopLeft(437, 682);
-	opera.set_center(437 + 54, 682 + 54);//491 , 736
-
 	goal.LoadBitmapByString({ "Resources/goal.bmp" }, RGB(255, 255, 255));
-	goal.SetTopLeft(107, 82);
+	goal.SetTopLeft(1000, 82);
 
+	energy_bar.LoadBitmapByString({ "Resources/health_ui/health_ui_0.bmp", "Resources/health_ui/health_ui_1.bmp", "Resources/health_ui/health_ui_2.bmp", "Resources/health_ui/health_ui_3.bmp", "Resources/health_ui/health_ui_4.bmp" }, RGB(255, 255, 255));
+	energy_bar.SetFrameIndexOfBitmap(energy_bar.GetFrameSizeOfBitmap() - 1);
 
 	srand((unsigned)time(NULL));
 	/* 指定亂數範圍 */
-	int min = -1450;
-	int max = 1450;
+
 	for (int i = 0; i < 100; i++) {
 		random_born_item(energy, { "Resources/energy.bmp", "Resources/energy_ignore.bmp" }, {255,255,255});
 
 	}
 	for (int i = 0; i < 40; i++) {
 		int arr[] = { 1,2,3 };
-		random_born_item(monster, { "Resources/monster.bmp", "Resources/energy_ignore.bmp" }, { 255,255,255 });
-
+		random_born_item(monster, { "Resources/m1.bmp","Resources/m2.bmp","Resources/m3.bmp","Resources/m4.bmp","Resources/m5.bmp","Resources/m6.bmp","Resources/m7.bmp" }, { 255,255,255 });
+		monster[i].SetAnimation(50, false);
 	}
+
+	opera.LoadBitmapByString({ "Resources/operator.bmp" }, RGB(105, 106, 106));
+	opera.SetTopLeft(437, 682);
+	opera.set_center(437 + 54, 682 + 54);//491 , 736
 }
 
 void CGameStateRun::OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags)
@@ -118,7 +136,6 @@ void CGameStateRun::OnMouseMove(UINT nFlags, CPoint point)	// 處理滑鼠的動
 		}
 		if (point.x > 491) {
 			if (opera.get_center_x() < 541) {
-				//opera.SetTopLeft((opera.GetLeft() + 6), opera.GetTop());
 				opera.SetTopLeft((opera.GetLeft() + 6), opera.GetTop());
 				opera.set_center(opera.get_center_x() + 6, opera.get_center_y());
 			}
@@ -126,7 +143,7 @@ void CGameStateRun::OnMouseMove(UINT nFlags, CPoint point)	// 處理滑鼠的動
 
 		if ((point.y < 736)) {
 			if (opera.get_center_y() > 686) {
-				//opera.SetTopLeft(opera.GetLeft(), (opera.GetTop() - 6));
+				
 				opera.SetTopLeft(opera.GetLeft(), (opera.GetTop() - 6));
 				opera.set_center(opera.get_center_x(), opera.get_center_y() - 6);
 			}
@@ -166,10 +183,11 @@ void CGameStateRun::show_img() {
 	}
 
 	//if(monster.size()>0){
-		for (int i = 0;i < 30; i++) {
+		for (int i = 0;i< int(monster.size()); i++) {
 			monster[i].ShowBitmap();
 		}
 	//}
+		energy_bar.ShowBitmap();
 }
 
 void CGameStateRun::show_text() {
@@ -316,6 +334,5 @@ void CGameStateRun::random_born_item(vector<CMovingBitmap> &item, vector<string>
 	int y = rand() % (max - min + 1) + min;
 	item[tail].SetTopLeft(x, y);
 	item[tail].set_center(x + 45, y + 57);
-
 
 }
