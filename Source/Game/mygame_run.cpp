@@ -7,10 +7,14 @@
 #include "../Library/gamecore.h"
 #include "mygame.h"
 
+#include <stdio.h>
+#include <stdlib.h>
+#include <time.h>
+
 using namespace game_framework;
 
 /////////////////////////////////////////////////////////////////////////////
-// ≥o≠”class¨∞πC¿∏™∫πC¿∏∞ı¶Ê™´•Û°A•D≠n™∫πC¿∏µ{¶°≥£¶b≥o∏Ã
+// ÈÄôÂÄãclassÁÇ∫ÈÅäÊà≤ÁöÑÈÅäÊà≤Âü∑Ë°åÁâ©‰ª∂Ôºå‰∏ªË¶ÅÁöÑÈÅäÊà≤Á®ãÂºèÈÉΩÂú®ÈÄôË£°
 /////////////////////////////////////////////////////////////////////////////
 
 CGameStateRun::CGameStateRun(CGame *g) : CGameState(g)
@@ -25,263 +29,223 @@ void CGameStateRun::OnBeginState()
 {
 }
 
-void CGameStateRun::OnMove()							// ≤æ∞ πC¿∏§∏Ø¿
+void CGameStateRun::OnMove()							// ÁßªÂãïÈÅäÊà≤ÂÖÉÁ¥†
 {
-	if (character.Top() + character.Height() >= 430 && 
-		( (150 <= character.Left() && character.Left() <= 150 + chest_and_key.Width() ) 
-			|| (150 <= character.Left() + character.Width() && character.Left() + character.Width() <= 150 + chest_and_key.Width()) ) ){
-		chest_and_key.SelectShowBitmap(1);
+
+	//background.SetTopLeft(background.GetLeft() - int((opera.GetLeft()- 437)*0.2), background.GetTop() - int((opera.GetTop() - 682)*0.2));
+	background_move(background);
+	//background_move(background2);
+
+	for (int i = 0; i < 100; i++) {
+		item_move(energy[i]);
 	}
-	if(phase == 5){
-		if (character.Left() + character.Width() >= door[0].Left()) {
-			door[0].SelectShowBitmap(1);
-		}
-		if (character.Left() + character.Width() >= door[1].Left()) {
-			door[1].SelectShowBitmap(1);
-		}
-		if (character.Left() + character.Width() >= door[2].Left()) {
-			door[2].SelectShowBitmap(1);
-	}
-	}
-	if (phase == 6) {
-		if (ball.IsAnimationDone() && ball.IsAnimation()) {
-			ball.SetAnimation(1000, TRUE);
-			ball.ShowBitmap();
-			ball.ToggleAnimation();
-		}
-	}
+
 }
 
-void CGameStateRun::OnInit()  								// πC¿∏™∫™Ï≠»§ŒπœßŒ≥]©w
+void CGameStateRun::OnInit()  								// ÈÅäÊà≤ÁöÑÂàùÂÄºÂèäÂúñÂΩ¢Ë®≠ÂÆö
 {
-	background.LoadBitmapByString({ 
-		"resources/phase11_background.bmp", 
-		"resources/phase12_background.bmp", 
-		"resources/phase21_background.bmp", 
-		"resources/phase22_background.bmp", 
-		"resources/phase31_background.bmp", 
-		"resources/phase32_background.bmp",
-		"resources/phase41_background.bmp",
-		"resources/phase42_background.bmp",
-		"resources/phase51_background.bmp",
-		"resources/phase52_background.bmp",
-		"resources/phase61_background.bmp",
-		"resources/phase62_background.bmp",
-	});
-	background.SetTopLeft(0, 0);
-
-	character.LoadBitmapByString({ "resources/giraffe.bmp" });
-	character.SetTopLeft(150, 265);
-
-	chest_and_key.LoadBitmapByString({ "resources/chest.bmp", "resources/chest_ignore.bmp" }, RGB(255, 255, 255));
-	chest_and_key.SetTopLeft(150, 430);
-
-	bee.LoadBitmapByString({ "resources/bee_1.bmp", "resources/bee_2.bmp" });
-	bee.SetTopLeft(462, 265);
-	bee.SetAnimation(2, 0);
-
-	ball.LoadBitmapByString({ "resources/ball-3.bmp", "resources/ball-2.bmp", "resources/ball-1.bmp", "resources/ball-ok.bmp" });
-	ball.SetTopLeft(150, 430);
-	ball.SetAnimation(200, FALSE);
-	for (int i = 0; i < 3; i++) {
-		door[i].LoadBitmapByString({ "resources/door_close.bmp", "resources/door_open.bmp" }, RGB(255, 255, 255));
-		door[i].SetTopLeft(462 - 100 * i, 265);
+	if (background_select == 0) {
+		background.LoadBitmapByString({ "Resources/Hills.bmp" });
+		background.SetTopLeft(0, 0);
+		background2.LoadBitmapByString({ "Resources/Hills.bmp" });
+		background2.SetTopLeft(0, 4000);
 	}
+	else if (background_select == 1) {
+		background.LoadBitmapByString({ "Resources/background.bmp" });
+		background.SetTopLeft(0, 0);
+		background2.LoadBitmapByString({ "Resources/background.bmp" });
+		background2.SetTopLeft(0, 4000);
+	}
+
+	character.LoadBitmapByString({ "Resources/witch.bmp" }, RGB(255, 255, 255));
+	character.SetTopLeft(481, 252);
+
+	opera.LoadBitmapByString({ "Resources/operator.bmp" }, RGB(105, 106, 106));
+	opera.SetTopLeft(437, 682);
+
+	goal.LoadBitmapByString({ "Resources/goal.bmp" }, RGB(255, 255, 255));
+	goal.SetTopLeft(437, 682);
+
+	energy_bar.LoadBitmapByString({ "Resources/health_ui/health_ui_0.bmp", "Resources/health_ui/health_ui_1.bmp", "Resources/health_ui/health_ui_2.bmp", "Resources/health_ui/health_ui_3.bmp", "Resources/health_ui/health_ui_4.bmp" }, RGB(255, 255, 255));
+
+	srand((unsigned)time(NULL));
+	/* ÊåáÂÆö‰∫ÇÊï∏ÁØÑÂúç */
+	int min = 0;
+	int max = 1045;
+	for (int i = 0; i < 100; i++) {
+		energy[i].LoadBitmapByString({ "Resources/energy.bmp", "Resources/ignore.bmp" }, RGB(255, 255, 255));
+		/* Áî¢Áîü [min , max] ÁöÑÊï¥Êï∏‰∫ÇÊï∏ */
+		int x = rand() % (max - min + 1) + min;
+		int y = rand() % (max - min + 1) + min;
+		energy[i].SetTopLeft(x, y);
+	}
+
+	bullet.LoadBitmapByString({ "Resources/bullet.bmp" }, RGB(255, 255, 255));
+	bullet.SetTopLeft(481, 210);
 }
 
 void CGameStateRun::OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags)
 {
-	if (nChar == VK_RETURN) {
-		if (phase == 1) {
-			if (sub_phase == 1) {
-				sub_phase += validate_phase_1();
-			}
-			else if (sub_phase == 2) {
-				sub_phase = 1;
-				phase += 1;
-			}
-		} else if (phase == 2) {
-			if (sub_phase == 1) {
-				sub_phase += validate_phase_2();
-			}
-			else if (sub_phase == 2) {
-				sub_phase = 1;
-				phase += 1;
-			}
-		}else if (phase == 3) {
-			if (sub_phase == 1) {
-				sub_phase += validate_phase_3();
-			}
-			else if (sub_phase == 2) {
-				sub_phase = 1;
-				phase += 1;
-			}
-		}else if (phase == 4) {
-			if (sub_phase == 1) {
-				sub_phase += validate_phase_4();
-			}
-			else if (sub_phase == 2) {
-				sub_phase = 1;
-				phase += 1;
-			}
-		}else if (phase == 5) {
-			if (sub_phase == 1) {
-				sub_phase += validate_phase_5();
-			}
-			else if (sub_phase == 2) {
-				sub_phase = 1;
-				phase += 1;
-			}
-		}else if (phase == 6) {
-			if (sub_phase == 1) {
-				sub_phase += validate_phase_6();
-			}
-			else if (sub_phase == 2) {
-				sub_phase = 1;
-				phase += 1;
-				GotoGameState(GAME_STATE_OVER);
-			}
-		}
+	if (nChar == VK_UP) {
+		character.SetTopLeft(character.GetLeft(), character.GetTop() - 15);
+		//character.Height;
 	}
-	else if (nChar == VK_DOWN) {
-		character.SetTopLeft(character.Left(), character.Top() + 20);
+
+	if (nChar == VK_DOWN) {
+		character.SetTopLeft(character.GetLeft(), character.GetTop() + 15);
+		//character.Height;
 	}
-	else if (nChar == VK_UP) {
-		character.SetTopLeft(character.Left(), character.Top() - 20);
+
+	if (nChar == VK_RIGHT) {
+		character.SetTopLeft(character.GetLeft() + 15, character.GetTop());
+		//character.Height;
 	}
-	else if (nChar == VK_LEFT) {
-		character.SetTopLeft(character.Left() - 20, character.Top());
-	}
-	else if (nChar == VK_RIGHT) {
-		character.SetTopLeft(character.Left() + 20, character.Top());
+
+	if (nChar == VK_LEFT) {
+		character.SetTopLeft(character.GetLeft() - 15, character.GetTop());
+		//character.Height;
 	}
 }
 
 void CGameStateRun::OnKeyUp(UINT nChar, UINT nRepCnt, UINT nFlags)
 {
+
 }
 
-
-void CGameStateRun::OnLButtonDown(UINT nFlags, CPoint point)  // ≥B≤z∑∆π´™∫∞ ß@
+void CGameStateRun::OnLButtonDown(UINT nFlags, CPoint point)  // ËôïÁêÜÊªëÈº†ÁöÑÂãï‰Ωú
 {
 }
 
-void CGameStateRun::OnLButtonUp(UINT nFlags, CPoint point)	// ≥B≤z∑∆π´™∫∞ ß@
+void CGameStateRun::OnLButtonUp(UINT nFlags, CPoint point)	// ËôïÁêÜÊªëÈº†ÁöÑÂãï‰Ωú
 {
 }
 
-void CGameStateRun::OnMouseMove(UINT nFlags, CPoint point)	// ≥B≤z∑∆π´™∫∞ ß@
+void CGameStateRun::OnMouseMove(UINT nFlags, CPoint point)	// ËôïÁêÜÊªëÈº†ÁöÑÂãï‰Ωú
+{
+	// ËôïÁêÜÊªëÈº†ÁöÑÂãï‰Ωú
+	if (nFlags == FALSE) {
+		opera.SetTopLeft(437, 682);
+	}
+	else {
+		if (point.x < 517) {
+			if (opera.GetLeft() > 380) {
+				opera.SetTopLeft((opera.GetLeft() - 6), opera.GetTop());
+			}
+		}
+		if (point.x > 517) {
+			if (opera.GetLeft() < 480) {
+				opera.SetTopLeft((opera.GetLeft() + 6), opera.GetTop());
+			}
+		}
+
+		if ((point.y < 770)) {
+			if (opera.GetTop() > 630) {
+				opera.SetTopLeft(opera.GetLeft(), (opera.GetTop() - 6));
+			}
+		}
+		if ((point.y) > 770) {
+			if (opera.GetTop() < 730) {
+				opera.SetTopLeft(opera.GetLeft(), (opera.GetTop() + 6));
+			}
+		}
+	}
+
+}
+
+
+void CGameStateRun::OnRButtonDown(UINT nFlags, CPoint point)  // ËôïÁêÜÊªëÈº†ÁöÑÂãï‰Ωú
 {
 }
 
-void CGameStateRun::OnRButtonDown(UINT nFlags, CPoint point)  // ≥B≤z∑∆π´™∫∞ ß@
-{
-}
-
-void CGameStateRun::OnRButtonUp(UINT nFlags, CPoint point)	// ≥B≤z∑∆π´™∫∞ ß@
+void CGameStateRun::OnRButtonUp(UINT nFlags, CPoint point)	// ËôïÁêÜÊªëÈº†ÁöÑÂãï‰Ωú
 {
 }
 
 void CGameStateRun::OnShow()
 {
-	show_image_by_phase();
-	show_text_by_phase();
+	show_img();
+	show_text();
 }
 
-void CGameStateRun::show_image_by_phase() {
-	if (phase <= 6) {
-		background.SelectShowBitmap((phase - 1) * 2 + (sub_phase - 1));
-		background.ShowBitmap();
-		character.ShowBitmap();
-		if (phase == 3 && sub_phase == 1) {
-			chest_and_key.ShowBitmap();
+void CGameStateRun::show_img() {
+	background.ShowBitmap();
+	character.ShowBitmap();
+	opera.ShowBitmap();
+	//goal.ShowBitmap();
+	for (int i = 0; i < 100; i++) {
+		energy[i].ShowBitmap();
+	}
+	energy_bar.ShowBitmap();
+	bullet.ShowBitmap();
+}
+
+void CGameStateRun::show_text() {
+
+}
+
+void CGameStateRun::background_move(CMovingBitmap &item) {
+
+	//if (item == background) {
+	if (item.GetLeft() > character.GetLeft()) { //character->item
+		if ((opera.GetLeft() - 437) > 0) { //turn right
+			item.SetTopLeft(item.GetLeft() - int((opera.GetLeft() - 437)*0.1), item.GetTop() - int((opera.GetTop() - 682)*0.1));
 		}
-		if (phase == 4 && sub_phase == 1) {
-			bee.ShowBitmap();
-		}
-		if (phase == 5 && sub_phase == 1) {
-			for (int i = 0; i < 3; i++) {
-				door[i].ShowBitmap();
-			}
-		}
-		if (phase == 6 && sub_phase == 1) {
-			ball.ShowBitmap();
-			//ball.SetAnimation(1000, 0);
-			//ball.ShowBitmap();
-			//if (ball.GetSelectShowBitmap() == 3) {
-				//ball.SetAnimation(0, 1);
-			//}
+		else {
+			item.SetTopLeft(item.GetLeft(), item.GetTop() - int((opera.GetTop() - 682)*0.1));
 		}
 	}
-}
-
-void CGameStateRun::show_text_by_phase() {
-	CDC *pDC = CDDraw::GetBackCDC();
-	CFont* fp;
-
-	CTextDraw::ChangeFontLog(pDC, fp, 21, "∑L≥n•ø∂¬≈È", RGB(0, 0, 0), 800);
-
-	if (phase == 1 && sub_phase == 1) {
-		CTextDraw::Print(pDC, 237, 128, "≠◊ßÔßA™∫•D®§°I");
-		CTextDraw::Print(pDC, 55, 163, "±N¶«¶‚§ËÆÊ¥´¶® resources §∫™∫ giraffe.bmp πœºÀ°I");
-		CTextDraw::Print(pDC, 373, 537, "´ˆ§U Enter ¡‰®”≈Á√“");
-	} else if (phase == 2 && sub_phase == 1) {
-		CTextDraw::Print(pDC, 26, 128, "§U§@≠”∂•¨q°A≈˝™¯¿V≥¿Ø‡∞˜≥zπL§W§U•™•k≤æ∞ ®Ï≥o≠”¶Ï∏m°I");
-		CTextDraw::Print(pDC, 373, 537, "´ˆ§U Enter ¡‰®”≈Á√“");
-	} else if (phase == 3 && sub_phase == 1) {
-		CTextDraw::Print(pDC, 205, 128, "¿∞ßA∑«≥∆§F§@≠”ƒ_Ωc");
-		CTextDraw::Print(pDC, 68, 162, "≥]≠pµ{¶°≈˝™¯¿V≥¿∫N®Ïƒ_Ωc´·°A±Nƒ_ΩcÆ¯•¢°I");
-		CTextDraw::Print(pDC, 68, 196, "∞O±oƒ_Ωc≠n•h≠I°A®œ•Œ RGB(255, 255, 255)");
-		CTextDraw::Print(pDC, 373, 537, "´ˆ§U Enter ¡‰®”≈Á√“");
-	} else if (phase == 4 && sub_phase == 1) {
-		CTextDraw::Print(pDC, 173, 128, "¿∞ßA∑«≥∆§F§@≠”ªe∏¡¶n™B§Õ");
-		CTextDraw::Print(pDC, 89, 162, "§w∏g¿∞•¶∞µ§F®‚¥V™∫∞ µe°A≈˝•¶•i•H§W§U≤æ∞ ");
-		CTextDraw::Print(pDC, 110, 196, "ºg≠”µ{¶°®”≈˝ßA™∫ªe∏¡¶n™B§Õæ÷¶≥∞ µe°I");
-		CTextDraw::Print(pDC, 373, 537, "´ˆ§U Enter ¡‰®”≈Á√“");
-	} else if (phase == 5 && sub_phase == 1) {
-		CTextDraw::Print(pDC, 173, 128, "¿∞ßA∑«≥∆§F§TÆ∞™˘");
-		CTextDraw::Print(pDC, 89, 162, "≥]≠pµ{¶°≈˝™¯¿V≥¿∫N®Ï™˘§ß´·°A™˘∑|•¥∂}");
-		CTextDraw::Print(pDC, 373, 537, "´ˆ§U Enter ¡‰®”≈Á√“");
-	} else if (phase == 6 && sub_phase == 1) {
-		CTextDraw::Print(pDC, 173, 128, "¿∞ßA∑«≥∆§F§@¡˚∑|≠Àº∆™∫≤y");
-		CTextDraw::Print(pDC, 89, 162, "≥]≠pµ{¶°≈˝≤y≠Àº∆°AµM´·≈„•‹ OK ´·∞±§Ó∞ µe");
-		CTextDraw::Print(pDC, 373, 537, "´ˆ§U Enter ¡‰®”≈Á√“");
-	} else if (sub_phase == 2) {
-		CTextDraw::Print(pDC, 268, 128, "ßπ¶®°I");
+	else if (item.GetLeft() + item.GetWidth() < character.GetLeft() + character.GetWidth()) { //item->character
+		if ((opera.GetLeft() - 437) < 0) { //turn left
+			item.SetTopLeft(item.GetLeft() - int((opera.GetLeft() - 437)*0.1), item.GetTop() - int((opera.GetTop() - 682)*0.1));
+		}
+		else {
+			item.SetTopLeft(item.GetLeft(), item.GetTop() - int((opera.GetTop() - 682)*0.1));
+		}
+	}
+	else {
+		item.SetTopLeft(item.GetLeft() - int((opera.GetLeft() - 437)*0.1), item.GetTop() - int((opera.GetTop() - 682)*0.1));
 	}
 
-	CDDraw::ReleaseBackCDC();
 }
 
-bool CGameStateRun::validate_phase_1() {
-	return character.GetImageFilename() == "resources/giraffe.bmp";
-}
+void CGameStateRun::item_move(CMovingBitmap &item) {
+	int x = item.GetLeft() - int((opera.GetLeft() - 437)*0.1);
+	int y = item.GetTop() - int((opera.GetTop() - 682)*0.1);
+	//item.SetTopLeft(x, y);
+	int std_x = background.GetLeft();
+	int std_y = background.GetTop();
+	int std_w = background.GetWidth();
 
-bool CGameStateRun::validate_phase_2() {
-	return character.Top() > 204 && character.Top() < 325 && character.Left() > 339 && character.Left() < 459;
-}
 
-bool CGameStateRun::validate_phase_3() {
-	return (
-		character.Top() + character.Height() >= chest_and_key.Top()
-		&& character.Left() + character.Width() >= chest_and_key.Left()
-		&& chest_and_key.GetSelectShowBitmap() == 1
-		&& chest_and_key.GetFilterColor() == RGB(255, 255, 255)
-	);
-}
-
-bool CGameStateRun::validate_phase_4() {
-	return bee.IsAnimation() && bee.GetMovingBitmapFrame() == 2;
-}
-
-bool CGameStateRun::validate_phase_5() {
-	bool check_all_door_is_open = true;
-	for (int i = 0; i < 3; i++) {
-		check_all_door_is_open &= (door[i].GetSelectShowBitmap() == 1);
+	if (std_x >= character.GetLeft()) { //character->item
+		if ((opera.GetLeft() - 437) >= 0) { //turn right
+			item.SetTopLeft(item.GetLeft() - int((opera.GetLeft() - 437)*0.1), item.GetTop() - int((opera.GetTop() - 682)*0.1));
+		}
+		else {
+			item.SetTopLeft(item.GetLeft(), item.GetTop() - int((opera.GetTop() - 682)*0.1));
+		}
 	}
-	return check_all_door_is_open;
+	else if (std_x + std_w < character.GetLeft() + character.GetWidth()) { //item->character
+		if ((opera.GetLeft() - 437) < 0) { //turn left
+			item.SetTopLeft(item.GetLeft() - int((opera.GetLeft() - 437)*0.1), item.GetTop() - int((opera.GetTop() - 682)*0.1));
+		}
+		else {
+			item.SetTopLeft(item.GetLeft(), item.GetTop() - int((opera.GetTop() - 682)*0.1));
+		}
+	}
+	else {
+		item.SetTopLeft(item.GetLeft() - int((opera.GetLeft() - 437)*0.1), item.GetTop() - int((opera.GetTop() - 682)*0.1));
+	}
+	if (character.IsOverlap(character, item)) {
+		item.SetFrameIndexOfBitmap(1);
+		if(energy_bar.GetFrameIndexOfBitmap() + 1 < 5)
+		energy_bar.SetFrameIndexOfBitmap(energy_bar.GetFrameIndexOfBitmap() + 1);
+	}
+
 }
 
-bool CGameStateRun::validate_phase_6() {
-	return ball.IsAnimationDone() && !ball.IsAnimation();
+void CGameStateRun::attack_bullet() {
+	while (bullet.GetTop() >= 0) {
+		bullet.SetTopLeft(481, bullet.GetTop()-1);
+	}
 }

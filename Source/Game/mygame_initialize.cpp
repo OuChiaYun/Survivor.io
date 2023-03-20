@@ -9,68 +9,73 @@
 
 using namespace game_framework;
 /////////////////////////////////////////////////////////////////////////////
-// ³o­Óclass¬°¹CÀ¸ªº¹CÀ¸¶}ÀYµe­±ª«¥ó
+// é€™å€‹classç‚ºéŠæˆ²çš„éŠæˆ²é–‹é ­ç•«é¢ç‰©ä»¶
 /////////////////////////////////////////////////////////////////////////////
 
 CGameStateInit::CGameStateInit(CGame *g) : CGameState(g)
 {
-	
 }
 
 void CGameStateInit::OnInit()
 {
 	//
-	// ·í¹Ï«Ü¦h®É¡AOnInit¸ü¤J©Ò¦³ªº¹Ï­nªá«Ü¦h®É¶¡¡C¬°Á×§Kª±¹CÀ¸ªº¤H
-	//     µ¥ªº¤£­@·Ğ¡A¹CÀ¸·|¥X²{¡uLoading ...¡v¡AÅã¥ÜLoadingªº¶i«×¡C
+	// ç•¶åœ–å¾ˆå¤šæ™‚ï¼ŒOnInitè¼‰å…¥æ‰€æœ‰çš„åœ–è¦èŠ±å¾ˆå¤šæ™‚é–“ã€‚ç‚ºé¿å…ç©éŠæˆ²çš„äºº
+	//     ç­‰çš„ä¸è€ç…©ï¼ŒéŠæˆ²æœƒå‡ºç¾ã€ŒLoading ...ã€ï¼Œé¡¯ç¤ºLoadingçš„é€²åº¦ã€‚
 	//
-	ShowInitProgress(0, "Start Initialize...");	// ¤@¶}©lªºloading¶i«×¬°0%
-	Sleep(200);
-
-	load_background();
-
-	ShowInitProgress(66, "Initialize...");
-	Sleep(200);
+	ShowInitProgress(0, "Start Initialize...");	// ä¸€é–‹å§‹çš„loadingé€²åº¦ç‚º0%
 	//
-	// ¦¹OnInit°Ê§@·|±µ¨ìCGameStaterRun::OnInit()¡A©Ò¥H¶i«×ÁÙ¨S¨ì100%
+	// é–‹å§‹è¼‰å…¥è³‡æ–™
+	//
+	Sleep(1000);				// æ”¾æ…¢ï¼Œä»¥ä¾¿çœ‹æ¸…æ¥šé€²åº¦ï¼Œå¯¦éš›éŠæˆ²è«‹åˆªé™¤æ­¤Sleep
+	//
+	// æ­¤OnInitå‹•ä½œæœƒæ¥åˆ°CGameStaterRun::OnInit()ï¼Œæ‰€ä»¥é€²åº¦é‚„æ²’åˆ°100%
 	//
 }
 
 void CGameStateInit::OnBeginState()
 {
-	
 }
 
 void CGameStateInit::OnKeyUp(UINT nChar, UINT nRepCnt, UINT nFlags)
 {
-	GotoGameState(GAME_STATE_RUN);		// ¤Á´«¦ÜGAME_STATE_RUN
+
 }
 
 void CGameStateInit::OnLButtonDown(UINT nFlags, CPoint point)
 {
+	if (nFlags == TRUE) {
+		if (select_scene1.GetLeft() <= point.x && point.x <= select_scene1.GetLeft() + select_scene1.GetWidth()
+			&& select_scene1.GetTop() <= point.y && point.y <= select_scene1.GetTop() + 300) {
+			selected1.SetFrameIndexOfBitmap(1);
+			Sleep(1000);
+		}
+		else {
+			selected1.SetFrameIndexOfBitmap(0);
+		}
+	}
+	background_select = 1;
+	GotoGameState(GAME_STATE_RUN);		// åˆ‡æ›è‡³GAME_STATE_RUN
 }
 
 void CGameStateInit::OnShow()
 {
-	background.ShowBitmap();
-	draw_text();
-}
+	logo.LoadBitmapByString({  "Resources/health_ui/health_ui_0.bmp" }, RGB(255, 255, 255));
+	logo.SetTopLeft(510, 0);
+	logo.ShowBitmap();
+	
+	select_scene1.LoadBitmapByString({ "Resources/select_background.bmp" });
+	select_scene1.SetTopLeft(10, 300);
+	select_scene1.ShowBitmap();
 
-void CGameStateInit::load_background() {
-	background.LoadBitmapByString({ "resources/initialize_background.bmp" });
-	background.SetTopLeft(0, 0);
-}
+	select_scene2.LoadBitmapByString({ "Resources/select_Hills.bmp" });
+	select_scene2.SetTopLeft(350, 300);
+	select_scene2.ShowBitmap();
 
-void CGameStateInit::draw_text() {
-	CDC *pDC = CDDraw::GetBackCDC();
-	CFont* fp;
+	selected1.LoadBitmapByString({ "Resources/ignore.bmp", "Resources/selected.bmp" }, RGB(255, 255, 255));
+	selected1.SetTopLeft(10, 300);
+	selected1.ShowBitmap();
 
-	/* Print title */
-	CTextDraw::ChangeFontLog(pDC, fp, 36, "·L³n¥¿¶ÂÅé", RGB(255, 255, 255));
-	CTextDraw::Print(pDC, 79, 228, "Game Framework Practice");
-
-	/* Print info */
-	CTextDraw::ChangeFontLog(pDC, fp, 24, "·L³n¥¿¶ÂÅé", RGB(255, 255, 255));
-	CTextDraw::Print(pDC, 182, 431, "Press any key to start");
-
-	CDDraw::ReleaseBackCDC();
+	selected2.LoadBitmapByString({ "Resources/ignore.bmp", "Resources/selected.bmp" }, RGB(255, 255, 255));
+	selected2.SetTopLeft(350, 300);
+	selected2.ShowBitmap();
 }
