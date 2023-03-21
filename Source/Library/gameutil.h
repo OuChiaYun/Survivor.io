@@ -112,6 +112,7 @@ namespace game_framework {
 		void set_timer(int t);
 		int get_timer();
 		void add_timer(int s);
+		void dart_hit_monster (vector<CMovingBitmap> &dart, vector<CMovingBitmap> &monster);
 
 		int center_x = 0;
 		int center_y = 0;

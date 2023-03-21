@@ -35,23 +35,20 @@ void CGameStateRun::OnMove()							// 移動遊戲元素
 {
 	timer += 1;
 
-	//background.SetTopLeft(background.GetLeft() - int((opera.GetLeft()- 437)*0.2), background.GetTop() - int((opera.GetTop() - 682)*0.2));
 	background_move();
 	show_img();
-	//background_move(background2);
 
 	for (int i = 0; i < 100; i++) {
 		item_move(energy[i]);
 		character.item_hit(character,energy[i]);
 	}
-	for (int i = 0;i< int(monster.size()); i++) {
+	for (int i = 0;i< (int)(monster.size()); i++) {
 		item_move(monster[i]);
-
 		if (!monster[i].IsOverlap(character,monster[i])) {
 			monster_move(monster[i]);
+
 		}
 		else {
-			//goal.SetTopLeft(goal.GetLeft() - 3, goal.GetTop());
 			hit_count += 1;
 			if (energy_bar.GetFrameIndexOfBitmap()>0 && hit_count >800) {
 				energy_bar.SetFrameIndexOfBitmap(energy_bar.GetFrameIndexOfBitmap() - 1);
@@ -59,14 +56,14 @@ void CGameStateRun::OnMove()							// 移動遊戲元素
 			}
 		}
 	}
-	if (timer*0.1 > 100 && int(monster.size())<80) {
+	if (timer > 10 && int(monster.size())<300) {
 		random_born_item(monster, { "Resources/m1.bmp","Resources/m2.bmp","Resources/m3.bmp","Resources/m4.bmp","Resources/m5.bmp","Resources/m6.bmp","Resources/m7.bmp" }, { 255,255,255 });
 		monster[monster.size()-1].SetAnimation(50, false);
 		timer = 0;
 	}
-	//if (dart.get_timer() % 10 == 0) {
-		//goal.SetTopLeft(300,goal.GetTop()+3);
-	//}
+
+	character.dart_hit_monster(dart, monster);
+
 
 
 	for (int i = 0; i < 2; i++) {
@@ -76,6 +73,8 @@ void CGameStateRun::OnMove()							// 移動遊戲元素
 			dart[i].set_timer(0);
 		}
 	}
+
+
 
 
 }
@@ -120,6 +119,7 @@ void CGameStateRun::OnInit()  								// 遊戲的初值及圖形設定
 		dart[i].LoadBitmapByString({ "Resources/dart.bmp" }, RGB(255, 255, 255));
 		dart[i].SetTopLeft(0, 0);
 		dart[i].set_timer(180*i);
+		dart[i].SetAnimation(100, false);
 	}
 
 }
@@ -206,7 +206,7 @@ void CGameStateRun::show_img() {
 	}
 
 	//if(monster.size()>0){
-	for (int i = 0;i< int(monster.size()); i++) {
+	for (int i = 0;i< (int)(monster.size()); i++) {
 		monster[i].ShowBitmap();
 	}
 	//}
@@ -325,6 +325,21 @@ void CMovingBitmap::item_hit(CMovingBitmap &character,CMovingBitmap &item) {
 	}
 }
 
+void CMovingBitmap::dart_hit_monster(vector<CMovingBitmap> &dart, vector<CMovingBitmap> &monster) {
+
+	for (int i = 0; i < (int)monster.size(); i++) {
+
+		for (int j = 0; j < (int)dart.size(); j++) {
+			if (IsOverlap(dart[j], monster[i])) {
+				monster.erase(monster.begin()+i);
+				break;
+				
+			}
+		}
+	}
+}
+
+
 void CGameStateRun::monster_move(CMovingBitmap &monster) {
 
 	int ax = int((monster.GetLeft() - character.GetLeft())*0.01), ay = int((monster.GetTop() - character.GetTop())*0.01);
@@ -366,9 +381,7 @@ void CGameStateRun::random_born_item(vector<CMovingBitmap> &item, vector<string>
 
 void CGameStateRun::dart_move(CMovingBitmap &item,int i) {
 	int r = 200;
-	//if(i <= 360){
 		int px = character.get_center_x() + (int)(r *cos(i * 3.14 / 180));
 		int py = character.get_center_y() + (int)(r *sin(i * 3.14 / 180));
 		item.SetTopLeft(px,py);
-	//}
 }
