@@ -109,9 +109,13 @@ namespace game_framework {
 		int get_center_x();
 		int get_center_y();
 		void item_hit(CMovingBitmap &character,CMovingBitmap &item);
+		void set_timer(int t);
+		int get_timer();
+		void add_timer(int s);
 
 		int center_x = 0;
 		int center_y = 0;
+		int timer = 0;
 		//////////////
 		/* Getter */
 		int   GetFrameIndexOfBitmap();

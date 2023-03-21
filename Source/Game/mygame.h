@@ -97,7 +97,8 @@ namespace game_framework {
 		CMovingBitmap opera;
 		CMovingBitmap goal;
 		CMovingBitmap energy_bar;
-
+		//CMovingBitmap dart;
+		vector <CMovingBitmap> dart;
 		vector <CMovingBitmap> energy;
 		vector<CMovingBitmap> monster;
 		void show_img();
@@ -106,6 +107,7 @@ namespace game_framework {
 		void item_move(CMovingBitmap &item);
 		void monster_move(CMovingBitmap &monster);
 		void random_born_item(vector<CMovingBitmap>&item,vector<string> str, vector<int>rgb);
+		void dart_move(CMovingBitmap &item, int i);
 		int hit_count = 0;
 		int timer = 0;
 	};

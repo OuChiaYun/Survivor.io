@@ -10,6 +10,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <time.h>
+#include <cmath>
+#define M_PI 3.14159265358979323846
 
 using namespace game_framework;
 
@@ -57,10 +59,22 @@ void CGameStateRun::OnMove()							// 移動遊戲元素
 			}
 		}
 	}
-	if (timer > 100 && int(monster.size())<80) {
+	if (timer*0.1 > 100 && int(monster.size())<80) {
 		random_born_item(monster, { "Resources/m1.bmp","Resources/m2.bmp","Resources/m3.bmp","Resources/m4.bmp","Resources/m5.bmp","Resources/m6.bmp","Resources/m7.bmp" }, { 255,255,255 });
 		monster[monster.size()-1].SetAnimation(50, false);
 		timer = 0;
+	}
+	//if (dart.get_timer() % 10 == 0) {
+		//goal.SetTopLeft(300,goal.GetTop()+3);
+	//}
+
+
+	for (int i = 0; i < 2; i++) {
+		dart[i].add_timer(1);
+		dart_move(dart[i], (dart[i].timer % 360) * 5);
+		if (dart[i].get_timer() > 360) {
+			dart[i].set_timer(0);
+		}
 	}
 
 
@@ -75,10 +89,10 @@ void CGameStateRun::OnInit()  								// 遊戲的初值及圖形設定
 
 	character.LoadBitmapByString({ "Resources/witch.bmp" }, RGB(255, 255, 255));
 	character.SetTopLeft(461, 252);
-	character.set_center(501,300); //40 49
+	character.set_center(470,270); //40 49
 
 	goal.LoadBitmapByString({ "Resources/goal.bmp" }, RGB(255, 255, 255));
-	goal.SetTopLeft(1000, 82);
+	goal.SetTopLeft(100, 82);
 
 	energy_bar.LoadBitmapByString({ "Resources/health_ui/health_ui_0.bmp", "Resources/health_ui/health_ui_1.bmp", "Resources/health_ui/health_ui_2.bmp", "Resources/health_ui/health_ui_3.bmp", "Resources/health_ui/health_ui_4.bmp" }, RGB(255, 255, 255));
 	energy_bar.SetFrameIndexOfBitmap(energy_bar.GetFrameSizeOfBitmap() - 1);
@@ -99,6 +113,15 @@ void CGameStateRun::OnInit()  								// 遊戲的初值及圖形設定
 	opera.LoadBitmapByString({ "Resources/operator.bmp" }, RGB(105, 106, 106));
 	opera.SetTopLeft(437, 682);
 	opera.set_center(437 + 54, 682 + 54);//491 , 736
+
+	
+	for (int i = 0; i < 2; i++) {
+		dart.push_back(CMovingBitmap());
+		dart[i].LoadBitmapByString({ "Resources/dart.bmp" }, RGB(255, 255, 255));
+		dart[i].SetTopLeft(0, 0);
+		dart[i].set_timer(180*i);
+	}
+
 }
 
 void CGameStateRun::OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags)
@@ -183,11 +206,15 @@ void CGameStateRun::show_img() {
 	}
 
 	//if(monster.size()>0){
-		for (int i = 0;i< int(monster.size()); i++) {
-			monster[i].ShowBitmap();
-		}
+	for (int i = 0;i< int(monster.size()); i++) {
+		monster[i].ShowBitmap();
+	}
 	//}
-		energy_bar.ShowBitmap();
+	energy_bar.ShowBitmap();
+
+	for (int i = 0; i < 2; i++) {
+		dart[i].ShowBitmap();
+	}
 }
 
 void CGameStateRun::show_text() {
@@ -335,4 +362,13 @@ void CGameStateRun::random_born_item(vector<CMovingBitmap> &item, vector<string>
 	item[tail].SetTopLeft(x, y);
 	item[tail].set_center(x + 45, y + 57);
 
+}
+
+void CGameStateRun::dart_move(CMovingBitmap &item,int i) {
+	int r = 200;
+	//if(i <= 360){
+		int px = character.get_center_x() + (int)(r *cos(i * 3.14 / 180));
+		int py = character.get_center_y() + (int)(r *sin(i * 3.14 / 180));
+		item.SetTopLeft(px,py);
+	//}
 }

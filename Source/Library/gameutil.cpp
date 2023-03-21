@@ -440,6 +440,17 @@ namespace game_framework {
 	int CMovingBitmap::get_center_y() {
 		return center_y;
 	}
+
+	void CMovingBitmap::set_timer(int t) {
+		timer = t;
+	};
+
+	int CMovingBitmap::get_timer() {
+		return timer;
+	}
+	void CMovingBitmap::add_timer(int s) {
+		timer += s;
+	}
 	/////////////////////////////
 
 }         
