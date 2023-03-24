@@ -26,7 +26,7 @@ namespace game_framework {
 	/////////////////////////////////////////////////////////////////////////////
 
 	//! CMovingBitmap 建構子
-	/*! 
+	/*!
 		用於創立一個尚未讀取圖片的物件。
 	*/
 	CMovingBitmap::CMovingBitmap()
@@ -69,7 +69,7 @@ namespace game_framework {
 		GAME_ASSERT(rval, "Load bitmap failed !!! Please check bitmap ID (IDB_XXX).");
 		BITMAP bitmapSize;
 		bitmap.GetBitmap(&bitmapSize);
-		
+
 		InitializeRectByBITMAP(bitmapSize);
 
 		surfaceID.push_back(CDDraw::RegisterBitmap(IDB_BITMAP, color));
@@ -135,7 +135,7 @@ namespace game_framework {
 			LoadBitmap((char*)filepaths[i].c_str(), color);
 		}
 	}
-	
+
 	//! 讀取空白圖片資源。
 	/*!
 		讀取一個特定大小的白色點陣圖。
@@ -163,7 +163,7 @@ namespace game_framework {
 
 		bmp->DeleteObject();
 	}
-	
+
 	//! 停止顯示圖片。
 	/*!
 		@deprecated 從 v1.0.0 版本後棄用，停止顯示圖片請在 `OnShow()` 時不呼叫 `ShowBitmap()` 即可
@@ -204,11 +204,11 @@ namespace game_framework {
 		\sa ToggleAnimation()
 	*/
 	void CMovingBitmap::SetAnimation(int delay, bool once) {
-		if(!once) isAnimation = true;
+		if (!once) isAnimation = true;
 		isOnce = once;
 		delayCount = delay;
 	}
-	
+
 	//! 顯示圖片。
 	/*!
 		僅能在 `onShow()` 時呼叫，且圖片需要被讀取。
@@ -238,7 +238,7 @@ namespace game_framework {
 		\param frameIndex 圖片顯示幀的索引值。
 	*/
 	void CMovingBitmap::SetFrameIndexOfBitmap(int frameIndex) {
-		GAME_ASSERT(frameIndex < (int) surfaceID.size(), "選擇圖片時索引出界");
+		GAME_ASSERT(frameIndex < (int)surfaceID.size(), "選擇圖片時索引出界");
 		this->frameIndex = frameIndex;
 	}
 
@@ -269,7 +269,7 @@ namespace game_framework {
 		GAME_ASSERT(isBitmapLoaded, "A bitmap must be loaded before Width() is called !!!");
 		return locations[frameIndex].right - locations[frameIndex].left;
 	}
-	
+
 	//! 啟動單次動畫。
 	/*!
 		將動畫設為初始幀，並且初始化單次動畫的參數值。
@@ -317,7 +317,7 @@ namespace game_framework {
 		\return 回傳物件的幀數。
 	*/
 	int CMovingBitmap::GetFrameSizeOfBitmap() {
-		return (int) surfaceID.size();
+		return (int)surfaceID.size();
 	}
 
 	//! 根據 BITMAP 來初始化 CMovingBitmap 內的 location 物件。
@@ -451,6 +451,20 @@ namespace game_framework {
 	void CMovingBitmap::add_timer(int s) {
 		timer += s;
 	}
+
+
+	void CMovingBitmap::set_hp(int blood) {
+		hp = blood;
+	}
+
+	int CMovingBitmap::get_hp(){
+		return hp;
+	};
+
+	void CMovingBitmap::add_sub_hp(int blood) {
+		hp = hp + blood;
+	}
+
 	/////////////////////////////
 
 }         

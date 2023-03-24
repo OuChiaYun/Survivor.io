@@ -106,17 +106,25 @@ namespace game_framework {
 
 		////////////
 		void set_center(int x, int y);
+		void set_timer(int t);
+		void set_hp(int blood);
+
 		int get_center_x();
 		int get_center_y();
-		void item_hit(CMovingBitmap &character,CMovingBitmap &item);
-		void set_timer(int t);
 		int get_timer();
-		void add_timer(int s);
-		void dart_hit_monster (vector<CMovingBitmap> &dart, vector<CMovingBitmap> &monster);
+		int get_hp();
 
+		void add_timer(int s);
+		void add_sub_hp(int blood);
+
+
+		void dart_hit_monster (vector<CMovingBitmap> &dart, vector<CMovingBitmap> &monster);
+		void item_hit(CMovingBitmap &character, CMovingBitmap &item);
+		
 		int center_x = 0;
 		int center_y = 0;
 		int timer = 0;
+		int hp = 0;
 		//////////////
 		/* Getter */
 		int   GetFrameIndexOfBitmap();

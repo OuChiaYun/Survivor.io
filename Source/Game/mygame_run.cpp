@@ -10,8 +10,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <time.h>
-#include <cmath>
-#define M_PI 3.14159265358979323846
+
 
 using namespace game_framework;
 
@@ -36,12 +35,15 @@ void CGameStateRun::OnMove()							// 移動遊戲元素
 	timer += 1;
 
 	background_move();
-	show_img();
+	
 
 	for (int i = 0; i < 100; i++) {
 		item_move(energy[i]);
 		character.item_hit(character,energy[i]);
 	}
+
+
+	int flag = 0;
 	for (int i = 0;i< (int)(monster.size()); i++) {
 		item_move(monster[i]);
 		if (!monster[i].IsOverlap(character,monster[i])) {
@@ -49,16 +51,26 @@ void CGameStateRun::OnMove()							// 移動遊戲元素
 
 		}
 		else {
-			hit_count += 1;
-			if (energy_bar.GetFrameIndexOfBitmap()>0 && hit_count >800) {
+			//hit_count += 1;
+			flag++;
+			character.add_sub_hp(-5);
+			if (flag <= 3) {
+				character.SetFrameIndexOfBitmap(flag);
+			}
+			if (energy_bar.GetFrameIndexOfBitmap()>0 && character.get_hp() %1000 == 0) {
 				energy_bar.SetFrameIndexOfBitmap(energy_bar.GetFrameIndexOfBitmap() - 1);
-				hit_count = 0;
 			}
 		}
 	}
+
+	if (flag == 0) {
+		character.SetFrameIndexOfBitmap(0);
+	}
+
 	if (timer > 10 && int(monster.size())<300) {
 		random_born_item(monster, { "Resources/m1.bmp","Resources/m2.bmp","Resources/m3.bmp","Resources/m4.bmp","Resources/m5.bmp","Resources/m6.bmp","Resources/m7.bmp" }, { 255,255,255 });
 		monster[monster.size()-1].SetAnimation(50, false);
+		monster[monster.size() - 1].set_hp(6);
 		timer = 0;
 	}
 
@@ -66,7 +78,7 @@ void CGameStateRun::OnMove()							// 移動遊戲元素
 
 
 
-	for (int i = 0; i < 2; i++) {
+	for (int i = 0; i < (int)dart.size(); i++) {
 		dart[i].add_timer(1);
 		dart_move(dart[i], (dart[i].timer % 360) * 5);
 		if (dart[i].get_timer() > 360) {
@@ -74,7 +86,7 @@ void CGameStateRun::OnMove()							// 移動遊戲元素
 		}
 	}
 
-
+	item_move(boss2);
 
 
 }
@@ -86,15 +98,19 @@ void CGameStateRun::OnInit()  								// 遊戲的初值及圖形設定
 	background2.LoadBitmapByString({ "Resources/background.bmp" });
 	background2.SetTopLeft(0, 4000);
 
-	character.LoadBitmapByString({ "Resources/witch.bmp" }, RGB(255, 255, 255));
+	character.LoadBitmapByString({ "Resources/witch.bmp","Resources/witch_hurt.bmp","Resources/witch_hurt2.bmp","Resources/witch_hurt3.bmp" }, RGB(255, 255, 255));
 	character.SetTopLeft(461, 252);
 	character.set_center(470,270); //40 49
+	character.set_hp(50000);
 
 	goal.LoadBitmapByString({ "Resources/goal.bmp" }, RGB(255, 255, 255));
 	goal.SetTopLeft(100, 82);
 
 	energy_bar.LoadBitmapByString({ "Resources/health_ui/health_ui_0.bmp", "Resources/health_ui/health_ui_1.bmp", "Resources/health_ui/health_ui_2.bmp", "Resources/health_ui/health_ui_3.bmp", "Resources/health_ui/health_ui_4.bmp" }, RGB(255, 255, 255));
 	energy_bar.SetFrameIndexOfBitmap(energy_bar.GetFrameSizeOfBitmap() - 1);
+
+	boss2.LoadBitmapByString({ "Resources/boss2.bmp" }, RGB(255, 255, 255));
+	boss2.SetTopLeft(100, 322);
 
 	srand((unsigned)time(NULL));
 	/* 指定亂數範圍 */
@@ -107,6 +123,7 @@ void CGameStateRun::OnInit()  								// 遊戲的初值及圖形設定
 		int arr[] = { 1,2,3 };
 		random_born_item(monster, { "Resources/m1.bmp","Resources/m2.bmp","Resources/m3.bmp","Resources/m4.bmp","Resources/m5.bmp","Resources/m6.bmp","Resources/m7.bmp" }, { 255,255,255 });
 		monster[i].SetAnimation(50, false);
+		monster[i].set_hp(6);
 	}
 
 	opera.LoadBitmapByString({ "Resources/operator.bmp" }, RGB(105, 106, 106));
@@ -114,11 +131,11 @@ void CGameStateRun::OnInit()  								// 遊戲的初值及圖形設定
 	opera.set_center(437 + 54, 682 + 54);//491 , 736
 
 	
-	for (int i = 0; i < 2; i++) {
+	for (int i = 0; i < 6; i++) { //max 9
 		dart.push_back(CMovingBitmap());
 		dart[i].LoadBitmapByString({ "Resources/dart.bmp" }, RGB(255, 255, 255));
 		dart[i].SetTopLeft(0, 0);
-		dart[i].set_timer(180*i);
+		dart[i].set_timer((int)(i+1)*(360/6));
 		dart[i].SetAnimation(100, false);
 	}
 
@@ -201,6 +218,7 @@ void CGameStateRun::show_img() {
 	character.ShowBitmap();
 	opera.ShowBitmap();
 	goal.ShowBitmap();
+	boss2.ShowBitmap();
 	for (int i = 0; i < 100; i++) {
 		energy[i].ShowBitmap();
 	}
@@ -212,7 +230,7 @@ void CGameStateRun::show_img() {
 	//}
 	energy_bar.ShowBitmap();
 
-	for (int i = 0; i < 2; i++) {
+	for (int i = 0; i < (int)dart.size(); i++) {
 		dart[i].ShowBitmap();
 	}
 }
@@ -331,8 +349,12 @@ void CMovingBitmap::dart_hit_monster(vector<CMovingBitmap> &dart, vector<CMoving
 
 		for (int j = 0; j < (int)dart.size(); j++) {
 			if (IsOverlap(dart[j], monster[i])) {
-				monster.erase(monster.begin()+i);
-				break;
+
+				monster[i].add_sub_hp(-1);
+				if (monster[i].get_hp() <= 0) {
+					monster.erase(monster.begin() + i);
+					break;
+				}
 				
 			}
 		}
