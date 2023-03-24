@@ -43,9 +43,40 @@ void CGameStateInit::OnKeyUp(UINT nChar, UINT nRepCnt, UINT nFlags)
 
 void CGameStateInit::OnLButtonDown(UINT nFlags, CPoint point)
 {
-	GotoGameState(GAME_STATE_RUN);		// 切換至GAME_STATE_RUN
+	if (nFlags == TRUE) {
+		if (select_scene1.GetLeft() <= point.x && point.x <= select_scene1.GetLeft() + select_scene1.GetWidth()
+			&& select_scene1.GetTop() <= point.y && point.y <= select_scene1.GetTop() + 300) {
+			selected1.SetFrameIndexOfBitmap(1);
+			set_init_background_value(0);
+		}
+		else if (select_scene2.GetLeft() <= point.x && point.x <= select_scene2.GetLeft() + select_scene2.GetWidth()
+			&& select_scene2.GetTop() <= point.y && point.y <= select_scene2.GetTop() + 300) {
+			selected2.SetFrameIndexOfBitmap(1);
+			set_init_background_value(1);
+		}
+		GotoGameState(GAME_STATE_RUN);
+	}
 }
 
 void CGameStateInit::OnShow()
 {
+	logo.LoadBitmapByString({ "Resources/health_ui/health_ui_0.bmp" }, RGB(255, 255, 255));
+	logo.SetTopLeft(510, 0);
+	logo.ShowBitmap();
+
+	select_scene1.LoadBitmapByString({ "Resources/select_background.bmp" });
+	select_scene1.SetTopLeft(10, 300);
+	select_scene1.ShowBitmap();
+
+	select_scene2.LoadBitmapByString({ "Resources/select_Hills.bmp" });
+	select_scene2.SetTopLeft(350, 300);
+	select_scene2.ShowBitmap();
+
+	selected1.LoadBitmapByString({ "Resources/ignore.bmp", "Resources/selected.bmp" }, RGB(255, 255, 255));
+	selected1.SetTopLeft(10, 300);
+	selected1.ShowBitmap();
+
+	selected2.LoadBitmapByString({ "Resources/ignore.bmp", "Resources/selected.bmp" }, RGB(255, 255, 255));
+	selected2.SetTopLeft(350, 300);
+	selected2.ShowBitmap();
 }

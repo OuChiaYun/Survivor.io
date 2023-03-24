@@ -236,6 +236,7 @@
     <None Include="RES\GAME.RC2" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="..\oopL_sunny\Survivor.io\Source\Game\mygame_value.cpp" />
     <ClCompile Include="Source\Core\game.cpp" />
     <ClCompile Include="Source\Core\gameDoc.cpp" />
     <ClCompile Include="Source\Core\gameView.cpp" />

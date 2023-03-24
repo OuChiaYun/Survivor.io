@@ -50,12 +50,20 @@ namespace game_framework {
 		AUDIO_NTUT				// 2
 	};
 
+	class CGameStateValueStorage {
+	public:
+		CGameStateValueStorage();
+		static void set_init_background_value(int);
+		static int get_init_background_value();
+	private:
+		static int init_background_value;
+	};
 	/////////////////////////////////////////////////////////////////////////////
 	// 這個class為遊戲的遊戲開頭畫面物件
 	// 每個Member function的Implementation都要弄懂
 	/////////////////////////////////////////////////////////////////////////////
 
-	class CGameStateInit : public CGameState {
+	class CGameStateInit : public CGameState, public CGameStateValueStorage {
 	public:
 		CGameStateInit(CGame *g);
 		void OnInit();  								// 遊戲的初值及圖形設定
@@ -66,6 +74,10 @@ namespace game_framework {
 		void OnShow();									// 顯示這個狀態的遊戲畫面
 	private:
 		CMovingBitmap logo;								// csie的logo
+		CMovingBitmap select_scene1;
+		CMovingBitmap select_scene2;
+		CMovingBitmap selected1;
+		CMovingBitmap selected2;
 	};
 
 	/////////////////////////////////////////////////////////////////////////////
@@ -73,7 +85,7 @@ namespace game_framework {
 	// 每個Member function的Implementation都要弄懂
 	/////////////////////////////////////////////////////////////////////////////
 
-	class CGameStateRun : public CGameState {
+	class CGameStateRun : public CGameState, public CGameStateValueStorage {
 	public:
 		CGameStateRun(CGame *g);
 		~CGameStateRun();
@@ -107,6 +119,8 @@ namespace game_framework {
 
 		void show_img();
 		void show_text();
+		
+		void show_baclground_selected();
 
 		void background_move();
 		void item_move(CMovingBitmap &item);
@@ -124,7 +138,7 @@ namespace game_framework {
 	// 每個Member function的Implementation都要弄懂
 	/////////////////////////////////////////////////////////////////////////////
 
-	class CGameStateOver : public CGameState {
+	class CGameStateOver : public CGameState, public CGameStateValueStorage {
 	public:
 		CGameStateOver(CGame *g);
 		void OnBeginState();							// 設定每次重玩所需的變數

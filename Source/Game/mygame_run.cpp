@@ -33,7 +33,6 @@ void CGameStateRun::OnBeginState()
 void CGameStateRun::OnMove()							// 移動遊戲元素
 {
 	timer += 1;
-
 	background_move();
 	
 
@@ -93,9 +92,9 @@ void CGameStateRun::OnMove()							// 移動遊戲元素
 
 void CGameStateRun::OnInit()  								// 遊戲的初值及圖形設定
 {
-	background.LoadBitmapByString({ "Resources/background.bmp" });
+	background.LoadBitmapByString({ "Resources/background.bmp", "Resources/Hills.bmp" });
 	background.SetTopLeft(-1500, -1500);
-	background2.LoadBitmapByString({ "Resources/background.bmp" });
+	background2.LoadBitmapByString({ "Resources/background.bmp", "Resources/Hills.bmp" });
 	background2.SetTopLeft(0, 4000);
 
 	character.LoadBitmapByString({ "Resources/witch.bmp","Resources/witch_hurt.bmp","Resources/witch_hurt2.bmp","Resources/witch_hurt3.bmp" }, RGB(255, 255, 255));
@@ -214,6 +213,7 @@ void CGameStateRun::OnShow()
 }
 
 void CGameStateRun::show_img() {
+	show_baclground_selected();
 	background.ShowBitmap();
 	character.ShowBitmap();
 	opera.ShowBitmap();
@@ -237,6 +237,19 @@ void CGameStateRun::show_img() {
 
 void CGameStateRun::show_text() {
 
+}
+
+void CGameStateRun::show_baclground_selected() {
+	if (get_init_background_value() == 0) {
+		background.SetFrameIndexOfBitmap(0);
+		background2.SetFrameIndexOfBitmap(0);
+	}
+	else if (get_init_background_value() == 1) {
+		background.SetFrameIndexOfBitmap(1);
+		background2.SetFrameIndexOfBitmap(1);
+	}
+	//background.SetTopLeft(0, 0);
+//	background2.SetTopLeft(0, 4000);
 }
 
 void CGameStateRun::background_move() {
