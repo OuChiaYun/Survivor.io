@@ -1,5 +1,5 @@
 /*
- * mygame.h: ¥»ÀÉ®×Àx¹CÀ¸¥»¨­ªºclassªºinterface
+ * mygame.h: æœ¬æª”æ¡ˆå„²éŠæˆ²æœ¬èº«çš„classçš„interface
  * Copyright (C) 2002-2008 Woei-Kae Chen <wkc@csie.ntut.edu.tw>
  *
  * This file is part of game, a free game development framework for windows.
@@ -44,89 +44,110 @@ namespace game_framework {
 	// Constants
 	/////////////////////////////////////////////////////////////////////////////
 
-	enum AUDIO_ID {				// ©w¸q¦UºØ­µ®Äªº½s¸¹
+	enum AUDIO_ID {				// å®šç¾©å„ç¨®éŸ³æ•ˆçš„ç·¨è™Ÿ
 		AUDIO_DING,				// 0
 		AUDIO_LAKE,				// 1
 		AUDIO_NTUT				// 2
 	};
 
+	class CGameStateValueStorage {
+	public:
+		CGameStateValueStorage();
+		static void set_init_background_value(int);
+		static int get_init_background_value();
+	private:
+		static int init_background_value;
+	};
 	/////////////////////////////////////////////////////////////////////////////
-	// ³o­Óclass¬°¹CÀ¸ªº¹CÀ¸¶}ÀYµe­±ª«¥ó
-	// ¨C­ÓMember functionªºImplementation³£­n§ËÀ´
+	// é€™å€‹classç‚ºéŠæˆ²çš„éŠæˆ²é–‹é ­ç•«é¢ç‰©ä»¶
+	// æ¯å€‹Member functionçš„Implementationéƒ½è¦å¼„æ‡‚
 	/////////////////////////////////////////////////////////////////////////////
 
-	class CGameStateInit : public CGameState {
+	class CGameStateInit : public CGameState, public CGameStateValueStorage {
 	public:
 		CGameStateInit(CGame *g);
-		void OnInit();  								// ¹CÀ¸ªºªì­È¤Î¹Ï§Î³]©w
-		void OnBeginState();							// ³]©w¨C¦¸­«ª±©Ò»İªºÅÜ¼Æ
-		void OnKeyUp(UINT, UINT, UINT); 				// ³B²zÁä½LUpªº°Ê§@
-		void OnLButtonDown(UINT nFlags, CPoint point);  // ³B²z·Æ¹«ªº°Ê§@
+		void OnInit();  								// éŠæˆ²çš„åˆå€¼åŠåœ–å½¢è¨­å®š
+		void OnBeginState();							// è¨­å®šæ¯æ¬¡é‡ç©æ‰€éœ€çš„è®Šæ•¸
+		void OnKeyUp(UINT, UINT, UINT); 				// è™•ç†éµç›¤Upçš„å‹•ä½œ
+		void OnLButtonDown(UINT nFlags, CPoint point);  // è™•ç†æ»‘é¼ çš„å‹•ä½œ
 	protected:
-		void OnShow();									// Åã¥Ü³o­Óª¬ºAªº¹CÀ¸µe­±
+		void OnShow();									// é¡¯ç¤ºé€™å€‹ç‹€æ…‹çš„éŠæˆ²ç•«é¢
 	private:
-		void load_background();
-		void draw_text();
-		CMovingBitmap background;
+		CMovingBitmap logo;								// csieçš„logo
+		CMovingBitmap select_scene1;
+		CMovingBitmap select_scene2;
+		CMovingBitmap selected1;
+		CMovingBitmap selected2;
 	};
 
 	/////////////////////////////////////////////////////////////////////////////
-	// ³o­Óclass¬°¹CÀ¸ªº¹CÀ¸°õ¦æª«¥ó¡A¥D­nªº¹CÀ¸µ{¦¡³£¦b³o¸Ì
-	// ¨C­ÓMember functionªºImplementation³£­n§ËÀ´
+	// é€™å€‹classç‚ºéŠæˆ²çš„éŠæˆ²åŸ·è¡Œç‰©ä»¶ï¼Œä¸»è¦çš„éŠæˆ²ç¨‹å¼éƒ½åœ¨é€™è£¡
+	// æ¯å€‹Member functionçš„Implementationéƒ½è¦å¼„æ‡‚
 	/////////////////////////////////////////////////////////////////////////////
 
-	class CGameStateRun : public CGameState {
+	class CGameStateRun : public CGameState, public CGameStateValueStorage {
 	public:
 		CGameStateRun(CGame *g);
 		~CGameStateRun();
-		void OnBeginState();							// ³]©w¨C¦¸­«ª±©Ò»İªºÅÜ¼Æ
-		void OnInit();  								// ¹CÀ¸ªºªì­È¤Î¹Ï§Î³]©w
+		void OnBeginState();							// è¨­å®šæ¯æ¬¡é‡ç©æ‰€éœ€çš„è®Šæ•¸
+		void OnInit();  								// éŠæˆ²çš„åˆå€¼åŠåœ–å½¢è¨­å®š
 		void OnKeyDown(UINT, UINT, UINT);
 		void OnKeyUp(UINT, UINT, UINT);
-		void OnLButtonDown(UINT nFlags, CPoint point);  // ³B²z·Æ¹«ªº°Ê§@
-		void OnLButtonUp(UINT nFlags, CPoint point);	// ³B²z·Æ¹«ªº°Ê§@
-		void OnMouseMove(UINT nFlags, CPoint point);	// ³B²z·Æ¹«ªº°Ê§@ 
-		void OnRButtonDown(UINT nFlags, CPoint point);  // ³B²z·Æ¹«ªº°Ê§@
-		void OnRButtonUp(UINT nFlags, CPoint point);	// ³B²z·Æ¹«ªº°Ê§@
+		void OnLButtonDown(UINT nFlags, CPoint point);  // è™•ç†æ»‘é¼ çš„å‹•ä½œ
+		void OnLButtonUp(UINT nFlags, CPoint point);	// è™•ç†æ»‘é¼ çš„å‹•ä½œ
+		void OnMouseMove(UINT nFlags, CPoint point);	// è™•ç†æ»‘é¼ çš„å‹•ä½œ 
+		void OnRButtonDown(UINT nFlags, CPoint point);  // è™•ç†æ»‘é¼ çš„å‹•ä½œ
+		void OnRButtonUp(UINT nFlags, CPoint point);	// è™•ç†æ»‘é¼ çš„å‹•ä½œ
+
 	protected:
-		void OnMove();									// ²¾°Ê¹CÀ¸¤¸¯À
-		void OnShow();									// Åã¥Ü³o­Óª¬ºAªº¹CÀ¸µe­±
+		void OnMove();									// ç§»å‹•éŠæˆ²å…ƒç´ 
+		void OnShow();		// é¡¯ç¤ºé€™å€‹ç‹€æ…‹çš„éŠæˆ²ç•«é¢
 	private:
-		int phase = 1;
-		int sub_phase = 1;
 		CMovingBitmap background;
+		CMovingBitmap background2;
 		CMovingBitmap character;
-		CMovingBitmap chest_and_key;
-		CMovingBitmap bee;
-		CMovingBitmap ball;
-		CMovingBitmap door[3];
-		void show_image_by_phase();
-		void show_text_by_phase();
-		bool validate_phase_1();
-		bool validate_phase_2();
-		bool validate_phase_3();
-		bool validate_phase_4();
-		bool validate_phase_5();
-		bool validate_phase_6();
+		CMovingBitmap opera;
+		CMovingBitmap goal;
+		CMovingBitmap energy_bar;
+		CMovingBitmap boss2;
+
+
+		//CMovingBitmap dart;
+		vector <CMovingBitmap> dart;
+		vector <CMovingBitmap> energy;
+		vector<CMovingBitmap> monster;
+
+		void show_img();
+		void show_text();
+		
+		void show_baclground_selected();
+
+		void background_move();
+		void item_move(CMovingBitmap &item);
+		void monster_move(CMovingBitmap &monster);
+		void dart_move(CMovingBitmap &item, int i);
+	
+
+		void random_born_item(vector<CMovingBitmap>&item,vector<string> str, vector<int>rgb);
+		int hit_count = 0;
+		int timer = 0;
 	};
 
 	/////////////////////////////////////////////////////////////////////////////
-	// ³o­Óclass¬°¹CÀ¸ªºµ²§ôª¬ºA(Game Over)
-	// ¨C­ÓMember functionªºImplementation³£­n§ËÀ´
+	// é€™å€‹classç‚ºéŠæˆ²çš„çµæŸç‹€æ…‹(Game Over)
+	// æ¯å€‹Member functionçš„Implementationéƒ½è¦å¼„æ‡‚
 	/////////////////////////////////////////////////////////////////////////////
 
-	class CGameStateOver : public CGameState {
+	class CGameStateOver : public CGameState, public CGameStateValueStorage {
 	public:
 		CGameStateOver(CGame *g);
-		void OnBeginState();							// ³]©w¨C¦¸­«ª±©Ò»İªºÅÜ¼Æ
+		void OnBeginState();							// è¨­å®šæ¯æ¬¡é‡ç©æ‰€éœ€çš„è®Šæ•¸
 		void OnInit();
-		void OnKeyDown(UINT, UINT, UINT);
 	protected:
-		void OnMove();									// ²¾°Ê¹CÀ¸¤¸¯À
-		void OnShow();									// Åã¥Ü³o­Óª¬ºAªº¹CÀ¸µe­±
+		void OnMove();									// ç§»å‹•éŠæˆ²å…ƒç´ 
+		void OnShow();									// é¡¯ç¤ºé€™å€‹ç‹€æ…‹çš„éŠæˆ²ç•«é¢
 	private:
-		CMovingBitmap background;
-		void load_background();
+		int counter;	// å€’æ•¸ä¹‹è¨ˆæ•¸å™¨
 	};
 
 }
