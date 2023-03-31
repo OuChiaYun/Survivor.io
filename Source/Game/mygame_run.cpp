@@ -66,7 +66,7 @@ void CGameStateRun::OnMove()							// 移動遊戲元素
 		character.SetFrameIndexOfBitmap(0);
 	}
 
-	if (timer > 10 && int(monster.size())<300) {
+	if (timer > 10 && int(monster.size())<100) {
 		random_born_item(monster, { "Resources/m1.bmp","Resources/m2.bmp","Resources/m3.bmp","Resources/m4.bmp","Resources/m5.bmp","Resources/m6.bmp","Resources/m7.bmp" }, { 255,255,255 });
 		monster[monster.size()-1].SetAnimation(50, false);
 		monster[monster.size() - 1].set_hp(6);
@@ -225,7 +225,9 @@ void CGameStateRun::show_img() {
 
 	//if(monster.size()>0){
 	for (int i = 0;i< (int)(monster.size()); i++) {
-		monster[i].ShowBitmap();
+		if (monster[i].IsOverlap(monster[i], background)) {
+			monster[i].ShowBitmap();
+		}
 	}
 	//}
 	energy_bar.ShowBitmap();
@@ -249,50 +251,51 @@ void CGameStateRun::show_baclground_selected() {
 		background2.SetFrameIndexOfBitmap(1);
 	}
 	//background.SetTopLeft(0, 0);
-//	background2.SetTopLeft(0, 4000);
+	//background2.SetTopLeft(0, 4000);
 }
 
 void CGameStateRun::background_move() {
 
+	double rate = 0.115;
 	if (background.GetLeft() > character.GetLeft()) { //character->item
 		if ((opera.GetLeft() - 437) > 0) { //turn right
-			background.SetTopLeft(background.GetLeft() - int((opera.GetLeft() - 437)*0.2), background.GetTop() - int((opera.GetTop() - 682)*0.2));
+			background.SetTopLeft(background.GetLeft() - int((opera.GetLeft() - 437)*rate), background.GetTop() - int((opera.GetTop() - 682)*rate));
 		}
 		else {
-			background.SetTopLeft(background.GetLeft(), background.GetTop() - int((opera.GetTop() - 682)*0.2));
+			background.SetTopLeft(background.GetLeft(), background.GetTop() - int((opera.GetTop() - 682)*rate));
 
 		}
 	}
 	else if (background.GetLeft() + background.GetWidth() < character.GetLeft() + character.GetWidth()) { //item->character
 		if ((opera.GetLeft() - 437) < 0) { //turn left
-			background.SetTopLeft(background.GetLeft() - int((opera.GetLeft() - 437)*0.2), background.GetTop() - int((opera.GetTop() - 682)*0.2));
+			background.SetTopLeft(background.GetLeft() - int((opera.GetLeft() - 437)*rate), background.GetTop() - int((opera.GetTop() - 682)*rate));
 
 		}
 		else {
-			background.SetTopLeft(background.GetLeft(), background.GetTop() - int((opera.GetTop() - 682)*0.2));
+			background.SetTopLeft(background.GetLeft(), background.GetTop() - int((opera.GetTop() - 682)*rate));
 
 		}
 	}
 	else if (background.GetTop() > character.GetTop()) { //character->item
 		if ((opera.GetTop()) > 682) { //turn right
-			background.SetTopLeft(background.GetLeft() - int((opera.GetLeft() - 437)*0.2), background.GetTop() - int((opera.GetTop() - 682)*0.2));
+			background.SetTopLeft(background.GetLeft() - int((opera.GetLeft() - 437)*rate), background.GetTop() - int((opera.GetTop() - 682)*rate));
 		}
 		else {
-			background.SetTopLeft(background.GetLeft() - int((opera.GetLeft() - 437)*0.2), background.GetTop());
+			background.SetTopLeft(background.GetLeft() - int((opera.GetLeft() - 437)*rate), background.GetTop());
 
 		}
 	}
 	else if (background.GetTop() + background.GetHeight() < character.GetTop() + character.GetHeight()) { //character->item
 		if ((opera.GetTop()) < 682) { //turn right
-			background.SetTopLeft(background.GetLeft() - int((opera.GetLeft() - 437)*0.2), background.GetTop() - int((opera.GetTop() - 682)*0.2));
+			background.SetTopLeft(background.GetLeft() - int((opera.GetLeft() - 437)*rate), background.GetTop() - int((opera.GetTop() - 682)*rate));
 		}
 		else {
-			background.SetTopLeft(background.GetLeft() - int((opera.GetLeft() - 437)*0.2), background.GetTop());
+			background.SetTopLeft(background.GetLeft() - int((opera.GetLeft() - 437)*rate), background.GetTop());
 
 		}
 	}
 	else {
-		background.SetTopLeft(background.GetLeft() - int((opera.GetLeft() - 437)*0.2), background.GetTop() - int((opera.GetTop() - 682)*0.2));
+		background.SetTopLeft(background.GetLeft() - int((opera.GetLeft() - 437)*rate), background.GetTop() - int((opera.GetTop() - 682)*rate));
 
 	}
 
@@ -301,8 +304,9 @@ void CGameStateRun::background_move() {
 }
 
 void CGameStateRun::item_move(CMovingBitmap &item) {
-	int x = item.GetLeft() - int((opera.GetLeft() - 437)*0.2);
-	int y = item.GetTop() - int((opera.GetTop() - 682)*0.2);
+	double rate = 0.115;
+	int x = item.GetLeft() - int((opera.GetLeft() - 437)*rate);
+	int y = item.GetTop() - int((opera.GetTop() - 682)*rate);
 
 	int std_x = background.GetLeft();
 	int std_w = background.GetWidth();
@@ -310,40 +314,40 @@ void CGameStateRun::item_move(CMovingBitmap &item) {
 
 	if (background.GetLeft() >= character.GetLeft()) { //character->item
 		if (opera.GetLeft()  > 437) { //turn right
-			item.SetTopLeft(item.GetLeft() - int((opera.GetLeft() - 437)*0.2), item.GetTop() - int((opera.GetTop() - 682)*0.2));
+			item.SetTopLeft(item.GetLeft() - int((opera.GetLeft() - 437)*rate), item.GetTop() - int((opera.GetTop() - 682)*rate));
 		}
 		else {
-			item.SetTopLeft(item.GetLeft(), item.GetTop() - int((opera.GetTop() - 682)*0.2));
+			item.SetTopLeft(item.GetLeft(), item.GetTop() - int((opera.GetTop() - 682)*rate));
 		}
 	}
 	else if (background.GetLeft() + background.GetWidth() <= character.GetLeft() + character.GetWidth()) { //item->character
 		if ((opera.GetLeft()) < 437) { //turn left
-			item.SetTopLeft(item.GetLeft() - int((opera.GetLeft() - 437)*0.2), item.GetTop() - int((opera.GetTop() - 682)*0.2));
+			item.SetTopLeft(item.GetLeft() - int((opera.GetLeft() - 437)*rate), item.GetTop() - int((opera.GetTop() - 682)*rate));
 		}
 		else {
-			item.SetTopLeft(item.GetLeft(), item.GetTop() - int((opera.GetTop() - 682)*0.2));
+			item.SetTopLeft(item.GetLeft(), item.GetTop() - int((opera.GetTop() - 682)*rate));
 		}
 	}
 
 	else if (background.GetTop() >= character.GetTop()) { //character->item
 		if (opera.GetTop() > 682) { //turn right
-			item.SetTopLeft(item.GetLeft() - int((opera.GetLeft() - 437)*0.2), item.GetTop() - int((opera.GetTop() - 682)*0.2));
+			item.SetTopLeft(item.GetLeft() - int((opera.GetLeft() - 437)*rate), item.GetTop() - int((opera.GetTop() - 682)*rate));
 		}
 		else {
-			item.SetTopLeft(item.GetLeft() - int((opera.GetLeft() - 437)*0.2), item.GetTop());
+			item.SetTopLeft(item.GetLeft() - int((opera.GetLeft() - 437)*rate), item.GetTop());
 		}
 	}
 	else if (background.GetTop() + background.GetHeight() <= character.GetTop() + character.GetHeight()) { //item->character
 		if ((opera.GetLeft()) > 682) { //turn left
-			item.SetTopLeft(item.GetLeft() - int((opera.GetLeft() - 437)*0.2), item.GetTop() - int((opera.GetTop() - 682)*0.2));
+			item.SetTopLeft(item.GetLeft() - int((opera.GetLeft() - 437)*rate), item.GetTop() - int((opera.GetTop() - 682)*rate));
 		}
 		else {
-			item.SetTopLeft(item.GetLeft() - int((opera.GetLeft() - 437)*0.2), item.GetTop());
+			item.SetTopLeft(item.GetLeft() - int((opera.GetLeft() - 437)*rate), item.GetTop());
 		}
 	}
 	else {
 
-		item.SetTopLeft(item.GetLeft() - int((opera.GetLeft() - 437)*0.2), item.GetTop() - int((opera.GetTop() - 682)*0.2));
+		item.SetTopLeft(item.GetLeft() - int((opera.GetLeft() - 437)*rate), item.GetTop() - int((opera.GetTop() - 682)*rate));
 
 	}
 
@@ -376,32 +380,39 @@ void CMovingBitmap::dart_hit_monster(vector<CMovingBitmap> &dart, vector<CMoving
 
 
 void CGameStateRun::monster_move(CMovingBitmap &monster) {
+	int x = abs(monster.GetLeft() - character.GetLeft());
+	int y = abs(monster.GetTop() - character.GetTop());
+	double std_a = 2.2;
+	double a = pow((x*x +y*y), 0.5);
+	int _x = (int)(x / (a / std_a));
+	int _y = (int)(y / (a / std_a));
 
-	int ax = int((monster.GetLeft() - character.GetLeft())*0.01), ay = int((monster.GetTop() - character.GetTop())*0.01);
+	int np_x = 1;
+	int np_y = 1;
 
 	if (monster.GetLeft() < character.GetLeft()) {
-		ax = 1;
+		np_x = 1;
 	}
 	else if (monster.GetLeft() > character.GetLeft()) {
-		ax = -1;
+		np_x = -1;
 	}
 
 	if (monster.GetTop() < character.GetTop()) {
-		ay = 1;
+		np_y = 1;
 	}
 	else if (monster.GetTop() > character.GetTop()) {
-		ay = -1;
+		np_y = -1;
 	}
 
-	
-	monster.SetTopLeft(monster.GetLeft() + ax, monster.GetTop() + ay);
-	monster.set_center(monster.GetLeft()+45,monster.GetTop()+57);
+
+	monster.SetTopLeft(monster.GetLeft()+ (int)(np_x*_x),monster.GetTop()+ (int)(np_y*_y));
+	//monster.set_center(monster.GetLeft()+45,monster.GetTop()+57);
 };
 
 void CGameStateRun::random_born_item(vector<CMovingBitmap> &item, vector<string> str, vector<int>rgb) {
 
-	int min = -1450;
-	int max = 1450;
+	int min = -1100;
+	int max = 1100;
 	int tail = item.size();
 
 	item.push_back(CMovingBitmap());
