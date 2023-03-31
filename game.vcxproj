@@ -236,7 +236,6 @@
     <None Include="RES\GAME.RC2" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\oopL_sunny\Survivor.io\Source\Game\mygame_value.cpp" />
     <ClCompile Include="Source\Core\game.cpp" />
     <ClCompile Include="Source\Core\gameDoc.cpp" />
     <ClCompile Include="Source\Core\gameView.cpp" />
@@ -247,6 +246,7 @@
     <ClCompile Include="Source\Game\mygame_initialize.cpp" />
     <ClCompile Include="Source\Game\mygame_over.cpp" />
     <ClCompile Include="Source\Game\mygame_run.cpp" />
+    <ClCompile Include="Source\Game\mygame_value.cpp" />
     <ClCompile Include="Source\Library\audio.cpp" />
     <ClCompile Include="Source\Library\gamecore.cpp" />
     <ClCompile Include="Source\Library\gameutil.cpp">

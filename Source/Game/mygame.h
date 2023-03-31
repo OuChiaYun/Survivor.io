@@ -74,10 +74,16 @@ namespace game_framework {
 		void OnShow();									// 顯示這個狀態的遊戲畫面
 	private:
 		CMovingBitmap logo;								// csie的logo
+		CMovingBitmap select1;
+		CMovingBitmap select2;
+		CMovingBitmap check_blank1;
+		CMovingBitmap check_blank2;
+		CMovingBitmap check1;
+		CMovingBitmap check2;
 		CMovingBitmap select_scene1;
 		CMovingBitmap select_scene2;
-		CMovingBitmap selected1;
-		CMovingBitmap selected2;
+		CMovingBitmap play;
+		CMovingBitmap play_bg;
 	};
 
 	/////////////////////////////////////////////////////////////////////////////
@@ -108,6 +114,7 @@ namespace game_framework {
 		CMovingBitmap character;
 		CMovingBitmap opera;
 		CMovingBitmap goal;
+		CMovingBitmap blood_bar;
 		CMovingBitmap energy_bar;
 		CMovingBitmap boss2;
 
@@ -116,6 +123,8 @@ namespace game_framework {
 		vector <CMovingBitmap> dart;
 		vector <CMovingBitmap> energy;
 		vector<CMovingBitmap> monster;
+		vector<CMovingBitmap> monster_vanish;
+		vector<CMovingBitmap> hiden;
 
 		void show_img();
 		void show_text();
@@ -126,9 +135,15 @@ namespace game_framework {
 		void item_move(CMovingBitmap &item);
 		void monster_move(CMovingBitmap &monster);
 		void dart_move(CMovingBitmap &item, int i);
+		void boss2_move();
+
+		bool isLeft(CMovingBitmap &character, CMovingBitmap &item);
+		bool isDown(CMovingBitmap &character, CMovingBitmap &item);
+
 	
 
 		void random_born_item(vector<CMovingBitmap>&item,vector<string> str, vector<int>rgb);
+		void random_born_monster(vector<CMovingBitmap>&monster, vector<string> str_monster, vector<CMovingBitmap>&monster_vanish, vector<string> str_monster_vanish, vector<int>rgb_monster, vector<int>rgb_monster_vanish);
 		int hit_count = 0;
 		int timer = 0;
 	};

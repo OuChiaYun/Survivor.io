@@ -54,7 +54,7 @@
     <ClCompile Include="Source\Game\mygame_run.cpp">
       <Filter>MyGame</Filter>
     </ClCompile>
-    <ClCompile Include="..\oopL_sunny\Survivor.io\Source\Game\mygame_value.cpp">
+    <ClCompile Include="Source\Game\mygame_value.cpp">
       <Filter>MyGame</Filter>
     </ClCompile>
   </ItemGroup>

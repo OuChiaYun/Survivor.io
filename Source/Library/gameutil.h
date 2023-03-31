@@ -108,6 +108,7 @@ namespace game_framework {
 		void set_center(int x, int y);
 		void set_timer(int t);
 		void set_hp(int blood);
+		void set_limit_start_end(int start,int end);
 
 		int get_center_x();
 		int get_center_y();
@@ -118,13 +119,18 @@ namespace game_framework {
 		void add_sub_hp(int blood);
 
 
-		void dart_hit_monster (vector<CMovingBitmap> &dart, vector<CMovingBitmap> &monster);
-		void item_hit(CMovingBitmap &character, CMovingBitmap &item);
+		void dart_hit_monster (vector<CMovingBitmap> &dart, vector<CMovingBitmap> &monster, vector<CMovingBitmap> &monster_vanish);
+		void item_hit(CMovingBitmap &character, vector<CMovingBitmap> &item);
 		
 		int center_x = 0;
 		int center_y = 0;
 		int timer = 0;
 		int hp = 0;
+		int limit_frame_start = 0;
+		int limit_frame_end = 0;
+		int ax = 0;
+		int ay = 0;
+
 		//////////////
 		/* Getter */
 		int   GetFrameIndexOfBitmap();
@@ -163,6 +169,7 @@ namespace game_framework {
 		bool isOnce = false;
 		vector<CRect>    locations;			// location of the bitmap
 		vector<unsigned> surfaceID;
+
 		clock_t last_time = clock();
 		//! 儲存物件讀取的圖片路徑
 		string   imageFileName = "";
