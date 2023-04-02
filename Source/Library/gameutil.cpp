@@ -465,6 +465,16 @@ namespace game_framework {
 		hp = hp + blood;
 	}
 
+	void CMovingBitmap::set_energy(int energy_v) {
+		energy = energy_v;
+	}
+	int CMovingBitmap::get_energy() {
+		return energy;
+	};
+	void CMovingBitmap::add_energy(int energy_v) {
+		energy += energy_v;
+	}
+
 	/////////////////////////////
 
 }         

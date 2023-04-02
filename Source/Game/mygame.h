@@ -117,6 +117,7 @@ namespace game_framework {
 		CMovingBitmap blood_bar;
 		CMovingBitmap energy_bar;
 		CMovingBitmap boss2;
+		CMovingBitmap blood;
 
 
 		//CMovingBitmap dart;

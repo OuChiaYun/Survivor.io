@@ -108,20 +108,24 @@ namespace game_framework {
 		void set_center(int x, int y);
 		void set_timer(int t);
 		void set_hp(int blood);
+		void set_energy(int energy_v);
 		void set_limit_start_end(int start,int end);
 
 		int get_center_x();
 		int get_center_y();
 		int get_timer();
 		int get_hp();
+		int get_energy();
 
 		void add_timer(int s);
 		void add_sub_hp(int blood);
+		void add_energy(int energy_v);
 
 
 		void dart_hit_monster (vector<CMovingBitmap> &dart, vector<CMovingBitmap> &monster, vector<CMovingBitmap> &monster_vanish);
 		void item_hit(CMovingBitmap &character, vector<CMovingBitmap> &item);
-		
+		void item_hit_energy(CMovingBitmap &character, vector<CMovingBitmap> &item, CMovingBitmap &energy_bar);
+
 		int center_x = 0;
 		int center_y = 0;
 		int timer = 0;
@@ -130,6 +134,7 @@ namespace game_framework {
 		int limit_frame_end = 0;
 		int ax = 0;
 		int ay = 0;
+		int energy = 0;
 
 		//////////////
 		/* Getter */
