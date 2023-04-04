@@ -475,6 +475,20 @@ namespace game_framework {
 		energy += energy_v;
 	}
 
+	void CMovingBitmap::set_hit_x(int x, int index) {
+		boss1_hit_x[index] = x;
+	}
+	void CMovingBitmap::set_hit_y(int y, int index) {
+		boss1_hit_y[index] = y;
+	}
+
+	int CMovingBitmap::get_hit_x(int index) {
+		return boss1_hit_x[index];
+	};
+	int CMovingBitmap::get_hit_y(int index) {
+		return boss1_hit_y[index];
+	};
+
 	/////////////////////////////
 
 }         

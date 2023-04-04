@@ -19,11 +19,12 @@ CGameStateOver::CGameStateOver(CGame *g): CGameState(g)
 
 void CGameStateOver::OnMove()
 {
-	GotoGameState(GAME_STATE_INIT);
+	//GotoGameState(GAME_STATE_INIT);
 }
 
 void CGameStateOver::OnBeginState()
 {
+	
 }
 
 void CGameStateOver::OnInit()
@@ -43,9 +44,19 @@ void CGameStateOver::OnInit()
 	ShowInitProgress(100, "OK!");
 
 	Sleep(1000);
+
+	victory.LoadBitmapByString({ "Resources/UI/victory.bmp" }, RGB(255, 255, 255));
+	victory.SetTopLeft(100, 300);
+	die.LoadBitmapByString({ "Resources/UI/died.bmp" }, RGB(255, 255, 255));
+	die.SetTopLeft(100, 300);
 }
 
 void CGameStateOver::OnShow()
 {
-
+	if (get_victory_value() == 1) {
+		victory.ShowBitmap();	
+	}
+	if (get_victory_value() == 0) {
+		die.ShowBitmap();
+	}
 }

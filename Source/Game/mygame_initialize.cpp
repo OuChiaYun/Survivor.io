@@ -111,50 +111,17 @@ void CGameStateInit::OnShow()
 
 	CDDraw::ReleaseBackCDC();
 
-//	logo.LoadBitmapByString({ "Resources/health_ui/health_ui_0.bmp" }, RGB(255, 255, 255));
-//	logo.SetTopLeft(510, 0);
 	//logo.ShowBitmap();
-
-	//select1.LoadBitmapByString({ "Resources/UI/select_bg.bmp" }, RGB(255, 255, 255));
-	//select1.SetTopLeft(100, 390);
+	
 	select1.ShowBitmap();
-
-	//select2.LoadBitmapByString({ "Resources/UI/select_bg.bmp" }, RGB(255, 255, 255));
-	//select2.SetTopLeft(select1.GetLeft() + select1.GetWidth() + 50, 390);
 	select2.ShowBitmap();
-
-	//check_blank1.LoadBitmapByString({ "Resources/UI/check_blank.bmp" }, RGB(255, 255, 255));
-	//check_blank1.SetTopLeft(100+20, 400);
 	check_blank1.ShowBitmap();
-
-	//check_blank2.LoadBitmapByString({ "Resources/UI/check_blank.bmp" }, RGB(255, 255, 255));
-	//check_blank2.SetTopLeft(select1.GetLeft() + select1.GetWidth() + 50 + 20, 400);
 	check_blank2.ShowBitmap();
-
-//	check1.LoadBitmapByString({ "Resources/ignore.bmp", "Resources/UI/check.bmp" }, RGB(255, 255, 255));
-//	check1.SetTopLeft(100 + 20, 400);
 	check1.ShowBitmap();
-
-//	check2.LoadBitmapByString({ "Resources/ignore.bmp", "Resources/UI/check.bmp" }, RGB(255, 255, 255));
-//	check2.SetTopLeft(select1.GetLeft() + select1.GetWidth() + 50 + 20, 400);
 	check2.ShowBitmap();
-
-//	select_scene1.LoadBitmapByString({ "Resources/background/Purple Nebula/init_Purple_Nebula_08.bmp" });
-//	select_scene1.SetTopLeft(select1.GetLeft()+100, 450);
 	select_scene1.ShowBitmap();
-
-//	select_scene2.LoadBitmapByString({ "Resources/background/Blue Nebula/init_Blue_Nebula_08.bmp" });
-//	select_scene2.SetTopLeft(select_scene1.GetLeft()+select_scene1.GetWidth()+250, 450);
 	select_scene2.ShowBitmap();
-
-//	play_bg.LoadBitmapByString({"Resources/UI/play_bg.bmp"}, RGB(255, 255, 255));
-//	play_bg.SetTopLeft(350, 780);
 	play_bg.ShowBitmap();
-
-
-//	play.SetTopLeft(375, 790);
 	play.ShowBitmap();
-
-
 	
 }

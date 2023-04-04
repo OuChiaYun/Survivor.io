@@ -55,8 +55,12 @@ namespace game_framework {
 		CGameStateValueStorage();
 		static void set_init_background_value(int);
 		static int get_init_background_value();
+
+		static void set_victory_value(int);
+		static int get_victory_value();
 	private:
 		static int init_background_value;
+		static int victory;
 	};
 	/////////////////////////////////////////////////////////////////////////////
 	// 這個class為遊戲的遊戲開頭畫面物件
@@ -115,9 +119,11 @@ namespace game_framework {
 		CMovingBitmap opera;
 		CMovingBitmap goal;
 		CMovingBitmap blood_bar;
+		CMovingBitmap blood_bar_boss1;
 		CMovingBitmap energy_bar;
 		CMovingBitmap boss2;
 		CMovingBitmap blood;
+		CMovingBitmap blood_boss1;
 
 
 		//CMovingBitmap dart;
@@ -135,18 +141,34 @@ namespace game_framework {
 		void background_move();
 		void item_move(CMovingBitmap &item);
 		void monster_move(CMovingBitmap &monster);
-		void dart_move(CMovingBitmap &item, int i);
+		void dart_move(CMovingBitmap &item, int i, int setR);
 		void boss2_move();
 
 		bool isLeft(CMovingBitmap &character, CMovingBitmap &item);
 		bool isDown(CMovingBitmap &character, CMovingBitmap &item);
 
-	
 
 		void random_born_item(vector<CMovingBitmap>&item,vector<string> str, vector<int>rgb);
 		void random_born_monster(vector<CMovingBitmap>&monster, vector<string> str_monster, vector<CMovingBitmap>&monster_vanish, vector<string> str_monster_vanish, vector<int>rgb_monster, vector<int>rgb_monster_vanish);
 		int hit_count = 0;
 		int timer = 0;
+
+		void monster_all();
+		void dart_all(int);
+
+		void blood_bar_progress(CMovingBitmap &blood_bar, CMovingBitmap &item_blood);
+
+		vector<CMovingBitmap> bullet;
+		void bullet_move(vector<CMovingBitmap> &item);
+		void bullet_erase(vector<CMovingBitmap> &item);
+		void born_bullet(vector<CMovingBitmap> &item, vector<string> str, vector<int>rgb);
+
+		CMovingBitmap boss1;
+		CMovingBitmap boss1_range;
+		vector<CMovingBitmap> boss1_bullet;
+		void boss1_background();
+		void boss1_character_attack();
+		void boss1_bullet_move();
 	};
 
 	/////////////////////////////////////////////////////////////////////////////
@@ -164,6 +186,9 @@ namespace game_framework {
 		void OnShow();									// 顯示這個狀態的遊戲畫面
 	private:
 		int counter;	// 倒數之計數器
+
+		CMovingBitmap victory;
+		CMovingBitmap die;
 	};
 
 }
