@@ -47,9 +47,13 @@ void CGameStateRun::OnMove()							// 移動遊戲元素
 
 	int flag = 0;
 	for (int i = 0;i< (int)(monster.size()); i++) {
+		monster[i].add_timer(1);
 		item_move(monster[i]);
+
 		if (!monster[i].IsOverlap(character, monster[i])) {
 			monster_move(monster[i]);
+	
+				
 			blood.SetAnimation(50, true);
 
 		}
@@ -72,7 +76,7 @@ void CGameStateRun::OnMove()							// 移動遊戲元素
 		character.SetFrameIndexOfBitmap(0);
 	}
 
-	if (timer > 10 && int(monster.size())<300) {
+	if (timer > 10 && int(monster.size())<50) {
 		random_born_monster(monster, {
 			"Resources/monster/m1.bmp","Resources/monster/m2.bmp","Resources/monster/m3.bmp","Resources/monster/m4.bmp","Resources/monster/m5.bmp",
 			"Resources/monster/m6.bmp","Resources/monster/m7.bmp","Resources/monster/m8.bmp","Resources/monster/m9.bmp","Resources/monster/m10.bmp",
@@ -142,7 +146,7 @@ void CGameStateRun::OnInit()  								// 遊戲的初值及圖形設定
 		random_born_item(energy, { "Resources/gem/gem1.bmp", "Resources/gem/gem2.bmp","Resources/gem/gem3.bmp","Resources/gem/gem4.bmp","Resources/gem/gem5.bmp" }, { 200, 191, 231 });
 		energy[i].SetAnimation(100, false);
 	}
-	for (int i = 0; i < 40; i++) {
+	for (int i = 0; i < 10; i++) {
 		int arr[] = { 1,2,3 };
 		random_born_monster(monster, {
 			"Resources/monster/m1.bmp","Resources/monster/m2.bmp","Resources/monster/m3.bmp","Resources/monster/m4.bmp","Resources/monster/m5.bmp",
@@ -213,7 +217,7 @@ void CGameStateRun::OnMouseMove(UINT nFlags, CPoint point)	// 處理滑鼠的動
 	}
 	else {
 
-		if (point.x < 491) {
+		if ((point.x) < 491) {
 			if (opera.get_center_x() > 451) {
 				opera.SetTopLeft((opera.GetLeft() - 6), opera.GetTop());
 				opera.set_center(opera.get_center_x() - 6, opera.get_center_y());
@@ -228,7 +232,7 @@ void CGameStateRun::OnMouseMove(UINT nFlags, CPoint point)	// 處理滑鼠的動
 
 		if ((point.y < 736)) {
 			if (opera.get_center_y() > 686) {
-				
+
 				opera.SetTopLeft(opera.GetLeft(), (opera.GetTop() - 6));
 				opera.set_center(opera.get_center_x(), opera.get_center_y() - 6);
 			}
@@ -262,8 +266,7 @@ void CGameStateRun::show_img() {
 	show_baclground_selected();
 	background.ShowBitmap();
 	character.ShowBitmap();
-	//goal.ShowBitmap();
-	boss2.ShowBitmap();
+	goal.ShowBitmap();
 	for (int i = 0; i < (int)energy.size(); i++) {
 		energy[i].ShowBitmap();
 	}
@@ -284,11 +287,10 @@ void CGameStateRun::show_img() {
 		dart[i].ShowBitmap();
 	}
 
+	boss2.ShowBitmap();
+
 	blood.ShowBitmap();
 	energy_bar.ShowBitmap();
-
-
-
 	opera.ShowBitmap();
 
 }
@@ -476,10 +478,11 @@ void CGameStateRun::monster_move(CMovingBitmap &monster) {
 
 	int x = abs(monster.GetLeft() - character.GetLeft());
 	int y = abs(monster.GetTop() - character.GetTop());
-	double std_a = 2.2;
+	double std_a = 5;
 	double a = pow((x*x + y * y), 0.5);
-	int _x = (int)(x / (a / std_a));
-	int _y = (int)(y / (a / std_a));
+
+	int _x = (int)(x *(std_a/a));
+	int _y = (int)(y * (std_a/a));
 
 	int np_x = 1;
 	int np_y = 1;
@@ -497,9 +500,10 @@ void CGameStateRun::monster_move(CMovingBitmap &monster) {
 	else if (monster.GetTop() > character.GetTop()) {
 		np_y = -1;
 	}
-
-
-	monster.SetTopLeft(monster.GetLeft() + (int)(np_x*_x), monster.GetTop() + (int)(np_y*_y));
+	//if (monster.get_timer() > 30) {
+		monster.SetTopLeft(monster.GetLeft() + (int)(np_x*(_x*0.5)), monster.GetTop() + (int)(np_y*(_y*0.5)));
+	//	monster.set_timer(0);
+	//}
 
 
 	if (isLeft(character, monster)) {
