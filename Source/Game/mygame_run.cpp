@@ -360,11 +360,15 @@ void CGameStateRun::show_text() {
 	CTextDraw::ChangeFontLog(pdc, 25, "Noto Sans", RGB(255, 255, 255), 80);
 	CTextDraw::Print(pdc, 305, 0, to_string(character.get_hp()));
 
+	CTextDraw::ChangeFontLog(pdc, 25, "Noto Sans", RGB(255, 255, 255), 80);
+	CTextDraw::Print(pdc, 305, energy_bar.GetTop()+20, to_string(energy_bar.get_energy()) + "/ 25");
+
 	if (timer <10200 && timer > 10000) {
 	
-
 		CTextDraw::ChangeFontLog(pdc, 25, "Noto Sans", RGB(255, 255, 255), 80);
 		CTextDraw::Print(pdc, 355, 240, "Level 1 => boss 1");
+
+
 
 	}
 	CDDraw::ReleaseBackCDC();
