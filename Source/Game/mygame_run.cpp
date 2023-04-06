@@ -206,12 +206,12 @@ void CGameStateRun::OnInit()  								// 遊戲的初值及圖形設定
 
 	boss1.LoadBitmapByString({ "Resources/boss1/big_demon_idle_anim_f0.bmp", "Resources/boss1/big_demon_idle_anim_f1.bmp",
 													"Resources/boss1/big_demon_idle_anim_f1.bmp" ,  "Resources/boss1/big_demon_idle_anim_f3.bmp" }, RGB(255, 255, 255));
-	boss1.SetTopLeft(450, 390);
+	//boss1.SetTopLeft(boss1_range.GetLeft() + 270 , boss1_range.GetTop() + 150);
 	boss1.SetAnimation(150, false);
 	boss1.set_hp(5000);
 
 	boss1_range.LoadBitmapByString({ "Resources/boss1/boss1_range.bmp" }, RGB(255, 255, 255));
-	boss1_range.SetTopLeft(290, 80);
+	boss1_range.SetTopLeft(energy_bar.GetLeft() + energy_bar.GetWidth() + 20, energy_bar.GetTop() + 125 + 10);
 
 	vector<int> x = { 5, 10, -2};
 	vector<int> y = { 3,  -2,   8 };
@@ -220,7 +220,8 @@ void CGameStateRun::OnInit()  								// 遊戲的初值及圖形設定
 	for (int i = 0; i < 3; i++) {
 		boss1_bullet.push_back(CMovingBitmap());
 		boss1_bullet[i].LoadBitmapByString({ "Resources/Rock.bmp" }, RGB(255, 255, 255));
-		boss1_bullet[i].SetTopLeft(boss1.GetLeft() + 10, boss1.GetTop());
+		boss1_bullet[i].SetTopLeft(boss1_range.GetLeft() + 270 + 10, boss1_range.GetTop() + 130);
+		//boss1.SetTopLeft(boss1_range.GetLeft() + 270, boss1_range.GetTop() + 130);
 		boss1.set_hit_x(x[i], i);
 		boss1.set_hit_y(y[i], i);
 	}
@@ -339,6 +340,7 @@ void CGameStateRun::show_img() {
 
 		boss1.ShowBitmap();
 		boss1_range.ShowBitmap();
+		boss1.SetTopLeft(boss1_range.GetLeft() + 270, boss1_range.GetTop() + 130);
 		for (int i = 0; i < (int)boss1_bullet.size(); i++) {
 			boss1_bullet[i].ShowBitmap();
 		}
@@ -374,12 +376,12 @@ void CGameStateRun::show_text() {
 	if (timer <10200 && timer > 10000) {
 
 		CTextDraw::ChangeFontLog(pdc, 25, "Modern No. 20", RGB(255, 255, 255), 80);
-		CTextDraw::Print(pdc, 395, 240, "Level 1 => boss 1");
+		CTextDraw::Print(pdc, boss1.GetLeft() - 150, boss1.GetTop()-20, "Level 1 => boss 1");
 
 	}
 	else if (timer >= 10200) {
 		CTextDraw::ChangeFontLog(pdc, 15, "Modern No. 20", RGB(255, 255, 255), 80);
-		CTextDraw::Print(pdc, 480, 540, to_string(boss1.get_hp()));
+		CTextDraw::Print(pdc, blood_bar_boss1.GetLeft(), blood_bar_boss1.GetTop()+ 10 + 5, to_string(boss1.get_hp()));
 
 	}
 	CDDraw::ReleaseBackCDC();
@@ -849,8 +851,8 @@ void CGameStateRun::boss1_background() {
 	if (character.GetLeft() + character.GetWidth() > boss1_range.GetLeft() + boss1_range.GetWidth()) { //right
 		character.SetTopLeft(boss1_range.GetLeft() + boss1_range.GetWidth() - character.GetWidth(), character.GetTop());
 	}
-	if (character.GetTop() + 60 > boss1_range.GetTop() + 600) { //bottom
-		character.SetTopLeft(character.GetLeft(), boss1_range.GetTop() + 600 - 60);
+	if (character.GetTop() + 60 > boss1_range.GetTop() + 430) { //bottom
+		character.SetTopLeft(character.GetLeft(), boss1_range.GetTop() + 430 - 60);
 	}
 
 	character.set_center( (character.GetLeft() + 10), (character.GetTop() +10));
@@ -870,7 +872,7 @@ void CGameStateRun::boss1_bullet_move() {
 		else if (boss1_bullet[i].GetTop() < boss1_range.GetTop()) {
 			boss1.set_hit_y(abs(y), i);
 		}
-		else if (boss1_bullet[i].GetTop() + 26 > boss1_range.GetTop() + 600) {
+		else if (boss1_bullet[i].GetTop() + 26 > boss1_range.GetTop() + 430) {
 			boss1.set_hit_y(-abs(y), i);
 		}
 
