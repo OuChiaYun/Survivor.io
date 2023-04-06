@@ -43,7 +43,7 @@ void CGameStateInit::OnInit()
 	select_scene1.SetTopLeft(select1.GetLeft() + 100, 450);
 
 	select_scene2.LoadBitmapByString({ "Resources/background/Blue Nebula/init_Blue_Nebula_08.bmp" });
-	select_scene2.SetTopLeft(select_scene1.GetLeft() + select_scene1.GetWidth() + 250, 450);
+	select_scene2.SetTopLeft(select_scene1.GetLeft() + select_scene1.GetWidth() + 250+15, 450);
 
 	play_bg.LoadBitmapByString({ "Resources/UI/play_bg.bmp" }, RGB(255, 255, 255));
 	play_bg.SetTopLeft(350, 780);
@@ -99,15 +99,16 @@ void CGameStateInit::OnLButtonDown(UINT nFlags, CPoint point)
 void CGameStateInit::OnShow()
 {
 	CDC *pdc = CDDraw::GetBackCDC();
+//Noto Sans   HGSoeiKakugothicUB  Bradley Hand ITC  Chiller Gigi Forte  Snap ITC  Harrington Broadway
+//Showcard Gothic Algerian
+	CTextDraw::ChangeFontLog(pdc, 105, "Modern No. 20", RGB(255, 255, 255), 1000);
+	CTextDraw::Print(pdc, 165, 130, "Survivor.io");
 
-	CTextDraw::ChangeFontLog(pdc, 100, "Noto Sans", RGB(255, 255, 255), 800);
-	CTextDraw::Print(pdc, 200, 150, "Survivor.io");
+	CTextDraw::ChangeFontLog(pdc, 25, "Ink Free", RGB(255, 255, 255), 400);
+	CTextDraw::Print(pdc, 320, 300, "Made By - Turtle & Sunny");
 
-	CTextDraw::ChangeFontLog(pdc, 25, "Noto Sans", RGB(255, 255, 255), 400);
-	CTextDraw::Print(pdc, 350, 300, "Made By - Turtle & Sunny");
-
-	CTextDraw::ChangeFontLog(pdc, 25, "Noto Sans", RGB(255, 255, 255), 200);
-	CTextDraw::Print(pdc, 250, 730, "Please select the scene which do you like");
+	CTextDraw::ChangeFontLog(pdc, 25, "Ink Free", RGB(255, 255, 255), 200);
+	CTextDraw::Print(pdc, 185, 730, "Please select the scene which do you like");
 
 	CDDraw::ReleaseBackCDC();
 

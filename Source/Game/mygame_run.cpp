@@ -70,11 +70,11 @@ void CGameStateRun::OnMove()							// 移動遊戲元素
 			boss1_bullet_move();
 			blood_bar_progress(blood_bar_boss1, boss1);
 			//blood_bar_progress(blood_bar, character);
-
-			if (blood_bar_boss1.GetFrameIndexOfBitmap() == 0) { //victory
+			if (boss1.get_hp() <= 0) { //victory
 				set_victory_value(1);
 				GotoGameState(GAME_STATE_OVER);
 			}
+
 
 			timer = 10200;
 
@@ -304,6 +304,10 @@ void CGameStateRun::show_img() {
 	character.ShowBitmap();
 
 	blood.ShowBitmap();
+	if (energy_bar.GetFrameIndexOfBitmap() == energy_bar.GetFrameSizeOfBitmap() - 1) {
+		level = 1;
+				
+	}
 	for (int i = 0; i < (int)bullet.size(); i++) {
 		bullet[i].ShowBitmap();
 	}
@@ -345,7 +349,9 @@ void CGameStateRun::show_img() {
 		blood_bar_boss1.ShowBitmap();
 		blood_bar_boss1.SetTopLeft(boss1.GetLeft(), boss1.GetTop() + 112 + 10);
 
-	}
+	}		
+
+
 	opera.ShowBitmap();
 	blood_bar.ShowBitmap();
 	energy_bar.ShowBitmap();
@@ -357,22 +363,26 @@ void CGameStateRun::show_text() {
 
 	CDC *pdc = CDDraw::GetBackCDC();
 
-	CTextDraw::ChangeFontLog(pdc, 25, "Noto Sans", RGB(255, 255, 255), 80);
-	CTextDraw::Print(pdc, 305, 0, to_string(character.get_hp()));
+	CTextDraw::ChangeFontLog(pdc, 25, "Modern No. 20", RGB(255, 255, 255), 80);
+	CTextDraw::Print(pdc, 305, 10, to_string(character.get_hp()));
 
-	CTextDraw::ChangeFontLog(pdc, 25, "Noto Sans", RGB(255, 255, 255), 80);
-	CTextDraw::Print(pdc, 305, energy_bar.GetTop()+20, to_string(energy_bar.get_energy()) + "/ 25");
+	CTextDraw::ChangeFontLog(pdc, 25, "Modern No. 20", RGB(255, 255, 255), 80);
+	CTextDraw::Print(pdc, 305, energy_bar.GetTop() + 20 + 25, to_string(energy_bar.get_energy()) + "/ 25");
+
+
 
 	if (timer <10200 && timer > 10000) {
-	
-		CTextDraw::ChangeFontLog(pdc, 25, "Noto Sans", RGB(255, 255, 255), 80);
-		CTextDraw::Print(pdc, 355, 240, "Level 1 => boss 1");
 
+		CTextDraw::ChangeFontLog(pdc, 25, "Modern No. 20", RGB(255, 255, 255), 80);
+		CTextDraw::Print(pdc, 395, 240, "Level 1 => boss 1");
 
+	}
+	else if (timer >= 10200) {
+		CTextDraw::ChangeFontLog(pdc, 15, "Modern No. 20", RGB(255, 255, 255), 80);
+		CTextDraw::Print(pdc, 480, 540, to_string(boss1.get_hp()));
 
 	}
 	CDDraw::ReleaseBackCDC();
-
 
 }
 
@@ -829,6 +839,7 @@ void CGameStateRun::boss1_background() {
 	}
 
 	character.SetTopLeft(character.GetLeft() + ax, character.GetTop() + ay);
+
 	if (character.GetLeft() < boss1_range.GetLeft()) { //left
 		character.SetTopLeft(boss1_range.GetLeft(), character.GetTop());
 	}
@@ -885,6 +896,7 @@ void CGameStateRun::boss1_character_attack() {
 			blood_boss1.SetAnimation(50, true);
 		}
 	}
+
 	for (int i = 0; i<int(dart.size()); i++) {
 		if (boss1.IsOverlap(dart[i], boss1)) {
 			boss1.add_sub_hp(-5);

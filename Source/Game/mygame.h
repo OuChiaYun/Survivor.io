@@ -169,6 +169,8 @@ namespace game_framework {
 		void boss1_background();
 		void boss1_character_attack();
 		void boss1_bullet_move();
+
+		int level = 0;
 	};
 
 	/////////////////////////////////////////////////////////////////////////////
