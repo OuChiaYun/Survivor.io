@@ -465,6 +465,30 @@ namespace game_framework {
 		hp = hp + blood;
 	}
 
+	void CMovingBitmap::set_energy(int energy_v) {
+		energy = energy_v;
+	}
+	int CMovingBitmap::get_energy() {
+		return energy;
+	};
+	void CMovingBitmap::add_energy(int energy_v) {
+		energy += energy_v;
+	}
+
+	void CMovingBitmap::set_hit_x(int x, int index) {
+		boss1_hit_x[index] = x;
+	}
+	void CMovingBitmap::set_hit_y(int y, int index) {
+		boss1_hit_y[index] = y;
+	}
+
+	int CMovingBitmap::get_hit_x(int index) {
+		return boss1_hit_x[index];
+	};
+	int CMovingBitmap::get_hit_y(int index) {
+		return boss1_hit_y[index];
+	};
+
 	/////////////////////////////
 
 }         
