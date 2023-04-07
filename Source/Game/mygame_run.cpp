@@ -76,7 +76,6 @@ void CGameStateRun::OnMove()							// 移動遊戲元素
 				set_victory_value(1);
 				GotoGameState(GAME_STATE_OVER);
 			}
-
 			timer = 10200;
 
 		}
@@ -86,8 +85,7 @@ void CGameStateRun::OnMove()							// 移動遊戲元素
 		set_victory_value(0);
 		GotoGameState(GAME_STATE_OVER);
 	}
-	boss2_move();
-	item_move(boss2);
+
 }
 
 void CGameStateRun::OnInit()  								// 遊戲的初值及圖形設定
@@ -135,11 +133,16 @@ void CGameStateRun::OnInit()  								// 遊戲的初值及圖形設定
 			"Resources/monster/e1.bmp","Resources/monster/e2.bmp","Resources/monster/e3.bmp","Resources/monster/e4.bmp","Resources/monster/e5.bmp",
 			"Resources/monster/e6.bmp","Resources/monster/e7.bmp","Resources/monster/e8.bmp","Resources/monster/e9.bmp","Resources/monster/e10.bmp",
 			"Resources/monster/d1.bmp","Resources/monster/d2.bmp","Resources/monster/d3.bmp","Resources/monster/d4.bmp","Resources/monster/d5.bmp",
-			"Resources/monster/d6.bmp","Resources/monster/d7.bmp","Resources/monster/d8.bmp","Resources/monster/d9.bmp","Resources/monster/d10.bmp" },
+			"Resources/monster/d6.bmp","Resources/monster/d7.bmp","Resources/monster/d8.bmp","Resources/monster/d9.bmp","Resources/monster/d10.bmp"},
 			monster_vanish, { "Resources/monster/m11.bmp", "Resources/monster/m12.bmp", "Resources/monster/m13.bmp", "Resources/monster/m14.bmp", "Resources/monster/m15.bmp",
 			"Resources/monster/m16.bmp", "Resources/monster/m17.bmp" }, { 255,255,255 }, { 200, 191, 231 });
 		monster[i].SetAnimation(50, false);
 		monster[i].set_hp(6);
+		/*
+		monster_vanish.push_back(CMovingBitmap());
+		monster_vanish[i].SetTopLeft(5000, 5000);
+		monster_vanish[i].
+		*/
 	}
 
 	opera.LoadBitmapByString({ "Resources/operator.bmp" }, RGB(105, 106, 106));
@@ -204,6 +207,7 @@ void CGameStateRun::OnInit()  								// 遊戲的初值及圖形設定
 		boss1_bullet[i].SetTopLeft(boss1_range.GetLeft() + 270 + 10, boss1_range.GetTop() + 130);
 		boss1.set_hit_x(x[i], i);
 		boss1.set_hit_y(y[i], i);
+
 	}
 }
 
@@ -302,12 +306,19 @@ void CGameStateRun::show_img() {
 		}
 
 		for (int i = 0; i < (int)(monster.size()); i++) {
-			if (monster[i].GetFrameIndexOfBitmap() == monster[i].limit_frame_end) {
+			if (monster[i].GetFrameIndexOfBitmap() >= monster[i].limit_frame_end) {
 				monster[i].SetFrameIndexOfBitmap(monster[i].limit_frame_start);
 			}
 			if (monster[i].IsOverlap(background, monster[i])) {
 				monster[i].ShowBitmap();
-				monster_vanish[i].ShowBitmap();
+				//monster_vanish[i].ShowBitmap();
+			}
+		}
+
+		for (int i = 0; i < (int)monster_vanish.size(); i++) {
+			monster_vanish[i].ShowBitmap();
+			if (monster_vanish[i].IsAnimationDone()) {
+				//monster_vanish.erase(monster_vanish.begin() + i);
 			}
 		}
 	}
@@ -515,20 +526,19 @@ void CMovingBitmap::dart_hit_monster(vector<CMovingBitmap> &dart, vector<CMoving
 	for (int i = 0; i < (int)monster.size(); i++) {
 
 		for (int j = 0; j < (int)dart.size(); j++) {
-			if (IsOverlap(dart[j], monster[i])) {
+			if ( (i < (int)monster.size()) && IsOverlap(dart[j], monster[i])) {
 
 				monster[i].add_sub_hp(-1);
 				if (monster[i].get_hp() <= 0) {
 
-					monster_vanish[i].SetTopLeft(monster[i].GetLeft(), monster[i].GetTop());
+					monster_vanish.push_back(monster[i]);
+					monster_vanish[monster_vanish.size()-1].SetAnimation(80, true);
+					monster_vanish[monster_vanish.size() - 1].ShowBitmap();
+					monster_vanish[monster_vanish.size() - 1].ToggleAnimation();
+					monster_vanish[monster_vanish.size() - 1].SetFrameIndexOfBitmap(30);
+	
 					monster.erase(monster.begin() + i);
-					monster_vanish[i].SetAnimation(80, true);
-					monster_vanish[i].ShowBitmap();
-					monster_vanish[i].ToggleAnimation();
 
-					if (monster_vanish[i].IsAnimationDone())
-						monster_vanish.erase(monster_vanish.begin() + i);
-					break;
 				}
 				
 			}
@@ -569,13 +579,15 @@ void CGameStateRun::monster_move(CMovingBitmap &monster) {
 
 	if (isLeft(character, monster)) {
 		monster.set_limit_start_end(10, 19);
+
 	}
 	else {
 		monster.set_limit_start_end(0, 9);
 
+
 	}
 	if (isDown(character, monster) && (monster.GetLeft() > 365 && monster.GetLeft() < 580)) {
-		monster.set_limit_start_end(20, 29);
+		monster.set_limit_start_end(20, 28);
 	}
 
 };
@@ -603,18 +615,12 @@ void CGameStateRun::random_born_monster(vector<CMovingBitmap>&monster, vector<st
 
 	monster.push_back(CMovingBitmap());
 	monster[tail].LoadBitmapByString(str_monster, RGB(rgb_monster[0], rgb_monster[1], rgb_monster[2]));
-	
+	monster[tail].LoadBitmapByString(str_monster_vanish, RGB(rgb_monster_vanish[0], rgb_monster_vanish[1], rgb_monster_vanish[2]));
 
-	monster_vanish.push_back(CMovingBitmap());
-	monster_vanish[tail].LoadBitmapByString(str_monster_vanish, RGB(rgb_monster_vanish[0], rgb_monster_vanish[1], rgb_monster_vanish[2]));
-	/* 產生 [min , max] 的整數亂數 */
 	int x = rand() % (max - min + 1) + min;
 	int y = rand() % (max - min + 1) + min;
 	monster[tail].SetTopLeft(x, y);
 	monster[tail].set_center(x + 45, y + 57);
-	monster_vanish[tail].SetTopLeft(x, y);
-	monster_vanish[tail].set_center(x + 45, y + 57);
-	monster_vanish[tail].SetFrameIndexOfBitmap(6);
 
 	monster[tail].SetFrameIndexOfBitmap(monster[tail].limit_frame_start);
 
@@ -662,6 +668,7 @@ void CGameStateRun::monster_all() {
 			"Resources/monster/d6.bmp","Resources/monster/d7.bmp","Resources/monster/d8.bmp","Resources/monster/d9.bmp","Resources/monster/d10.bmp" },
 			monster_vanish, { "Resources/monster/m11.bmp", "Resources/monster/m12.bmp", "Resources/monster/m13.bmp", "Resources/monster/m14.bmp", "Resources/monster/m15.bmp",
 			"Resources/monster/m16.bmp", "Resources/monster/m17.bmp" }, { 255,255,255 }, { 200, 191, 231 });
+		monster[monster.size() - 1].SetFrameIndexOfBitmap(0);
 		monster[monster.size() - 1].SetAnimation(50, false);
 		monster[monster.size() - 1].set_hp(6);
 	}
