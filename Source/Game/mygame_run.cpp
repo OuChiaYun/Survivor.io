@@ -106,8 +106,8 @@ void CGameStateRun::OnMove()							// 移動遊戲元素
 			GotoGameState(GAME_STATE_OVER);
 		}*/
 
-	//boss2_move();
-	//item_move(boss2);
+	boss2_move();
+	item_move(boss2);
 }
 
 void CGameStateRun::OnInit()  								// 遊戲的初值及圖形設定
@@ -211,7 +211,7 @@ void CGameStateRun::OnInit()  								// 遊戲的初值及圖形設定
 	boss1.set_hp(5000);
 
 	boss1_range.LoadBitmapByString({ "Resources/boss1/boss1_range.bmp" }, RGB(255, 255, 255));
-	boss1_range.SetTopLeft(energy_bar.GetLeft() + energy_bar.GetWidth() + 20, energy_bar.GetTop() + 125 + 10);
+	boss1_range.SetTopLeft(energy_bar.GetLeft()+200, energy_bar.GetTop() + 125 + 10);
 
 	vector<int> x = { 5, 10, -2};
 	vector<int> y = { 3,  -2,   8 };
@@ -340,7 +340,9 @@ void CGameStateRun::show_img() {
 
 		boss1.ShowBitmap();
 		boss1_range.ShowBitmap();
-		boss1.SetTopLeft(boss1_range.GetLeft() + 270, boss1_range.GetTop() + 130);
+		boss1.SetTopLeft(boss1_range.GetLeft() + 243, boss1_range.GetTop() + 130);
+		//boss1.SetTopLeft(boss1_range.GetLeft() + 270, boss1_range.GetTop() + 130);
+
 		for (int i = 0; i < (int)boss1_bullet.size(); i++) {
 			boss1_bullet[i].ShowBitmap();
 		}
@@ -352,7 +354,6 @@ void CGameStateRun::show_img() {
 		blood_bar_boss1.SetTopLeft(boss1.GetLeft(), boss1.GetTop() + 112 + 10);
 
 	}		
-
 
 	opera.ShowBitmap();
 	blood_bar.ShowBitmap();
@@ -372,16 +373,15 @@ void CGameStateRun::show_text() {
 	CTextDraw::Print(pdc, 305, energy_bar.GetTop() + 20 + 25, to_string(energy_bar.get_energy()) + "/ 25");
 
 
-
 	if (timer <10200 && timer > 10000) {
 
 		CTextDraw::ChangeFontLog(pdc, 25, "Modern No. 20", RGB(255, 255, 255), 80);
-		CTextDraw::Print(pdc, boss1.GetLeft() - 150, boss1.GetTop()-20, "Level 1 => boss 1");
+		CTextDraw::Print(pdc, boss1.GetLeft() - 60, boss1.GetTop() - 60, "Level 1 => boss 1");
 
 	}
 	else if (timer >= 10200) {
 		CTextDraw::ChangeFontLog(pdc, 15, "Modern No. 20", RGB(255, 255, 255), 80);
-		CTextDraw::Print(pdc, blood_bar_boss1.GetLeft(), blood_bar_boss1.GetTop()+ 10 + 5, to_string(boss1.get_hp()));
+		CTextDraw::Print(pdc, blood_bar_boss1.GetLeft() + 30, blood_bar_boss1.GetTop() + 10 + 20, to_string(boss1.get_hp()));
 
 	}
 	CDDraw::ReleaseBackCDC();
