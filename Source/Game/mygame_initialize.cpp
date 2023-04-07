@@ -99,8 +99,7 @@ void CGameStateInit::OnLButtonDown(UINT nFlags, CPoint point)
 void CGameStateInit::OnShow()
 {
 	CDC *pdc = CDDraw::GetBackCDC();
-//Noto Sans   HGSoeiKakugothicUB  Bradley Hand ITC  Chiller Gigi Forte  Snap ITC  Harrington Broadway
-//Showcard Gothic Algerian
+
 	CTextDraw::ChangeFontLog(pdc, 105, "Modern No. 20", RGB(255, 255, 255), 1000);
 	CTextDraw::Print(pdc, 165, 130, "Survivor.io");
 
@@ -112,8 +111,6 @@ void CGameStateInit::OnShow()
 
 	CDDraw::ReleaseBackCDC();
 
-	//logo.ShowBitmap();
-	
 	select1.ShowBitmap();
 	select2.ShowBitmap();
 	check_blank1.ShowBitmap();
