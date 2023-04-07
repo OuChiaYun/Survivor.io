@@ -69,7 +69,7 @@ void CGameStateRun::OnMove()							// 移動遊戲元素
 			boss1_character_attack();
 			boss1_bullet_move();
 			blood_bar_progress(blood_bar_boss1, boss1);
-			//blood_bar_progress(blood_bar, character);
+		
 			if (boss1.get_hp() <= 0) { //victory
 				set_victory_value(1);
 				GotoGameState(GAME_STATE_OVER);
@@ -87,25 +87,6 @@ void CGameStateRun::OnMove()							// 移動遊戲元素
 		GotoGameState(GAME_STATE_OVER);
 	}
 
-		/*blood_bar_progress(blood_bar_boss1, boss1);
-
-		for (int i = 0; i < (int)dart.size(); i++) {
-			dart[i].add_timer(1);
-			dart_move(dart[i], (dart[i].timer % 360) * 5);
-			if (dart[i].get_timer() > 360) {
-				dart[i].set_timer(0);
-			}
-		}
-
-		boss1_background();
-		boss1_character_attack();
-		boss1_bullet_move();
-
-		if (blood_bar_boss1.GetFrameIndexOfBitmap() == 0) { //victory
-			set_victory_value(1);
-			GotoGameState(GAME_STATE_OVER);
-		}*/
-
 	boss2_move();
 	item_move(boss2);
 }
@@ -116,28 +97,16 @@ void CGameStateRun::OnInit()  								// 遊戲的初值及圖形設定
 	background.SetTopLeft(-1500, -1500);
 	background2.LoadBitmapByString({ "Resources/background/Purple Nebula/Purple_Nebula_03.bmp", "Resources/background/Blue Nebula/Blue_Nebula_02.bmp" });
 	background2.SetTopLeft(0, 4000);
-
-	/*character.LoadBitmapByString({ "Resources/character/skeleton-animation_00.bmp","Resources/character/skeleton-animation_01.bmp","Resources/character/skeleton-animation_02.bmp", "Resources/character/skeleton-animation_03.bmp"
-		,"Resources/character/skeleton-animation_04.bmp" ,"Resources/character/skeleton-animation_05.bmp" ,"Resources/character/skeleton-animation_06.bmp" ,"Resources/character/skeleton-animation_07.bmp" ,"Resources/character/skeleton-animation_08.bmp" 
-		,"Resources/character/skeleton-animation_09.bmp" ,"Resources/character/skeleton-animation_10.bmp" }, RGB(255, 255, 255));*/
 	character.LoadBitmapByString({ "Resources/character/char_04.bmp" }, RGB(200, 191, 231));
 	character.SetTopLeft(461, 252);
-	character.set_center(470,270); //40 49
-	//character.SetAnimation(50, false);
+	character.set_center(470,270);
 	character.set_hp(5000);
-	
-
-	goal.LoadBitmapByString({ "Resources/goal.bmp" }, RGB(255, 255, 255));
-	goal.SetTopLeft(100, 82);
-
 
 	blood_bar.LoadBitmapByString({ "Resources/health_ui/health_ui_0.bmp", "Resources/health_ui/health_ui_1.bmp", "Resources/health_ui/health_ui_2.bmp", "Resources/health_ui/health_ui_3.bmp", "Resources/health_ui/health_ui_4.bmp" }, RGB(255, 255, 255));
 	blood_bar.SetFrameIndexOfBitmap(blood_bar.GetFrameSizeOfBitmap() - 1);
 
 	blood_bar_boss1.LoadBitmapByString({ "Resources/health_ui/boss1/health_ui_0.bmp", "Resources/health_ui/boss1/health_ui_1.bmp", "Resources/health_ui/boss1/health_ui_2.bmp", "Resources/health_ui/boss1/health_ui_3.bmp", "Resources/health_ui/boss1/health_ui_4.bmp" }, RGB(255, 255, 255));
 	blood_bar_boss1.SetFrameIndexOfBitmap(blood_bar.GetFrameSizeOfBitmap() - 1);
-	//blood_bar_boss1.SetTopLeft(boss1.GetLeft(), boss1.GetTop() + 112 +10);
-
 
 	boss2.LoadBitmapByString({ "Resources/boss2.bmp" }, RGB(255, 255, 255));
 	boss2.SetTopLeft(110, 322);
@@ -165,7 +134,6 @@ void CGameStateRun::OnInit()  								// 遊戲的初值及圖形設定
 			"Resources/monster/m16.bmp", "Resources/monster/m17.bmp" }, { 255,255,255 }, { 200, 191, 231 });
 		monster[i].SetAnimation(50, false);
 		monster[i].set_hp(6);
-		//monster_vanish[i].SetAnimation(50, false);
 	}
 
 	opera.LoadBitmapByString({ "Resources/operator.bmp" }, RGB(105, 106, 106));
@@ -193,7 +161,6 @@ void CGameStateRun::OnInit()  								// 遊戲的初值及圖形設定
 	blood.SetTopLeft(character.GetLeft() + character.GetWidth(), character.GetTop());
 
 	blood_boss1.LoadBitmapByString({ "Resources/ignore.bmp", "Resources/blood/bloodfx001_01.bmp", "Resources/blood/bloodfx001_02.bmp", "Resources/blood/bloodfx001_03.bmp", "Resources/blood/bloodfx001_04.bmp", "Resources/blood/bloodfx001_05.bmp", "Resources/ignore.bmp" }, RGB(255, 255, 255));
-	//blood_boss1.SetTopLeft(boss1.GetLeft() + boss1.GetWidth(), boss1.GetTop());
 
 	energy_bar.LoadBitmapByString({ "Resources/energy_bar/00.bmp" }, RGB(255, 255, 255));
 	energy_bar.LoadBitmapByString({ "Resources/energy_bar/1.bmp", "Resources/energy_bar/2.bmp", "Resources/energy_bar/3.bmp", "Resources/energy_bar/4.bmp", "Resources/energy_bar/5.bmp" }, RGB(200, 191, 231));
@@ -205,8 +172,8 @@ void CGameStateRun::OnInit()  								// 遊戲的初值及圖形設定
 	bullet[0].SetTopLeft(character.GetLeft() + 10, character.GetTop());
 
 	boss1.LoadBitmapByString({ "Resources/boss1/big_demon_idle_anim_f0.bmp", "Resources/boss1/big_demon_idle_anim_f1.bmp",
-													"Resources/boss1/big_demon_idle_anim_f1.bmp" ,  "Resources/boss1/big_demon_idle_anim_f3.bmp" }, RGB(255, 255, 255));
-	//boss1.SetTopLeft(boss1_range.GetLeft() + 270 , boss1_range.GetTop() + 150);
+							   "Resources/boss1/big_demon_idle_anim_f1.bmp" ,  "Resources/boss1/big_demon_idle_anim_f3.bmp" }, RGB(255, 255, 255));
+	
 	boss1.SetAnimation(150, false);
 	boss1.set_hp(5000);
 
@@ -221,7 +188,6 @@ void CGameStateRun::OnInit()  								// 遊戲的初值及圖形設定
 		boss1_bullet.push_back(CMovingBitmap());
 		boss1_bullet[i].LoadBitmapByString({ "Resources/Rock.bmp" }, RGB(255, 255, 255));
 		boss1_bullet[i].SetTopLeft(boss1_range.GetLeft() + 270 + 10, boss1_range.GetTop() + 130);
-		//boss1.SetTopLeft(boss1_range.GetLeft() + 270, boss1_range.GetTop() + 130);
 		boss1.set_hit_x(x[i], i);
 		boss1.set_hit_y(y[i], i);
 	}
@@ -358,8 +324,6 @@ void CGameStateRun::show_img() {
 	opera.ShowBitmap();
 	blood_bar.ShowBitmap();
 	energy_bar.ShowBitmap();
-	//goal.ShowBitmap();
-	//boss2.ShowBitmap();
 }
 
 void CGameStateRun::show_text() {
@@ -696,7 +660,6 @@ void CGameStateRun::monster_all() {
 			"Resources/monster/m16.bmp", "Resources/monster/m17.bmp" }, { 255,255,255 }, { 200, 191, 231 });
 		monster[monster.size() - 1].SetAnimation(50, false);
 		monster[monster.size() - 1].set_hp(6);
-		//monster_vanish[monster_vanish.size() - 1].SetAnimation(50, false);
 	}
 
 	if (timer == 10000) {
@@ -756,7 +719,6 @@ void CGameStateRun::boss2_move() {
 		int y = rand() % 20-10;
 		boss2.ax = x;
 		boss2.ay = y;
-		//boss2.SetTopLeft(boss2.GetLeft() + boss2.ax, boss2.GetTop() + boss2.ay);
 	}
 
 	if (boss2.GetLeft() < -300) {
@@ -790,7 +752,6 @@ void CMovingBitmap::item_hit_energy(CMovingBitmap &character, vector<CMovingBitm
 			if (energy_bar.get_energy() % 5 == 0 && energy_bar.GetFrameIndexOfBitmap() < 5) {
 				energy_bar.SetFrameIndexOfBitmap(energy_bar.GetFrameIndexOfBitmap() + 1);
 				if (energy_bar.GetFrameIndexOfBitmap() == 5) {
-					//go to next phase
 				}
 			}
 			break;
@@ -822,7 +783,7 @@ void CGameStateRun::bullet_erase(vector<CMovingBitmap> &item) {
 }
 
 void CGameStateRun::boss1_background() {
-	//character.set_center((character.GetLeft() + character.GetWidth() / 2), (character.GetTop() + character.GetHeight() / 2));
+
 	int ax = 0;
 	int ay = 0;
 
