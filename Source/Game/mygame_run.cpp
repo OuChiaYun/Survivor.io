@@ -61,8 +61,11 @@ void CGameStateRun::OnMove()							// 移動遊戲元素
 		character.item_hit_energy(character, energy, energy_bar);
 		monster_all();
 		character.dart_hit_monster(dart, monster, monster_vanish);
+		
+		boss2_move();
+		item_move(boss2);
 	}
-	
+	/*
 	if (level == 1){
 		bullet_move(bullet);
 		born_bullet(bullet, { "Resources/bullet.bmp" }, { 255, 255, 255 });
@@ -95,7 +98,7 @@ void CGameStateRun::OnMove()							// 移動遊戲元素
 		}
 	}
 
-	
+	*/
 
 	//if (character.get_hp()<= 0) { //victory
 		//set_victory_value(0);
@@ -384,8 +387,8 @@ void CGameStateRun::show_img() {
 	if (level == 0) {
 		if (energy_bar.GetFrameIndexOfBitmap() > 2) {
 			if (state == 0) {
-				stop = 1;
-				state = 1;
+				//stop = 1;
+				//state = 1;
 			}
 			for (int i = 0; i < (int)dart.size(); i++) {
 				dart[i].ShowBitmap();
@@ -411,8 +414,11 @@ void CGameStateRun::show_img() {
 				//monster_vanish.erase(monster_vanish.begin() + i);
 			}
 		}
+
+		boss2.ShowBitmap();
 	}
-	else {
+	/*
+	if (level == 1){
 		
 		for (int i = 0; i < (int)dart.size(); i++) {
 			dart[i].ShowBitmap();
@@ -434,6 +440,8 @@ void CGameStateRun::show_img() {
 
 
 	}	
+
+	*/
 
 	if(state == 1){
 		//select_bar.ShowBitmap();
@@ -469,7 +477,7 @@ void CGameStateRun::show_text() {
 
 	int t =  (int)(b-a) / CLOCKS_PER_SEC;
 	CTextDraw::ChangeFontLog(pdc, 40, "Modern No. 20", RGB(255, 174, 201), 80);
-	CTextDraw::Print(pdc, 855, 925, to_string(t/60)+" : "+ to_string(t%60));
+	CTextDraw::Print(pdc, 825, 925, to_string((t / 600)) + to_string((t/60)%10)+" : "+ to_string((t/10)%6) + to_string(t % 10));
 
 	if (timer <10200 && timer > 10000) {
 
