@@ -108,7 +108,6 @@ namespace game_framework {
 		void OnMouseMove(UINT nFlags, CPoint point);	// 處理滑鼠的動作 
 		void OnRButtonDown(UINT nFlags, CPoint point);  // 處理滑鼠的動作
 		void OnRButtonUp(UINT nFlags, CPoint point);	// 處理滑鼠的動作
-		bool isSelect(UINT nFlags, CPoint point,CMovingBitmap & item);
 
 	protected:
 		void OnMove();									// 移動遊戲元素
@@ -125,12 +124,6 @@ namespace game_framework {
 		CMovingBitmap boss2;
 		CMovingBitmap blood;
 		CMovingBitmap blood_boss1;
-		CMovingBitmap select_bar;
-		CMovingBitmap select_pic_bg[3];
-		CMovingBitmap select_pic;
-		CMovingBitmap select_start;
-		CMovingBitmap selected;
-		CMovingBitmap timer_express;
 
 
 		//CMovingBitmap dart;
@@ -157,18 +150,11 @@ namespace game_framework {
 
 		void random_born_item(vector<CMovingBitmap>&item,vector<string> str, vector<int>rgb);
 		void random_born_monster(vector<CMovingBitmap>&monster, vector<string> str_monster, vector<CMovingBitmap>&monster_vanish, vector<string> str_monster_vanish, vector<int>rgb_monster, vector<int>rgb_monster_vanish);
-		void monster_pop(int less_than_n);
-		
 		int hit_count = 0;
 		int timer = 0;
-		int stop = 0;
-		int state = 0; // 1-> select
-		int weapon_list[3] = { 0,0,0 };
-		clock_t a, b;
 
 		void monster_all();
 		void dart_all(int);
-		
 
 		void blood_bar_progress(CMovingBitmap &blood_bar, CMovingBitmap &item_blood);
 
