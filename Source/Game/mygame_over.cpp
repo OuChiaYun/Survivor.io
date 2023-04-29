@@ -4,6 +4,7 @@
 #include <ddraw.h>
 #include "../Library/audio.h"
 #include "../Library/gameutil.h"
+#include "../Game/CGamestage_all.h"
 #include "../Library/gamecore.h"
 #include "mygame.h"
 

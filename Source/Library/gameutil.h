@@ -198,4 +198,11 @@ namespace game_framework {
 		void static ChangeFontLog(CDC *pdc, int size, string fontName, COLORREF fontColor, int weight = 500);
 	};
 
+
+	class a : public CMovingBitmap {
+
+
+
+	};
+
 }

@@ -61,6 +61,7 @@ namespace game_framework {
 	private:
 		static int init_background_value;
 		static int victory;
+
 	};
 	/////////////////////////////////////////////////////////////////////////////
 	// 這個class為遊戲的遊戲開頭畫面物件
@@ -109,68 +110,33 @@ namespace game_framework {
 		void OnRButtonDown(UINT nFlags, CPoint point);  // 處理滑鼠的動作
 		void OnRButtonUp(UINT nFlags, CPoint point);	// 處理滑鼠的動作
 
+		void show_baclground_selected();
+		void show_text();
+
 	protected:
 		void OnMove();									// 移動遊戲元素
 		void OnShow();		// 顯示這個狀態的遊戲畫面
 	private:
-		CMovingBitmap background;
-		CMovingBitmap background2;
+		CGamestage1 t1;
+		CGamestageSelect select_stage; 
+		CGamestageBoss1 b1;
+		CGamestageBoss2 b2;
+
 		CMovingBitmap character;
+		CMovingBitmap background;
 		CMovingBitmap opera;
-		CMovingBitmap goal;
 		CMovingBitmap blood_bar;
-		CMovingBitmap blood_bar_boss1;
 		CMovingBitmap energy_bar;
-		CMovingBitmap boss2;
-		CMovingBitmap blood;
-		CMovingBitmap blood_boss1;
-
-
-		//CMovingBitmap dart;
 		vector <CMovingBitmap> dart;
-		vector <CMovingBitmap> energy;
-		vector<CMovingBitmap> monster;
-		vector<CMovingBitmap> monster_vanish;
-		vector<CMovingBitmap> hiden;
-
-		void show_img();
-		void show_text();
-		
-		void show_baclground_selected();
-
-		void background_move();
-		void item_move(CMovingBitmap &item);
-		void monster_move(CMovingBitmap &monster);
-		void dart_move(CMovingBitmap &item, int i, int setR);
-		void boss2_move();
-
-		bool isLeft(CMovingBitmap &character, CMovingBitmap &item);
-		bool isDown(CMovingBitmap &character, CMovingBitmap &item);
-
-
-		void random_born_item(vector<CMovingBitmap>&item,vector<string> str, vector<int>rgb);
-		void random_born_monster(vector<CMovingBitmap>&monster, vector<string> str_monster, vector<CMovingBitmap>&monster_vanish, vector<string> str_monster_vanish, vector<int>rgb_monster, vector<int>rgb_monster_vanish);
-		int hit_count = 0;
-		int timer = 0;
-
-		void monster_all();
-		void dart_all(int);
-
-		void blood_bar_progress(CMovingBitmap &blood_bar, CMovingBitmap &item_blood);
-
 		vector<CMovingBitmap> bullet;
-		void bullet_move(vector<CMovingBitmap> &item);
-		void bullet_erase(vector<CMovingBitmap> &item);
-		void born_bullet(vector<CMovingBitmap> &item, vector<string> str, vector<int>rgb);
+		CMovingBitmap timer_express;
+		clock_t a, b;
 
-		CMovingBitmap boss1;
-		CMovingBitmap boss1_range;
-		vector<CMovingBitmap> boss1_bullet;
-		void boss1_background();
-		void boss1_character_attack();
-		void boss1_bullet_move();
 
-		int level = 0;
+		int weapon_list[3] = { 1,0,0 };//s
+
+
+
 	};
 
 	/////////////////////////////////////////////////////////////////////////////
@@ -192,5 +158,6 @@ namespace game_framework {
 		CMovingBitmap victory;
 		CMovingBitmap die;
 	};
+
 
 }
