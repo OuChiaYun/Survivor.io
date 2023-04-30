@@ -39,6 +39,9 @@ namespace game_framework {
 		void bullet_move(vector<CMovingBitmap> &item);
 		void bullet_erase(vector<CMovingBitmap> &item);
 		void born_bullet(vector<CMovingBitmap> &item, vector<string> str, vector<int>rgb);
+		void lightning_move(vector<CMovingBitmap> &item);
+
+
 		void show_text();
 		void show_img();
 
@@ -85,6 +88,11 @@ namespace game_framework {
 		vector<CMovingBitmap> monster;
 		vector<CMovingBitmap> monster_vanish;
 		CMovingBitmap blood;
+		vector<CMovingBitmap> lightning;
+		int axay[4][2] = { {-2,2},{2,2},{-2,-2},{2,-2} };
+		int item_stdax;
+		int item_stday;
+
 		//CMovingBitmap timer_express;
 		//clock_t a, b;
 

@@ -21,11 +21,33 @@ void CGamestageBoss2::OnBeginState() {};
 
 void CGamestageBoss2::OnInit() {
 
-	boss2.LoadBitmapByString({ "Resources/boss2.bmp" }, RGB(255, 255, 255));
-	boss2.SetTopLeft(110, 322);
+	boss2.LoadBitmapByString({ "Resources/boss2/boss2.bmp" }, RGB(255, 255, 255));
+	boss2.SetTopLeft(420, 500);
+	boss2.set_center((boss2.GetLeft() + boss2.GetWidth() / 2), (boss2.GetTop() + boss2.GetHeight() / 2));
 	boss2.set_timer(1500);
 	boss2.ax = 0;
 	boss2.ay = 0;
+	vector<string> boss2_bullet_bmp = { "Resources/boss2/boss2_b1.bmp ","Resources/boss2/boss2_b2.bmp " ,"Resources/boss2/boss2_b3.bmp" ,"Resources/boss2/boss2_b4.bmp" ,"Resources/boss2/boss2_b5.bmp" ,"Resources/boss2/boss2_b6.bmp " ,"Resources/boss2/boss2_b7.bmp " ,"Resources/boss2/boss2_b8.bmp " };
+
+	for (int i = 0; i < 8; i++) {
+		boss2_bullet.push_back(CMovingBitmap());
+		boss2_bullet[i].LoadBitmapByString(boss2_bullet_bmp, RGB(140, 133, 90));
+		boss2_bullet[i].SetTopLeft(boss2.get_center_x()-20, boss2.get_center_y()-20);
+		boss2_bullet[i].SetAnimation(10, false);
+	}
+
+
+
+	boss2_range.LoadBitmapByString({ "Resources/boss2/boss2_range.bmp" }, RGB(255, 255, 255));
+	boss2_range.SetTopLeft(0,0);
+	boss2.SetTopLeft(boss2_range.GetLeft() + 243, boss2_range.GetTop() + 130);
+	
+
+	blood.LoadBitmapByString({ "Resources/ignore.bmp", "Resources/blood/bloodfx001_01.bmp",
+					"Resources/blood/bloodfx001_02.bmp", "Resources/blood/bloodfx001_03.bmp",
+					"Resources/blood/bloodfx001_04.bmp", "Resources/blood/bloodfx001_05.bmp",
+					"Resources/ignore.bmp" }, RGB(255, 255, 255));
+	blood.SetTopLeft(character.GetLeft() + character.GetWidth(), character.GetTop());
 
 }
 
@@ -84,17 +106,31 @@ void CGamestageBoss2::OnRButtonDown(UINT nFlags, CPoint point) {};
 void CGamestageBoss2::OnRButtonUp(UINT nFlags, CPoint point) {};
 
 void CGamestageBoss2::OnMove() {
-	gat_data();
+	timmer++;
 
 
+	if (timmer > 100) {
+		gat_data();
+
+		boss2_move();
+
+		if (timmer % 2 == 0) {
+			boss2_bullet_move();
+		}
+
+		if (timmer > 100000) {
+			timmer = 0;
+		}
+	}
+	else {
+		boss2.SetTopLeft(420, 500);
+	
+	}
 	background_move();
-	boss2_move();
-
 	dart_all(200);
 	bullet_move(bullet);
 	born_bullet(bullet, { "Resources/bullet.bmp" }, { 255, 255, 255 });
 	bullet_erase(bullet);
-
 
 	share_data();
 };
@@ -114,10 +150,20 @@ void CGamestageBoss2::OnShow() {
 		bullet[i].ShowBitmap();
 	}
 
+	for (int i = 0; i < (int)boss2_bullet.size(); i++) {
+		boss2_bullet[i].ShowBitmap();
+
+	}
+
 	blood_bar.ShowBitmap();
 	energy_bar.ShowBitmap();
 	character.ShowBitmap();
+
+	blood.SetTopLeft((character.GetLeft() + character.GetWidth() /2), character.GetTop());
+	blood.ShowBitmap();
+
 	opera.ShowBitmap();
+	boss2_range.ShowBitmap();
 
 	show_text();
 
@@ -142,76 +188,44 @@ void CGamestageBoss2::show_text() {
 
 
 void CGamestageBoss2::background_move() {
-	double rate = 0.1;
-
-	int ch_x = character.GetLeft();
-	int ch_y = character.GetTop();
-	int opera_x = opera.GetLeft();
-	int opera_y = opera.GetTop();
-	int background_x = background.GetLeft();
-	int background_y = background.GetTop();
-
 	int ax = 0;
 	int ay = 0;
 
 	if (opera.center_x < 491) {
-		ax = 1;
+		ax = -3;
 	}
 	else if (opera.center_x > 491) {
-		ax = -1;
+		ax = 3;
 	}
 
 	if (opera.center_y < 736) {
-		ay = 1;
+		ay = -3;
 	}
 	else if (opera.center_y > 736) {
-		ay = -1;
+		ay = 3;
 	}
 
-	if (background_x > 0) { //character->item
-		if (ax < 0) { //turn right
+	character.SetTopLeft(character.GetLeft() + ax, character.GetTop() + ay);
 
-			background.SetTopLeft(background.GetLeft() + ax, background.GetTop() + ay);
-		}
-		else {
-			background.SetTopLeft(background.GetLeft(), background.GetTop() + ay);
-		}
+	if (character.GetLeft() < boss2_range.GetLeft()) { //left
+		character.SetTopLeft(boss2_range.GetLeft(), character.GetTop());
+	}
+	if (character.GetTop() < boss2_range.GetTop()) { //top
+		character.SetTopLeft(character.GetLeft(), boss2_range.GetTop());
+	}
+	if (character.GetLeft() + character.GetWidth() > (boss2_range.GetLeft() + boss2_range.GetWidth())) { //right
+		character.SetTopLeft(boss2_range.GetLeft() + boss2_range.GetWidth() - character.GetWidth(), character.GetTop());
+	}
+	if ((character.GetTop() + character.GetHeight()) > (boss2_range.GetTop() + boss2_range.GetHeight())) { //bottom
+		character.SetTopLeft(character.GetLeft(), boss2_range.GetTop() + boss2_range.GetHeight() - character.GetHeight());
+	}
 
-	}
-	else if (background.GetLeft() + background.GetWidth() < 1045) { //item->character
-		if (ax > 0) { //turn left
-			background.SetTopLeft(background.GetLeft() + ax, background.GetTop() + ay);
-		}
-		else {
-			background.SetTopLeft(background.GetLeft(), background.GetTop() + ay);
-		}
-	}
-	else if (background.GetTop() > 0) { //character->item
-		if ((opera.GetTop()) > 682) { //turn right
-			background.SetTopLeft(background.GetLeft() + ax, background.GetTop() + ay);
-		}
-		else {
-			background.SetTopLeft(background.GetLeft() + ax, background.GetTop());
-
-		}
-	}
-	else if (background.GetTop() + background.GetHeight() < 1045) { //character->item
-		if ((opera.GetTop()) < 682) {
-			background.SetTopLeft(background.GetLeft() + ax, background.GetTop() + ay);
-		}
-		else {
-			background.SetTopLeft(background.GetLeft() + ax, background.GetTop());
-		}
-	}
-	else {
-		background.SetTopLeft(background.GetLeft() + ax, background.GetTop() + ay);
-
-	}
+	character.set_center((character.GetLeft() + 10), (character.GetTop() + 10));
 }
 
 void CGamestageBoss2::bullet_move(vector<CMovingBitmap> &item) {
 	for (int i = 0; i < (int)item.size(); i++) {
-		item[i].SetTopLeft(character.GetLeft() + 10, item[i].GetTop() - 10);
+		item[i].SetTopLeft(item[i].GetLeft(), item[i].GetTop() - 10);
 		//item[i].dart_hit_monster(item, monster, monster_vanish);
 	}
 }
@@ -291,10 +305,72 @@ void CGamestageBoss2::boss2_move() {
 		boss2.ay = y;
 		boss2.SetTopLeft(boss2.GetLeft() + boss2.ax, boss2.GetTop() + boss2.ay);
 	}
+
+	boss2.set_center((boss2.GetLeft() + boss2.GetWidth() / 2), (boss2.GetTop() + boss2.GetHeight() / 2));
 }
 
+void CGamestageBoss2::boss2_bullet_move() {
 
+	double v = 1.0;
+	for (int i = 0; i < (int)boss2_bullet.size(); i++) {
+		int x0 = boss2_bullet[i].GetLeft();
+		int y0 = boss2_bullet[i].GetTop();
+		int d = 6;
+		int t = 1;
+		double x = x0 + d * cos(theta[i]) + v * t*cos(theta[i]);
+		double y = y0 + d * sin(theta[i]) + v * t*sin(theta[i]);
+		boss2_bullet[i].SetTopLeft((int)(x), (int)(y));
 
+		if (boss2.IsOverlap(boss2_bullet[i], character)) {
+			character.add_sub_hp(-15);
+			blood.SetAnimation(50, false);
+			blood.ShowBitmap();
+		}
+		else {
+			blood.SetAnimation(50, true);
+		}
+	}
+	int flag = 0;
+	for (int i = 0; i < (int)boss2_bullet.size(); i++) {
+		if (boss2_bullet[i].GetTop() < 0) { //up
+		//	boss2_bullet.erase(boss2_bullet.begin() + i);
+			flag++;
+		}
+		else if (boss2_bullet[i].GetLeft() > 1065) { //right
+	   //	boss2_bullet.erase(boss2_bullet.begin() + i);
+			flag++;
+		}
+		else if (boss2_bullet[i].GetTop() > 1065) { //down
+	   //	boss2_bullet.erase(boss2_bullet.begin() + i);
+			flag++;
+		}
+		else if (boss2_bullet[i].GetLeft() < 0) { //left
+	   //	boss2_bullet.erase(boss2_bullet.begin() + i);
+			flag++;
+		}
+	}
+
+	if (flag == boss2_bullet.size()) {
+		for (int i = 0; i < (int)boss2_bullet.size(); i++) {
+			//boss2_bullet.erase(boss2_bullet.begin(),boss2_bullet.end());
+			//}
+		}
+
+		if (boss2_bullet.size() == 0) {
+			vector<string> boss2_bullet_bmp = { "Resources/boss2/boss2_b1.bmp ","Resources/boss2/boss2_b2.bmp " ,"Resources/boss2/boss2_b3.bmp" ,"Resources/boss2/boss2_b4.bmp" ,"Resources/boss2/boss2_b5.bmp" ,"Resources/boss2/boss2_b6.bmp " ,"Resources/boss2/boss2_b7.bmp " ,"Resources/boss2/boss2_b8.bmp " };
+
+			for (int i = 0; i < 8; i++) {
+				boss2_bullet.push_back(CMovingBitmap());
+				boss2_bullet[i].LoadBitmapByString(boss2_bullet_bmp, RGB(140, 133, 90));
+				boss2_bullet[i].SetTopLeft(boss2.get_center_x(), boss2.get_center_y());
+				boss2_bullet[i].SetAnimation(10, false);
+
+			}
+
+		}
+	}
+
+}
 
 /////////////////////////////update data/////////////////
 

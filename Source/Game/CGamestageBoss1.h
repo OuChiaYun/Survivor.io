@@ -73,6 +73,8 @@ namespace game_framework {
 		vector<CMovingBitmap> boss1_bullet;
 		CMovingBitmap blood_bar_boss1;
 		CMovingBitmap blood_boss1;
+
+		CMovingBitmap lighting;
 	};
 
 };

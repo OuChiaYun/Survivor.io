@@ -37,6 +37,7 @@ namespace game_framework {
 		///////////////////boss2////////////////
 
 		void boss2_move();
+		void boss2_bullet_move();
 		//////////////////sharing///////////////
 		void set_share_obj_data(CMovingBitmap &tmp_background, CMovingBitmap &tmp_character,
 			CMovingBitmap &tmp_opera, CMovingBitmap &tmp_blood_bar, CMovingBitmap &tmp_energy_bar, vector <CMovingBitmap> &tmp_dart, vector<CMovingBitmap> &tmp_bullet);
@@ -69,7 +70,15 @@ namespace game_framework {
 		vector<CMovingBitmap> bullet;
 		//share
 
+		CMovingBitmap boss2_range;
 		CMovingBitmap boss2;
+		vector<CMovingBitmap> boss2_bullet;
+		CMovingBitmap blood;
+
+		double PI = 3.14159265358979323846;
+		double theta[8] = { 0.0, PI / 4, PI / 2, 3 * PI / 4, PI, 5 * PI / 4, 3 * PI / 2, 7 * PI / 4 };
+
+		int timmer = 0;
 	};
 
 };

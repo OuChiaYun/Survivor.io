@@ -37,7 +37,8 @@ void CGameStateRun::OnBeginState()
 
 void CGameStateRun::OnMove()							// 移動遊戲元素
 {
-	b2.OnMove();
+	t1.OnMove();
+	
 	/*
 	if (select_stage.show == 1) {
 		select_stage.OnMove();
@@ -48,6 +49,8 @@ void CGameStateRun::OnMove()							// 移動遊戲元素
 		t1.OnMove();
 	}
 	*/
+	
+	
 
 }
 
@@ -134,7 +137,7 @@ void CGameStateRun::OnKeyUp(UINT nChar, UINT nRepCnt, UINT nFlags)
 
 void CGameStateRun::OnLButtonDown(UINT nFlags, CPoint point)  // 處理滑鼠的動作
 {
-	/*
+	
 	if (select_stage.show == 1) {
 		select_stage.OnLButtonDown(nFlags, point);
 		if (select_stage.show == 2) {
@@ -142,11 +145,13 @@ void CGameStateRun::OnLButtonDown(UINT nFlags, CPoint point)  // 處理滑鼠的
 			weapon_list[select_stage.weapon_selected] += 1;
 			if (select_stage.weapon_selected == DART) {
 				t1.mygame_dart_born();
+				t1.share_data();
 			}
 
 		}
 	}
-	*/
+	
+	
 }
 
 void CGameStateRun::OnLButtonUp(UINT nFlags, CPoint point)	// 處理滑鼠的動作
@@ -155,7 +160,8 @@ void CGameStateRun::OnLButtonUp(UINT nFlags, CPoint point)	// 處理滑鼠的動
 
 void CGameStateRun::OnMouseMove(UINT nFlags, CPoint point)	// 處理滑鼠的動作
 {
-	b2.OnMouseMove(nFlags, point);
+	t1.OnMouseMove(nFlags, point);
+
 	/*
 	if (select_stage.show == 1) {
 		t1.OnMouseMove(false, point);
@@ -168,6 +174,8 @@ void CGameStateRun::OnMouseMove(UINT nFlags, CPoint point)	// 處理滑鼠的動
 		t1.OnMouseMove(nFlags, point);
 	}
 	*/
+	
+	
 }
 
 
@@ -181,8 +189,9 @@ void CGameStateRun::OnRButtonUp(UINT nFlags, CPoint point)	// 處理滑鼠的動
 
 void CGameStateRun::OnShow()
 {
-	b2.OnShow();
-	/*
+	t1.OnShow();
+	
+/*
 	t1.show_baclground_selected(get_init_background_value());
 	select_stage.show = t1.select;
 	
@@ -196,7 +205,11 @@ void CGameStateRun::OnShow()
 	if (select_stage.show == 1) {
 		select_stage.OnShow();
 	}
-	*/
+
+*/
+	
+
+
 	timer_express.ShowBitmap();
 	show_text();
 

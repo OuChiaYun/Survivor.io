@@ -55,8 +55,21 @@ void CGamestage1::OnInit() {
 							"Resources/blood/bloodfx001_04.bmp", "Resources/blood/bloodfx001_05.bmp",
 							"Resources/ignore.bmp" }, RGB(255, 255, 255));
 	blood.SetTopLeft(character.GetLeft() + character.GetWidth(), character.GetTop());
-
-
+	int axay[5][4] = { {-5,2},{5,2},{-5,-2},{5,-2} };
+	for (int i = 0; i < 4; i++) {
+		lightning.push_back(CMovingBitmap());
+		lightning[i].LoadBitmapByString({ "Resources/lightning/g1.bmp","Resources/lightning/g2.bmp","Resources/lightning/g3.bmp","Resources/lightning/g4.bmp",
+										  "Resources/lightning/g5.bmp" ,"Resources/lightning/g6.bmp" ,"Resources/lightning/g7.bmp" ,"Resources/lightning/g8.bmp",
+										  "Resources/lightning/g9.bmp", "Resources/lightning/g10.bmp", "Resources/lightning/g11.bmp", "Resources/lightning/g12.bmp",
+										  "Resources/lightning/g13.bmp" ,"Resources/lightning/g14.bmp" ,"Resources/lightning/g15.bmp" ,"Resources/lightning/g16.bmp",
+										  "Resources/lightning/g17.bmp" ,"Resources/lightning/g18.bmp" ,"Resources/lightning/g19.bmp", "Resources/lightning/g20.bmp"}, RGB(255, 255, 255));
+		lightning[i].SetTopLeft(character.GetLeft() + character.GetWidth() / 2 - lightning[i].GetWidth()/2, character.GetTop());
+		lightning[i].SetAnimation(30, false);
+		lightning[i].stdx = character.GetLeft() + (character.GetWidth() / 2);
+		lightning[i].stdy = character.GetTop();
+		lightning[i].ax = axay[i][0];
+		lightning[i].ay = axay[i][1];
+	}
 }
 
 void CGamestage1::OnKeyDown(UINT, UINT, UINT) {};
@@ -140,7 +153,17 @@ void CGamestage1::OnMove() {
 
 	character.dart_hit_monster(dart, monster, monster_vanish);
 
+	lightning_move(lightning);
 
+	for (int i = 0; i < (int)(lightning.size()); i++) {
+		int ax = lightning[i].GetLeft();
+		int ay = lightning[i].GetTop();
+		item_move(lightning[i]);
+
+		lightning[i].stdx += lightning[i].GetLeft()-ax;
+		lightning[i].stdy += lightning[i].GetTop()-ay;
+
+	}
 	share_data();
 };
 
@@ -185,6 +208,10 @@ void CGamestage1::show_img() {
 
 	for (int i = 0; i < (int)bullet.size(); i++) {
 		bullet[i].ShowBitmap();
+	}
+
+	for (int i = 0; i < (int)lightning.size(); i++) {
+		lightning[i].ShowBitmap();
 	}
 
 	blood.ShowBitmap();
@@ -564,7 +591,34 @@ void CGamestage1::show_baclground_selected(int s) {
 
 }
 
+void CGamestage1::lightning_move(vector<CMovingBitmap> &item) {
 
+
+	int flag = 0;
+	for (int i = 0; i < (int) item.size(); i++) {
+
+		if ((lightning[i].GetLeft() <= (lightning[i].stdx - 300)) || (lightning[i].GetLeft()+lightning[i].GetWidth() >= (lightning[i].stdx + 300))) {
+			lightning[i].ax *= -1;
+		}
+		if (lightning[i].GetTop() < (lightning[i].stdy-1065)|| lightning[i].GetTop() > (lightning[i].stdy + 1065)) {
+			flag++;
+		}
+
+		lightning[i].SetTopLeft(lightning[i].GetLeft() + lightning[i].ax, lightning[i].GetTop() +lightning[i].ay);
+		
+	}
+	int axay[5][4] = { {-5,2},{5,2},{-5,-2},{5,-2} };
+	if (flag == (int)lightning.size()) {
+		for (int i = 0; i < (int)lightning.size(); i++) {
+			lightning[i].SetTopLeft(character.GetLeft() + character.GetWidth() / 2 - lightning[i].GetWidth() / 2, character.GetTop());
+			lightning[i].stdx = character.GetLeft() + (character.GetWidth() / 2);
+			lightning[i].stdy = character.GetTop();
+			lightning[i].ax = axay[i][0];
+			lightning[i].ay = axay[i][1];
+		}
+	}
+
+};
 
 
 /////////////////////////////update data/////////////////

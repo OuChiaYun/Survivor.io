@@ -66,6 +66,7 @@ void CGamestageBoss1::OnInit() {
 								 "Resources/blood/bloodfx001_04.bmp", "Resources/blood/bloodfx001_05.bmp",
 								 "Resources/ignore.bmp" }, RGB(255, 255, 255));
 
+
 }
 
 void CGamestageBoss1::OnKeyDown(UINT, UINT, UINT) {};
@@ -124,6 +125,7 @@ void CGamestageBoss1::OnRButtonUp(UINT nFlags, CPoint point) {};
 
 void CGamestageBoss1::OnMove() {
 	get_data();
+
 	blood_bar_progress(blood_bar, character);
 	bullet_move(bullet);
 	born_bullet(bullet, { "Resources/bullet.bmp" }, { 255, 255, 255 });
