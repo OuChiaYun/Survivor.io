@@ -36,7 +36,7 @@ namespace game_framework {
 	private:
 		CMovingBitmap select_bar;
 		CMovingBitmap select_pic_bg[3];
-		CMovingBitmap select_pic;
+		CMovingBitmap select_pic[3];
 		CMovingBitmap select_start;
 		CMovingBitmap selected;
 		//int weapon_selected = 0;

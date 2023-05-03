@@ -35,7 +35,10 @@ void CGamestageSelect::OnInit() {
 	select_pic_bg[2].LoadBitmapByString({ "Resources/select_bar/select_bg_pic_2.bmp" }, RGB(255, 255, 255));
 	select_pic_bg[2].SetTopLeft((select_bar.GetLeft() + 40 + ((select_bar.GetWidth() - 80) / 6) * 5) - (select_pic_bg[0].GetWidth() / 2), select_bar.GetTop() + 50);
 
-	select_pic.LoadBitmapByString({ "Resources/weapon/hot_wheels/00.bmp",
+	select_pic[0].LoadBitmapByString({"Resources/weapon/cleaver.bmp"}, RGB(255, 255, 255));
+
+
+	select_pic[1].LoadBitmapByString({ "Resources/weapon/hot_wheels/00.bmp",
 	"Resources/weapon/hot_wheels/01.bmp",
 	"Resources/weapon/hot_wheels/02.bmp",
 	"Resources/weapon/hot_wheels/03.bmp",
@@ -46,14 +49,14 @@ void CGamestageSelect::OnInit() {
 	
 		//	select_pic.SetTopLeft( (select_pic_bg.GetLeft() + select_pic_bg.GetWidth() ) / 2 + (select_pic.GetWidth()), select_pic_bg.GetTop()+30);
 		
-	select_pic.SetAnimation(100,false);
+	select_pic[1].SetAnimation(100,false);
 
 	select_start.LoadBitmapByString({ "Resources/select_bar/s1.bmp","Resources/select_bar/s2.bmp","Resources/select_bar/s3.bmp" ,"Resources/select_bar/s4.bmp" ,"Resources/select_bar/s5.bmp" }, RGB(255, 255, 255));
 	select_start.SetAnimation(200, false);
 	select_start.SetTopLeft((select_bar.GetLeft() + 40 + ((select_bar.GetWidth() - 80) / 6) * 3) - (select_start.GetWidth() / 2), select_bar.GetTop() + 450);
 
-	selected.LoadBitmapByString({ "Resources/select_bar/selected2.bmp", "Resources/select_bar/selected_ignore.bmp" }, RGB(255, 255, 255));
-	selected.SetTopLeft(select_pic_bg[1].GetLeft() + 2, select_pic_bg[1].GetTop());
+	//selected.LoadBitmapByString({ "Resources/select_bar/selected2.bmp", "Resources/select_bar/selected_ignore.bmp" }, RGB(255, 255, 255));
+	//selected.SetTopLeft(select_pic_bg[0].GetLeft() + 2, select_pic_bg[0].GetTop());
 
 }
 
@@ -102,8 +105,10 @@ void CGamestageSelect::OnShow() {
 	select_pic_bg[0].ShowBitmap();
 	select_pic_bg[1].ShowBitmap();
 	select_pic_bg[2].ShowBitmap();
-	select_pic.SetTopLeft((select_pic_bg[1].GetLeft() + select_pic_bg[1].GetWidth() / 2 - select_pic.GetWidth() / 2), select_pic_bg[1].GetTop() + 40);
-	select_pic.ShowBitmap();
+	for (int i = 0; i < 2; i++) {
+		select_pic[i].SetTopLeft((select_pic_bg[i].GetLeft() + select_pic_bg[i].GetWidth() / 2 - select_pic[i].GetWidth() / 2), select_pic_bg[i].GetTop() + 40);
+		select_pic[i].ShowBitmap();
+	}
 	select_start.ShowBitmap();
 	selected.ShowBitmap();
 };

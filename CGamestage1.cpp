@@ -28,7 +28,6 @@ void CGamestage1::OnInit() {
 	}
 
 
-
 	for (int i = 0; i < 30; i++) {
 		int arr[] = { 1,2,3 };
 		random_born_monster(monster, {
@@ -69,6 +68,21 @@ void CGamestage1::OnInit() {
 		lightning[i].stdy = character.GetTop();
 		lightning[i].ax = axay[i][0];
 		lightning[i].ay = axay[i][1];
+	}
+
+	bullet.push_back(CMovingBitmap());
+	bullet[0].LoadBitmapByString({ "Resources/weapon/bullet.bmp" }, RGB(255, 255, 255));
+	bullet[0].SetTopLeft(character.GetLeft() + 10, character.GetTop());
+
+	for (int i = 0; i < 4; i++) {
+		bricks[i].push_back(CMovingBitmap());
+		bricks[i][0].LoadBitmapByString({ "Resources/weapon/cleaver.bmp" }, RGB(255, 255, 255));
+		bricks[i][0].SetTopLeft(character.GetLeft() + 10, character.GetTop());
+		/*for (int j = 0; j < 5; j++) {
+			bricks[i].push_back(CMovingBitmap());
+			bricks[i][j].LoadBitmapByString({ "Resources/weapon/cleaver.bmp" }, RGB(255, 255, 255));
+			bricks[i][j].SetTopLeft(character.GetLeft() + 10, character.GetTop());
+		}*/
 	}
 }
 
@@ -148,8 +162,19 @@ void CGamestage1::OnMove() {
 	monster_all();
 
 	bullet_move(bullet);
-	born_bullet(bullet, { "Resources/bullet.bmp" }, { 255, 255, 255 });
+	born_bullet(bullet, { "Resources/weapon/bullet.bmp" }, { 255, 255, 255 });
 	bullet_erase(bullet);
+
+	int h[4] = { -30, -60, 30, 60 };
+	int k[4] = { -70, -100, -70, -100 };
+	int c[4] = { 40, 60, 40, 60 };
+	int x_move[4] = { -5, -5, 5, 5 };
+
+	for (int i = 0; i < 4; i++) {
+		bricks_move(bricks[i], character.GetLeft() + h[i], character.GetTop() + k[i], c[i], x_move[i]);
+		bricks_born(bricks[i], { "Resources/weapon/cleaver.bmp" }, { 255, 255, 255 });
+		bricks_erase(bricks[i]);
+	}
 
 	character.dart_hit_monster(dart, monster, monster_vanish);
 
@@ -208,6 +233,12 @@ void CGamestage1::show_img() {
 
 	for (int i = 0; i < (int)bullet.size(); i++) {
 		bullet[i].ShowBitmap();
+	}
+
+	for (int i = 0; i < 4; i++) {
+		for (int j = 0; j < (int)bricks[i].size(); j++) {
+			bricks[i][j].ShowBitmap();
+		}
 	}
 
 	for (int i = 0; i < (int)lightning.size(); i++) {
@@ -566,6 +597,40 @@ void CGamestage1::bullet_erase(vector<CMovingBitmap> &item) {
 	}
 }
 
+void CGamestage1::bricks_move(vector<CMovingBitmap> &item, int h, int k, int c, int x_move) {
+	for (int i = 0; i < (int)item.size(); i++) {
+		int x = item[i].GetLeft() + x_move;
+		int y = (x - h) * (x - h) / (4 * c) + k;
+		item[i].SetTopLeft(x, y);
+		item[i].dart_hit_monster(item, monster, monster_vanish);
+	}
+	/*int x = item[bricks_index].GetLeft() + x_move;
+	int y = (x - h) * (x - h) / (4 * c) + k;
+	item[bricks_index].SetTopLeft(x, y);
+	item[bricks_index].dart_hit_monster(item, monster, monster_vanish);*/
+}
+
+void CGamestage1::bricks_born(vector<CMovingBitmap> &item, vector<string> str, vector<int>rgb) {
+	int tail = item.size();
+	if (item[tail - 1].GetTop() > character.GetTop() + 200) {
+		item.push_back(CMovingBitmap());
+		item[tail].LoadBitmapByString(str, RGB(rgb[0], rgb[1], rgb[2]));
+		item[tail].SetTopLeft(character.GetLeft() + 10, character.GetTop());
+	}
+}
+
+
+void CGamestage1::bricks_erase(vector<CMovingBitmap> &item) {
+	if (item[0].GetTop() + 70 > 1065) {
+		item.erase(item.begin());
+	}
+	/*for (int i = 0; i < 5; i++) {
+		if (item[i].GetTop() + 70 > 1065) {
+			//item[i].SetTopLeft(character.GetLeft() + 10, character.GetTop());
+		}
+	}*/
+}
+
 void CGamestage1::monster_pop(int less_than_n) {
 
 	for (int i = 0; i < (int)monster.size(); i++) {
@@ -605,7 +670,7 @@ void CGamestage1::lightning_move(vector<CMovingBitmap> &item) {
 		}
 
 		lightning[i].SetTopLeft(lightning[i].GetLeft() + lightning[i].ax, lightning[i].GetTop() +lightning[i].ay);
-		
+		item[i].dart_hit_monster(item, monster, monster_vanish);
 	}
 	int axay[5][4] = { {-5,2},{5,2},{-5,-2},{5,-2} };
 	if (flag == (int)lightning.size()) {
@@ -617,7 +682,6 @@ void CGamestage1::lightning_move(vector<CMovingBitmap> &item) {
 			lightning[i].ay = axay[i][1];
 		}
 	}
-
 };
 
 
@@ -626,7 +690,7 @@ void CGamestage1::lightning_move(vector<CMovingBitmap> &item) {
 
 
 void CGamestage1::set_share_obj_data(CMovingBitmap &tmp_background, CMovingBitmap &tmp_character,
-	CMovingBitmap &tmp_opera, CMovingBitmap &tmp_blood_bar, CMovingBitmap &tmp_energy_bar, vector <CMovingBitmap> &tmp_dart, vector<CMovingBitmap> &tmp_bullet) {
+	CMovingBitmap &tmp_opera, CMovingBitmap &tmp_blood_bar, CMovingBitmap &tmp_energy_bar, vector <CMovingBitmap> &tmp_dart, vector<CMovingBitmap> &tmp_bullet, vector<CMovingBitmap> &tmp_bricks) {
 
 	p_background = &tmp_background;
 	p_character = &tmp_character;
@@ -635,6 +699,7 @@ void CGamestage1::set_share_obj_data(CMovingBitmap &tmp_background, CMovingBitma
 	p_energy_bar = &tmp_energy_bar;
 	p_dart = &tmp_dart;
 	p_bullet = &tmp_bullet;
+	p_bricks = &tmp_bricks;
 
 	
 	background = tmp_background;
@@ -644,11 +709,11 @@ void CGamestage1::set_share_obj_data(CMovingBitmap &tmp_background, CMovingBitma
 	energy_bar = tmp_energy_bar;
 	dart = tmp_dart;
 	bullet = tmp_bullet;
-
+	bricks[4] = tmp_bricks;
 }
 
 void CGamestage1::move_share_obj_data(CMovingBitmap &tmp_background, CMovingBitmap &tmp_character,
-	CMovingBitmap &tmp_opera, CMovingBitmap &tmp_blood_bar, CMovingBitmap &tmp_energy_bar, vector <CMovingBitmap> &tmp_dart, vector<CMovingBitmap> &tmp_bullet) {
+	CMovingBitmap &tmp_opera, CMovingBitmap &tmp_blood_bar, CMovingBitmap &tmp_energy_bar, vector <CMovingBitmap> &tmp_dart, vector<CMovingBitmap> &tmp_bullet, vector<CMovingBitmap> &tmp_bricks) {
 
 	tmp_background = background;
 	tmp_character = character;
@@ -657,6 +722,7 @@ void CGamestage1::move_share_obj_data(CMovingBitmap &tmp_background, CMovingBitm
 	tmp_energy_bar = energy_bar;
 	tmp_dart = dart;
 	tmp_bullet = bullet;
+	tmp_bricks = bricks[4];
 };
 
 
@@ -669,7 +735,7 @@ void CGamestage1::get_data() {
 	energy_bar = *p_energy_bar;
 	dart = *p_dart;
 	bullet = *p_bullet;
-
+	bricks[4] = *p_bricks;
 };
 
 
@@ -682,6 +748,5 @@ void CGamestage1::share_data() {
 	*p_energy_bar = energy_bar;
 	*p_dart = dart;
 	*p_bullet = bullet;
-
+	*p_bricks = bricks[4];
 };
-

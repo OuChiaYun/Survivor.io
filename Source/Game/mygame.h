@@ -129,6 +129,7 @@ namespace game_framework {
 		CMovingBitmap energy_bar;
 		vector <CMovingBitmap> dart;
 		vector<CMovingBitmap> bullet;
+		vector<CMovingBitmap> bricks[4];
 		CMovingBitmap timer_express;
 		clock_t a, b;
 

@@ -60,7 +60,7 @@ void CGamestageBoss2::OnLButtonDown(UINT nFlags, CPoint point) {};
 void CGamestageBoss2::OnLButtonUp(UINT nFlags, CPoint point) {};
 
 void CGamestageBoss2::OnMouseMove(UINT nFlags, CPoint point) {
-	gat_data();
+	get_data();
 
 	if (nFlags == FALSE) {
 		opera.SetTopLeft(437, 682);
@@ -110,7 +110,7 @@ void CGamestageBoss2::OnMove() {
 
 
 	if (timmer > 100) {
-		gat_data();
+		get_data();
 
 		boss2_move();
 
@@ -129,14 +129,14 @@ void CGamestageBoss2::OnMove() {
 	background_move();
 	dart_all(200);
 	bullet_move(bullet);
-	born_bullet(bullet, { "Resources/bullet.bmp" }, { 255, 255, 255 });
+	born_bullet(bullet, { "Resources/weapon/bullet.bmp" }, { 255, 255, 255 });
 	bullet_erase(bullet);
 
 	share_data();
 };
 
 void CGamestageBoss2::OnShow() {
-	gat_data();
+	get_data();
 	background.ShowBitmap();
 
 	boss2.ShowBitmap();
@@ -374,8 +374,10 @@ void CGamestageBoss2::boss2_bullet_move() {
 
 /////////////////////////////update data/////////////////
 
+
+
 void CGamestageBoss2::set_share_obj_data(CMovingBitmap &tmp_background, CMovingBitmap &tmp_character,
-	CMovingBitmap &tmp_opera, CMovingBitmap &tmp_blood_bar, CMovingBitmap &tmp_energy_bar, vector <CMovingBitmap> &tmp_dart, vector<CMovingBitmap> &tmp_bullet) {
+	CMovingBitmap &tmp_opera, CMovingBitmap &tmp_blood_bar, CMovingBitmap &tmp_energy_bar, vector <CMovingBitmap> &tmp_dart, vector<CMovingBitmap> &tmp_bullet, vector<CMovingBitmap> &tmp_bricks) {
 
 	p_background = &tmp_background;
 	p_character = &tmp_character;
@@ -384,6 +386,7 @@ void CGamestageBoss2::set_share_obj_data(CMovingBitmap &tmp_background, CMovingB
 	p_energy_bar = &tmp_energy_bar;
 	p_dart = &tmp_dart;
 	p_bullet = &tmp_bullet;
+	p_bricks = &tmp_bricks;
 
 
 	background = tmp_background;
@@ -393,11 +396,11 @@ void CGamestageBoss2::set_share_obj_data(CMovingBitmap &tmp_background, CMovingB
 	energy_bar = tmp_energy_bar;
 	dart = tmp_dart;
 	bullet = tmp_bullet;
-
+	bricks[4] = tmp_bricks;
 }
 
 void CGamestageBoss2::move_share_obj_data(CMovingBitmap &tmp_background, CMovingBitmap &tmp_character,
-	CMovingBitmap &tmp_opera, CMovingBitmap &tmp_blood_bar, CMovingBitmap &tmp_energy_bar, vector <CMovingBitmap> &tmp_dart, vector<CMovingBitmap> &tmp_bullet) {
+	CMovingBitmap &tmp_opera, CMovingBitmap &tmp_blood_bar, CMovingBitmap &tmp_energy_bar, vector <CMovingBitmap> &tmp_dart, vector<CMovingBitmap> &tmp_bullet, vector<CMovingBitmap> &tmp_bricks) {
 
 	tmp_background = background;
 	tmp_character = character;
@@ -406,9 +409,11 @@ void CGamestageBoss2::move_share_obj_data(CMovingBitmap &tmp_background, CMoving
 	tmp_energy_bar = energy_bar;
 	tmp_dart = dart;
 	tmp_bullet = bullet;
+	tmp_bricks = bricks[4];
 };
 
-void CGamestageBoss2::gat_data() {
+
+void CGamestageBoss2::get_data() {
 
 	background = *p_background;
 	character = *p_character;
@@ -417,7 +422,7 @@ void CGamestageBoss2::gat_data() {
 	energy_bar = *p_energy_bar;
 	dart = *p_dart;
 	bullet = *p_bullet;
-
+	bricks[4] = *p_bricks;
 };
 
 
@@ -430,5 +435,5 @@ void CGamestageBoss2::share_data() {
 	*p_energy_bar = energy_bar;
 	*p_dart = dart;
 	*p_bullet = bullet;
-
+	*p_bricks = bricks[4];
 };

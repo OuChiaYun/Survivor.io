@@ -48,13 +48,15 @@ void CGamestageBoss1::OnInit() {
 
 	for (int i = 0; i < 3; i++) {
 		boss1_bullet.push_back(CMovingBitmap());
-		boss1_bullet[i].LoadBitmapByString({ "Resources/Rock.bmp" }, RGB(255, 255, 255));
+		boss1_bullet[i].LoadBitmapByString({ "Resources/boss1/Rock.bmp" }, RGB(255, 255, 255));
 		boss1_bullet[i].SetTopLeft(boss1_range.GetLeft() + 270 + 10, boss1_range.GetTop() + 130);
 		boss1.set_hit_x(x[i], i);
 		boss1.set_hit_y(y[i], i);
-
 	}
 
+	/*bullet.push_back(CMovingBitmap());
+	bullet[0].LoadBitmapByString({ "Resources/weapon/bullet.bmp" }, RGB(255, 255, 255));
+	bullet[0].SetTopLeft(character.GetLeft() + 10, character.GetTop());*/
 
 	blood_bar_boss1.LoadBitmapByString({ "Resources/health_ui/boss1/health_ui_0.bmp", "Resources/health_ui/boss1/health_ui_1.bmp",
 										 "Resources/health_ui/boss1/health_ui_2.bmp", "Resources/health_ui/boss1/health_ui_3.bmp",
@@ -128,7 +130,7 @@ void CGamestageBoss1::OnMove() {
 
 	blood_bar_progress(blood_bar, character);
 	bullet_move(bullet);
-	born_bullet(bullet, { "Resources/bullet.bmp" }, { 255, 255, 255 });
+	born_bullet(bullet, { "Resources/weapon/bullet.bmp" }, { 255, 255, 255 });
 	bullet_erase(bullet);
 	
 
@@ -339,8 +341,10 @@ void CGamestageBoss1::blood_bar_progress(CMovingBitmap &blood_bar, CMovingBitmap
 
 /////////////////////////////update data/////////////////
 
+
+
 void CGamestageBoss1::set_share_obj_data(CMovingBitmap &tmp_background, CMovingBitmap &tmp_character,
-	CMovingBitmap &tmp_opera, CMovingBitmap &tmp_blood_bar, CMovingBitmap &tmp_energy_bar, vector <CMovingBitmap> &tmp_dart, vector<CMovingBitmap> &tmp_bullet) {
+	CMovingBitmap &tmp_opera, CMovingBitmap &tmp_blood_bar, CMovingBitmap &tmp_energy_bar, vector <CMovingBitmap> &tmp_dart, vector<CMovingBitmap> &tmp_bullet, vector<CMovingBitmap> &tmp_bricks) {
 
 	p_background = &tmp_background;
 	p_character = &tmp_character;
@@ -349,8 +353,9 @@ void CGamestageBoss1::set_share_obj_data(CMovingBitmap &tmp_background, CMovingB
 	p_energy_bar = &tmp_energy_bar;
 	p_dart = &tmp_dart;
 	p_bullet = &tmp_bullet;
+	p_bricks = &tmp_bricks;
 
-
+	
 	background = tmp_background;
 	character = tmp_character;
 	opera = tmp_opera;
@@ -358,11 +363,11 @@ void CGamestageBoss1::set_share_obj_data(CMovingBitmap &tmp_background, CMovingB
 	energy_bar = tmp_energy_bar;
 	dart = tmp_dart;
 	bullet = tmp_bullet;
-
+	bricks[4] = tmp_bricks;
 }
 
 void CGamestageBoss1::move_share_obj_data(CMovingBitmap &tmp_background, CMovingBitmap &tmp_character,
-	CMovingBitmap &tmp_opera, CMovingBitmap &tmp_blood_bar, CMovingBitmap &tmp_energy_bar, vector <CMovingBitmap> &tmp_dart, vector<CMovingBitmap> &tmp_bullet) {
+	CMovingBitmap &tmp_opera, CMovingBitmap &tmp_blood_bar, CMovingBitmap &tmp_energy_bar, vector <CMovingBitmap> &tmp_dart, vector<CMovingBitmap> &tmp_bullet, vector<CMovingBitmap> &tmp_bricks) {
 
 	tmp_background = background;
 	tmp_character = character;
@@ -371,6 +376,7 @@ void CGamestageBoss1::move_share_obj_data(CMovingBitmap &tmp_background, CMoving
 	tmp_energy_bar = energy_bar;
 	tmp_dart = dart;
 	tmp_bullet = bullet;
+	tmp_bricks = bricks[4];
 };
 
 
@@ -383,7 +389,7 @@ void CGamestageBoss1::get_data() {
 	energy_bar = *p_energy_bar;
 	dart = *p_dart;
 	bullet = *p_bullet;
-
+	bricks[4] = *p_bricks;
 };
 
 
@@ -396,5 +402,5 @@ void CGamestageBoss1::share_data() {
 	*p_energy_bar = energy_bar;
 	*p_dart = dart;
 	*p_bullet = bullet;
-
+	*p_bricks = bricks[4];
 };

@@ -95,7 +95,7 @@ void CGameStateRun::OnInit()  								// 遊戲的初值及圖形設定
 		dart[i].SetAnimation(100, false);
 	}
 	bullet.push_back(CMovingBitmap());
-	bullet[0].LoadBitmapByString({ "Resources/bullet.bmp" }, RGB(255, 255, 255));
+	bullet[0].LoadBitmapByString({ "Resources/weapon/bullet.bmp" }, RGB(255, 255, 255));
 	bullet[0].SetTopLeft(character.GetLeft() + 10, character.GetTop());
 
 	/*
@@ -108,15 +108,15 @@ void CGameStateRun::OnInit()  								// 遊戲的初值及圖形設定
 	vector<CMovingBitmap> bullet;
 	*/
 
-	t1.set_share_obj_data(background, character, opera, blood_bar, energy_bar, dart, bullet);
+	t1.set_share_obj_data(background, character, opera, blood_bar, energy_bar, dart, bullet, bricks[4]);
 	t1.OnInit();
 
 	select_stage.OnInit();
 
-	b1.set_share_obj_data(background, character, opera, blood_bar, energy_bar, dart, bullet);
+	b1.set_share_obj_data(background, character, opera, blood_bar, energy_bar, dart, bullet, bricks[4]);
 	b1.OnInit();
 
-	b2.set_share_obj_data(background, character, opera, blood_bar, energy_bar, dart, bullet);
+	b2.set_share_obj_data(background, character, opera, blood_bar, energy_bar, dart, bullet, bricks[4]);
 	b2.OnInit();
 
 	timer_express.LoadBitmapByString({ "Resources/t1.bmp" }, RGB(255, 255, 255));

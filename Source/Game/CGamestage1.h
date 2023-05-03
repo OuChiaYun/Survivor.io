@@ -40,6 +40,9 @@ namespace game_framework {
 		void bullet_erase(vector<CMovingBitmap> &item);
 		void born_bullet(vector<CMovingBitmap> &item, vector<string> str, vector<int>rgb);
 		void lightning_move(vector<CMovingBitmap> &item);
+		void bricks_move(vector<CMovingBitmap> &item, int h, int k, int c, int x_move);
+		void bricks_erase(vector<CMovingBitmap> &item);
+		void bricks_born(vector<CMovingBitmap> &item, vector<string> str, vector<int>rgb);
 
 
 		void show_text();
@@ -48,10 +51,10 @@ namespace game_framework {
 
 		/////////////////////////////update data/////////////////
 		void set_share_obj_data(CMovingBitmap &tmp_background, CMovingBitmap &tmp_character,
-			CMovingBitmap &tmp_opera, CMovingBitmap &tmp_blood_bar, CMovingBitmap &tmp_energy_bar, vector <CMovingBitmap> &tmp_dart, vector<CMovingBitmap> &tmp_bullet);
+			CMovingBitmap &tmp_opera, CMovingBitmap &tmp_blood_bar, CMovingBitmap &tmp_energy_bar, vector <CMovingBitmap> &tmp_dart, vector<CMovingBitmap> &tmp_bullet, vector<CMovingBitmap> &tmp_bricks);
 
 		void move_share_obj_data(CMovingBitmap &tmp_background, CMovingBitmap &tmp_character,
-			CMovingBitmap &tmp_opera, CMovingBitmap &tmp_blood_bar, CMovingBitmap &tmp_energy_bar, vector <CMovingBitmap> &tmp_dart, vector<CMovingBitmap> &tmp_bullet);
+			CMovingBitmap &tmp_opera, CMovingBitmap &tmp_blood_bar, CMovingBitmap &tmp_energy_bar, vector <CMovingBitmap> &tmp_dart, vector<CMovingBitmap> &tmp_bullet, vector<CMovingBitmap> &tmp_bricks);
 		//move data = run
 
 		void get_data(); // move now data to run with pointer
@@ -72,6 +75,7 @@ namespace game_framework {
 		CMovingBitmap *p_energy_bar;
 		vector <CMovingBitmap> *p_dart;
 		vector<CMovingBitmap> *p_bullet;
+		vector<CMovingBitmap> *p_bricks;
 
 
 		CMovingBitmap background;
@@ -81,6 +85,7 @@ namespace game_framework {
 		CMovingBitmap energy_bar;
 		vector <CMovingBitmap> dart;
 		vector<CMovingBitmap> bullet;
+		vector<CMovingBitmap> bricks[4];
 		//CMovingBitmap timer_express;
 //share
 

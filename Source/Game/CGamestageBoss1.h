@@ -36,12 +36,11 @@ namespace game_framework {
 		void blood_bar_progress(CMovingBitmap &blood_bar, CMovingBitmap &item_blood);
 		void show_text();
 
-
 		void set_share_obj_data(CMovingBitmap &tmp_background, CMovingBitmap &tmp_character,
-			CMovingBitmap &tmp_opera, CMovingBitmap &tmp_blood_bar, CMovingBitmap &tmp_energy_bar, vector <CMovingBitmap> &tmp_dart, vector<CMovingBitmap> &tmp_bullet);
+			CMovingBitmap &tmp_opera, CMovingBitmap &tmp_blood_bar, CMovingBitmap &tmp_energy_bar, vector <CMovingBitmap> &tmp_dart, vector<CMovingBitmap> &tmp_bullet, vector<CMovingBitmap> &tmp_bricks);
 		//set data's pointer & data obj
 		void move_share_obj_data(CMovingBitmap &tmp_background, CMovingBitmap &tmp_character,
-			CMovingBitmap &tmp_opera, CMovingBitmap &tmp_blood_bar, CMovingBitmap &tmp_energy_bar, vector <CMovingBitmap> &tmp_dart, vector<CMovingBitmap> &tmp_bullet);
+			CMovingBitmap &tmp_opera, CMovingBitmap &tmp_blood_bar, CMovingBitmap &tmp_energy_bar, vector <CMovingBitmap> &tmp_dart, vector<CMovingBitmap> &tmp_bullet, vector<CMovingBitmap> &tmp_bricks);
 		//move data = run
 		void get_data(); // move now data to run with pointer
 		void share_data(); // move now data to run with pointer
@@ -57,6 +56,7 @@ namespace game_framework {
 		CMovingBitmap *p_energy_bar;
 		vector <CMovingBitmap> *p_dart;
 		vector<CMovingBitmap> *p_bullet;
+		vector<CMovingBitmap> *p_bricks;
 
 		CMovingBitmap character;
 		CMovingBitmap background;
@@ -65,6 +65,7 @@ namespace game_framework {
 		CMovingBitmap energy_bar;
 		vector <CMovingBitmap> dart;
 		vector<CMovingBitmap> bullet;
+		vector<CMovingBitmap> bricks[4];
 		//share
 
 		CMovingBitmap boss1;
