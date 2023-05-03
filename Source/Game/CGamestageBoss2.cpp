@@ -32,16 +32,16 @@ void CGamestageBoss2::OnInit() {
 	for (int i = 0; i < 8; i++) {
 		boss2_bullet.push_back(CMovingBitmap());
 		boss2_bullet[i].LoadBitmapByString(boss2_bullet_bmp, RGB(140, 133, 90));
-		boss2_bullet[i].SetTopLeft(boss2.get_center_x()-20, boss2.get_center_y()-20);
-		boss2_bullet[i].SetAnimation(10, false);
+		boss2_bullet[i].SetTopLeft(boss2.get_center_x() - 20, boss2.get_center_y() - 20);
+		boss2_bullet[i].SetAnimation(5, false);
 	}
 
 
 
 	boss2_range.LoadBitmapByString({ "Resources/boss2/boss2_range.bmp" }, RGB(255, 255, 255));
-	boss2_range.SetTopLeft(0,0);
+	boss2_range.SetTopLeft(0, 0);
 	boss2.SetTopLeft(boss2_range.GetLeft() + 243, boss2_range.GetTop() + 130);
-	
+
 
 	blood.LoadBitmapByString({ "Resources/ignore.bmp", "Resources/blood/bloodfx001_01.bmp",
 					"Resources/blood/bloodfx001_02.bmp", "Resources/blood/bloodfx001_03.bmp",
@@ -60,7 +60,7 @@ void CGamestageBoss2::OnLButtonDown(UINT nFlags, CPoint point) {};
 void CGamestageBoss2::OnLButtonUp(UINT nFlags, CPoint point) {};
 
 void CGamestageBoss2::OnMouseMove(UINT nFlags, CPoint point) {
-	gat_data();
+	get_data();
 
 	if (nFlags == FALSE) {
 		opera.SetTopLeft(437, 682);
@@ -110,7 +110,7 @@ void CGamestageBoss2::OnMove() {
 
 
 	if (timmer > 100) {
-		gat_data();
+		get_data();
 
 		boss2_move();
 
@@ -118,25 +118,25 @@ void CGamestageBoss2::OnMove() {
 			boss2_bullet_move();
 		}
 
-		if (timmer > 100000) {
+		if (timmer > 10000) {
 			timmer = 0;
 		}
 	}
 	else {
 		boss2.SetTopLeft(420, 500);
-	
+
 	}
 	background_move();
 	dart_all(200);
 	bullet_move(bullet);
-	born_bullet(bullet, { "Resources/bullet.bmp" }, { 255, 255, 255 });
+	//born_bullet(bullet, { "Resources/weapon/bullet.bmp" }, { 255, 255, 255 });
 	bullet_erase(bullet);
 
 	share_data();
 };
 
 void CGamestageBoss2::OnShow() {
-	gat_data();
+	get_data();
 	background.ShowBitmap();
 
 	boss2.ShowBitmap();
@@ -159,7 +159,7 @@ void CGamestageBoss2::OnShow() {
 	energy_bar.ShowBitmap();
 	character.ShowBitmap();
 
-	blood.SetTopLeft((character.GetLeft() + character.GetWidth() /2), character.GetTop());
+	blood.SetTopLeft((character.GetLeft() + character.GetWidth() / 2), character.GetTop());
 	blood.ShowBitmap();
 
 	opera.ShowBitmap();
@@ -192,17 +192,17 @@ void CGamestageBoss2::background_move() {
 	int ay = 0;
 
 	if (opera.center_x < 491) {
-		ax = -3;
+		ax = -5;
 	}
 	else if (opera.center_x > 491) {
-		ax = 3;
+		ax = 5;
 	}
 
 	if (opera.center_y < 736) {
-		ay = -3;
+		ay = -5;
 	}
 	else if (opera.center_y > 736) {
-		ay = 3;
+		ay = 5;
 	}
 
 	character.SetTopLeft(character.GetLeft() + ax, character.GetTop() + ay);
@@ -225,7 +225,7 @@ void CGamestageBoss2::background_move() {
 
 void CGamestageBoss2::bullet_move(vector<CMovingBitmap> &item) {
 	for (int i = 0; i < (int)item.size(); i++) {
-		item[i].SetTopLeft(item[i].GetLeft(), item[i].GetTop() - 10);
+		item[i].SetTopLeft(item[i].GetLeft(), item[i].GetTop() - 20);
 		//item[i].dart_hit_monster(item, monster, monster_vanish);
 	}
 }
@@ -241,7 +241,8 @@ void CGamestageBoss2::born_bullet(vector<CMovingBitmap> &item, vector<string> st
 
 void CGamestageBoss2::bullet_erase(vector<CMovingBitmap> &item) {
 	if (item[0].GetTop() < 0) {
-		item.erase(item.begin());
+		//item.erase(item.begin());
+		item[0].SetTopLeft(character.GetLeft() + 10, character.GetTop());
 	}
 }
 
@@ -312,10 +313,11 @@ void CGamestageBoss2::boss2_move() {
 void CGamestageBoss2::boss2_bullet_move() {
 
 	double v = 1.0;
+	int flag = 0;
 	for (int i = 0; i < (int)boss2_bullet.size(); i++) {
 		int x0 = boss2_bullet[i].GetLeft();
 		int y0 = boss2_bullet[i].GetTop();
-		int d = 6;
+		int d = 10;
 		int t = 1;
 		double x = x0 + d * cos(theta[i]) + v * t*cos(theta[i]);
 		double y = y0 + d * sin(theta[i]) + v * t*sin(theta[i]);
@@ -329,11 +331,9 @@ void CGamestageBoss2::boss2_bullet_move() {
 		else {
 			blood.SetAnimation(50, true);
 		}
-	}
-	int flag = 0;
-	for (int i = 0; i < (int)boss2_bullet.size(); i++) {
+
 		if (boss2_bullet[i].GetTop() < 0) { //up
-		//	boss2_bullet.erase(boss2_bullet.begin() + i);
+//	boss2_bullet.erase(boss2_bullet.begin() + i);
 			flag++;
 		}
 		else if (boss2_bullet[i].GetLeft() > 1065) { //right
@@ -350,29 +350,24 @@ void CGamestageBoss2::boss2_bullet_move() {
 		}
 	}
 
+
 	if (flag == boss2_bullet.size()) {
-		for (int i = 0; i < (int)boss2_bullet.size(); i++) {
-			//boss2_bullet.erase(boss2_bullet.begin(),boss2_bullet.end());
-			//}
-		}
-
-		if (boss2_bullet.size() == 0) {
-			vector<string> boss2_bullet_bmp = { "Resources/boss2/boss2_b1.bmp ","Resources/boss2/boss2_b2.bmp " ,"Resources/boss2/boss2_b3.bmp" ,"Resources/boss2/boss2_b4.bmp" ,"Resources/boss2/boss2_b5.bmp" ,"Resources/boss2/boss2_b6.bmp " ,"Resources/boss2/boss2_b7.bmp " ,"Resources/boss2/boss2_b8.bmp " };
-
+	
 			for (int i = 0; i < 8; i++) {
-				boss2_bullet.push_back(CMovingBitmap());
-				boss2_bullet[i].LoadBitmapByString(boss2_bullet_bmp, RGB(140, 133, 90));
+				
 				boss2_bullet[i].SetTopLeft(boss2.get_center_x(), boss2.get_center_y());
-				boss2_bullet[i].SetAnimation(10, false);
+//				boss2_bullet[i].SetAnimation(10, false);
 
 			}
 
-		}
+		
 	}
 
 }
 
 /////////////////////////////update data/////////////////
+
+
 
 void CGamestageBoss2::set_share_obj_data(CMovingBitmap &tmp_background, CMovingBitmap &tmp_character,
 	CMovingBitmap &tmp_opera, CMovingBitmap &tmp_blood_bar, CMovingBitmap &tmp_energy_bar, vector <CMovingBitmap> &tmp_dart, vector<CMovingBitmap> &tmp_bullet) {
@@ -393,7 +388,6 @@ void CGamestageBoss2::set_share_obj_data(CMovingBitmap &tmp_background, CMovingB
 	energy_bar = tmp_energy_bar;
 	dart = tmp_dart;
 	bullet = tmp_bullet;
-
 }
 
 void CGamestageBoss2::move_share_obj_data(CMovingBitmap &tmp_background, CMovingBitmap &tmp_character,
@@ -406,9 +400,11 @@ void CGamestageBoss2::move_share_obj_data(CMovingBitmap &tmp_background, CMoving
 	tmp_energy_bar = energy_bar;
 	tmp_dart = dart;
 	tmp_bullet = bullet;
+
 };
 
-void CGamestageBoss2::gat_data() {
+
+void CGamestageBoss2::get_data() {
 
 	background = *p_background;
 	character = *p_character;
@@ -417,7 +413,6 @@ void CGamestageBoss2::gat_data() {
 	energy_bar = *p_energy_bar;
 	dart = *p_dart;
 	bullet = *p_bullet;
-
 };
 
 
@@ -430,5 +425,4 @@ void CGamestageBoss2::share_data() {
 	*p_energy_bar = energy_bar;
 	*p_dart = dart;
 	*p_bullet = bullet;
-
 };

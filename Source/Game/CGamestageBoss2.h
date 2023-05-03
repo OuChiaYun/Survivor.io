@@ -41,11 +41,11 @@ namespace game_framework {
 		//////////////////sharing///////////////
 		void set_share_obj_data(CMovingBitmap &tmp_background, CMovingBitmap &tmp_character,
 			CMovingBitmap &tmp_opera, CMovingBitmap &tmp_blood_bar, CMovingBitmap &tmp_energy_bar, vector <CMovingBitmap> &tmp_dart, vector<CMovingBitmap> &tmp_bullet);
-		//set data's pointer & data obj
+
 		void move_share_obj_data(CMovingBitmap &tmp_background, CMovingBitmap &tmp_character,
 			CMovingBitmap &tmp_opera, CMovingBitmap &tmp_blood_bar, CMovingBitmap &tmp_energy_bar, vector <CMovingBitmap> &tmp_dart, vector<CMovingBitmap> &tmp_bullet);
 		//move data = run
-		void gat_data(); // move now data to run with pointer
+		void get_data(); // move now data to run with pointer
 		void share_data(); // move now data to run with pointer
 
 
@@ -60,6 +60,7 @@ namespace game_framework {
 		CMovingBitmap *p_energy_bar;
 		vector <CMovingBitmap> *p_dart;
 		vector<CMovingBitmap> *p_bullet;
+		vector<CMovingBitmap> *p_bricks;
 
 		CMovingBitmap character;
 		CMovingBitmap background;
@@ -68,6 +69,7 @@ namespace game_framework {
 		CMovingBitmap energy_bar;
 		vector <CMovingBitmap> dart;
 		vector<CMovingBitmap> bullet;
+		vector<CMovingBitmap> bricks[4];
 		//share
 
 		CMovingBitmap boss2_range;

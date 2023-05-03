@@ -450,7 +450,9 @@ void CGamestage1::monster_all() {
 	for (int i = 0; i < (int)(monster.size()); i++) {
 		item_move(monster[i]);
 		if (!monster[i].IsOverlap(character, monster[i])) {
-			monster_move(monster[i]);
+			if (timer % 3 == 0) {
+				monster_move(monster[i]);
+			}
 			blood.SetAnimation(50, true);
 
 		}
@@ -503,7 +505,7 @@ void CGamestage1::monster_move(CMovingBitmap &monster) {
 
 	int x = abs(monster.GetLeft() - character.GetLeft());
 	int y = abs(monster.GetTop() - character.GetTop());
-	double std_a = 4;
+	double std_a =10;
 	double a = pow((x*x + y * y), 0.5);
 	int _x = (int)(x / (a / std_a));
 	int _y = (int)(y / (a / std_a));
@@ -597,7 +599,7 @@ void CGamestage1::lightning_move(vector<CMovingBitmap> &item) {
 	int flag = 0;
 	for (int i = 0; i < (int) item.size(); i++) {
 
-		if ((lightning[i].GetLeft() <= (lightning[i].stdx - 300)) || (lightning[i].GetLeft()+lightning[i].GetWidth() >= (lightning[i].stdx + 300))) {
+		if ((lightning[i].GetLeft() <= (lightning[i].stdx - 300)) || (lightning[i].GetLeft()+110 >= (lightning[i].stdx + 300))) {
 			lightning[i].ax *= -1;
 		}
 		if (lightning[i].GetTop() < (lightning[i].stdy-1065)|| lightning[i].GetTop() > (lightning[i].stdy + 1065)) {
@@ -608,6 +610,7 @@ void CGamestage1::lightning_move(vector<CMovingBitmap> &item) {
 		
 	}
 	int axay[5][4] = { {-5,2},{5,2},{-5,-2},{5,-2} };
+	character.dart_hit_monster(lightning,monster,monster_vanish);
 	if (flag == (int)lightning.size()) {
 		for (int i = 0; i < (int)lightning.size(); i++) {
 			lightning[i].SetTopLeft(character.GetLeft() + character.GetWidth() / 2 - lightning[i].GetWidth() / 2, character.GetTop());
