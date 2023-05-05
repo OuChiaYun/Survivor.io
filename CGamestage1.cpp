@@ -450,7 +450,7 @@ void CGamestage1::monster_all() {
 	for (int i = 0; i < (int)(monster.size()); i++) {
 		item_move(monster[i]);
 		if (!monster[i].IsOverlap(character, monster[i])) {
-			if (timer % 3 == 0) {
+			if (timer % 2 == 0) {
 				monster_move(monster[i]);
 			}
 			blood.SetAnimation(50, true);
@@ -463,7 +463,8 @@ void CGamestage1::monster_all() {
 		}
 	}
 
-	if (timer % 10 == 0 && int(monster.size()) < 30) {
+	if (timer % 10 == 0 && int(monster.size()) < 30 && monster_vanish.size() >1) {
+		/*
 		random_born_monster(monster, {
 			"Resources/monster/m1.bmp","Resources/monster/m2.bmp","Resources/monster/m3.bmp","Resources/monster/m4.bmp","Resources/monster/m5.bmp",
 			"Resources/monster/m6.bmp","Resources/monster/m7.bmp","Resources/monster/m8.bmp","Resources/monster/m9.bmp","Resources/monster/m10.bmp",
@@ -473,9 +474,14 @@ void CGamestage1::monster_all() {
 			"Resources/monster/d6.bmp","Resources/monster/d7.bmp","Resources/monster/d8.bmp","Resources/monster/d9.bmp","Resources/monster/d10.bmp" },
 			monster_vanish, { "Resources/monster/m11.bmp", "Resources/monster/m12.bmp", "Resources/monster/m13.bmp", "Resources/monster/m14.bmp", "Resources/monster/m15.bmp",
 			"Resources/monster/m16.bmp", "Resources/monster/m17.bmp" }, { 255,255,255 }, { 200, 191, 231 });
+		*/
+		
+		monster.push_back(monster_vanish[0]);
 		monster[monster.size() - 1].SetFrameIndexOfBitmap(0);
 		monster[monster.size() - 1].SetAnimation(50, false);
 		monster[monster.size() - 1].set_hp(6);
+		monster_reset(monster[monster.size() - 1]);
+		monster_vanish.erase(monster_vanish.begin());
 	}
 
 	if (timer == 10000) {
@@ -620,6 +626,39 @@ void CGamestage1::lightning_move(vector<CMovingBitmap> &item) {
 			lightning[i].ay = axay[i][1];
 		}
 	}
+
+};
+
+void CGamestage1::monster_reset(CMovingBitmap &item) {
+
+
+	int min = -1450;
+	int max = 1450;
+	int x = rand() % (max - min + 1) + min;
+	int y = rand() % (max - min + 1) + min;
+	item.SetTopLeft(x, y);
+	item.set_center(x + 45, y + 57);
+
+	item.SetFrameIndexOfBitmap(item.limit_frame_start);
+
+	if (isLeft(character, item)) {
+		item.set_limit_start_end(10, 19);
+		item.SetFrameIndexOfBitmap(item.limit_frame_start);
+	}
+	else {
+		item.set_limit_start_end(0, 9);
+		item.SetFrameIndexOfBitmap(item.limit_frame_start);
+
+	}
+
+	if (isDown(character, item) && (item.GetLeft() > 365 && item.GetLeft() < 580)) {
+		item.set_limit_start_end(20, 29);
+		item.SetFrameIndexOfBitmap(item.limit_frame_start);
+	}
+	else {
+		item.SetFrameIndexOfBitmap(item.limit_frame_start);
+	}
+
 
 };
 

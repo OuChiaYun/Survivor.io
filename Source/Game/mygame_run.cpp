@@ -37,8 +37,8 @@ void CGameStateRun::OnBeginState()
 
 void CGameStateRun::OnMove()							// 移動遊戲元素
 {
-	//t1.OnMove();
-	b2.OnMove();
+	t1.OnMove();
+	//b2.OnMove();
 	
 	/*
 	if (select_stage.show == 1) {
@@ -161,8 +161,8 @@ void CGameStateRun::OnLButtonUp(UINT nFlags, CPoint point)	// 處理滑鼠的動
 
 void CGameStateRun::OnMouseMove(UINT nFlags, CPoint point)	// 處理滑鼠的動作
 {
-	//t1.OnMouseMove(nFlags, point);
-	b2.OnMouseMove(nFlags, point);
+	t1.OnMouseMove(nFlags, point);
+	//b2.OnMouseMove(nFlags, point);
 
 	/*
 	if (select_stage.show == 1) {
@@ -191,8 +191,8 @@ void CGameStateRun::OnRButtonUp(UINT nFlags, CPoint point)	// 處理滑鼠的動
 
 void CGameStateRun::OnShow()
 {
-//	t1.OnShow();
-	b2.OnShow();
+	t1.OnShow();
+	//b2.OnShow();
 /*
 	t1.show_baclground_selected(get_init_background_value());
 	select_stage.show = t1.select;

@@ -40,6 +40,7 @@ namespace game_framework {
 		void bullet_erase(vector<CMovingBitmap> &item);
 		void born_bullet(vector<CMovingBitmap> &item, vector<string> str, vector<int>rgb);
 		void lightning_move(vector<CMovingBitmap> &item);
+		void monster_reset(CMovingBitmap &item);
 
 
 		void show_text();
