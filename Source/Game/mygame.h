@@ -45,6 +45,10 @@ namespace game_framework {
 	/////////////////////////////////////////////////////////////////////////////
 
 	enum AUDIO_ID {				// 定義各種音效的編號
+		AUDIO_MenuSelect,
+		AUDIO_GameStage,
+		AUDIO_GameBoss,
+		AUDIO_GameOver,
 		AUDIO_DING,				// 0
 		AUDIO_LAKE,				// 1
 		AUDIO_NTUT				// 2
@@ -59,7 +63,7 @@ namespace game_framework {
 		static void set_victory_value(int);
 		static int get_victory_value();
 	private:
-		static int init_background_value;
+		static int init_background_value; //static => chaaracter 
 		static int victory;
 
 	};
@@ -129,8 +133,13 @@ namespace game_framework {
 		CMovingBitmap energy_bar;
 		vector <CMovingBitmap> dart;
 		vector<CMovingBitmap> bullet;
+		vector<CMovingBitmap> bricks;
+		vector<CMovingBitmap> lightning;
+
 		CMovingBitmap timer_express;
 		clock_t a, b;
+		int boss_level = 0;
+		int level = 0;
 
 
 		int weapon_list[3] = { 1,0,0 };//s
@@ -158,6 +167,5 @@ namespace game_framework {
 		CMovingBitmap victory;
 		CMovingBitmap die;
 	};
-
 
 }

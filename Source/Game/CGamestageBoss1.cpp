@@ -48,11 +48,10 @@ void CGamestageBoss1::OnInit() {
 
 	for (int i = 0; i < 3; i++) {
 		boss1_bullet.push_back(CMovingBitmap());
-		boss1_bullet[i].LoadBitmapByString({ "Resources/Rock.bmp" }, RGB(255, 255, 255));
+		boss1_bullet[i].LoadBitmapByString({ "Resources/boss1/Rock.bmp" }, RGB(255, 255, 255));
 		boss1_bullet[i].SetTopLeft(boss1_range.GetLeft() + 270 + 10, boss1_range.GetTop() + 130);
 		boss1.set_hit_x(x[i], i);
 		boss1.set_hit_y(y[i], i);
-
 	}
 
 
@@ -125,22 +124,43 @@ void CGamestageBoss1::OnRButtonUp(UINT nFlags, CPoint point) {};
 
 void CGamestageBoss1::OnMove() {
 	get_data();
+	timmer+=1;
+
 
 	blood_bar_progress(blood_bar, character);
-	bullet_move(bullet);
-	born_bullet(bullet, { "Resources/bullet.bmp" }, { 255, 255, 255 });
-	bullet_erase(bullet);
-	
 
-	boss1_bullet_move();
-	boss1_background();
+	bullet_erase(bullet);
+	bullet_move(bullet);
 
 	dart_all(100);
 
-	blood.SetTopLeft(character.GetLeft() + character.GetWidth(), character.GetTop());
-	boss1_character_attack();
 
-	blood_bar_progress(blood_bar_boss1, boss1);
+	int h[4] = { -30, -60, 30, 60 };
+	int k[4] = { -70, -100, -70, -100 };
+	int c[4] = { 40, 60, 40, 60 };
+	int x_move[4] = { -5, -5, 5, 5 };
+
+	for (int i = 0; i < (int)bricks.size(); i++) {
+		bricks_move(bricks, bricks[i].stdx + h[i], bricks[i].stdy + k[i], c[i], x_move[i], i);
+		bricks_erase(bricks);
+	}
+
+	blood.SetTopLeft(character.GetLeft() + character.GetWidth(), character.GetTop());
+	boss1_background();
+
+	lightning_move(lightning);
+
+	
+	if (timmer >= 300) {
+
+		boss1_bullet_move();
+		boss1_character_attack();
+
+		blood_bar_progress(blood_bar_boss1, boss1);
+		if (boss1.get_hp() <= 0) {
+			run = 0;
+		}
+	}
 	share_data();
 };
 
@@ -165,6 +185,13 @@ void CGamestageBoss1::OnShow() {
 
 	for (int i = 0; i < (int)bullet.size(); i++) {
 		bullet[i].ShowBitmap();
+	}
+
+	for (int j = 0; j < (int)bricks.size(); j++) {
+		bricks[j].ShowBitmap();
+	}
+	for (int i = 0; i < (int)lightning.size(); i++) {
+		lightning[i].ShowBitmap();
 	}
 	blood_bar.ShowBitmap();
 	energy_bar.ShowBitmap();
@@ -293,23 +320,23 @@ void CGamestageBoss1::boss1_character_attack() {
 
 void CGamestageBoss1::bullet_move(vector<CMovingBitmap> &item) {
 	for (int i = 0; i < (int)item.size(); i++) {
-		item[i].SetTopLeft(character.GetLeft() + 10, item[i].GetTop() - 10);
-		//item[i].dart_hit_monster(item, monster, monster_vanish);
+		item[i].SetTopLeft(character.GetLeft() + 20, item[i].GetTop() - 20);
 	}
 }
 
 void CGamestageBoss1::born_bullet(vector<CMovingBitmap> &item, vector<string> str, vector<int>rgb) {
-	int tail = item.size();
-	if (item[tail - 1].GetTop() < 0) {
+	    int tail = item.size();
 		item.push_back(CMovingBitmap());
 		item[tail].LoadBitmapByString(str, RGB(rgb[0], rgb[1], rgb[2]));
 		item[tail].SetTopLeft(character.GetLeft() + 10, character.GetTop());
-	}
+	
 }
 
 void CGamestageBoss1::bullet_erase(vector<CMovingBitmap> &item) {
-	if (item[0].GetTop() < 0) {
-		item.erase(item.begin());
+	for (int i = 0; i < (int)item.size(); i++) {
+		if (item[i].GetTop() < 0) {
+			bullet[i].SetTopLeft(character.GetLeft() + 10, character.GetTop());
+		}
 	}
 }
 
@@ -337,11 +364,80 @@ void CGamestageBoss1::blood_bar_progress(CMovingBitmap &blood_bar, CMovingBitmap
 }
 
 
+void CGamestageBoss1::lightning_move(vector<CMovingBitmap> &item) {
+
+
+	int flag = 0;
+	for (int i = 0; i < (int)item.size(); i++) {
+
+		if ((lightning[i].GetLeft() <= (lightning[i].stdx - 300)) || (lightning[i].GetLeft() +105 >= (lightning[i].stdx + 300))) {
+			lightning[i].ax *= -1;
+		}
+		if (lightning[i].GetTop() < (lightning[i].stdy - 365) || lightning[i].GetTop() > (lightning[i].stdy + 365)) {
+			flag++;
+		}
+
+		lightning[i].SetTopLeft(lightning[i].GetLeft() + lightning[i].ax, lightning[i].GetTop() + lightning[i].ay);
+		if (character.IsOverlap(lightning[i], boss1)) {
+			boss1.add_sub_hp(-5);
+			blood_boss1.SetAnimation(50, false);
+			blood_boss1.ShowBitmap();
+		}
+		else {
+			blood_boss1.SetAnimation(50, true);
+		}
+	}
+
+	int axay[5][4] = { {-5,2},{5,2},{-5,-2},{5,-2} };
+	if (flag == (int)lightning.size()) {
+		for (int i = 0; i < (int)lightning.size(); i++) {
+			lightning[i].SetTopLeft(character.GetLeft() + character.GetWidth() / 2 - lightning[i].GetWidth() / 2, character.GetTop());
+			lightning[i].stdx = character.GetLeft() + (character.GetWidth() / 2);
+			lightning[i].stdy = character.GetTop();
+			lightning[i].ax = axay[i][0];
+			lightning[i].ay = axay[i][1];
+		}
+	}
+};
+
+
+void CGamestageBoss1::bricks_move(vector<CMovingBitmap> &item, int h, int k, int c, int x_move, int i) {
+	int x = item[i].GetLeft() + x_move;
+	int y = (x - h) * (x - h) / (4 * c) + k;
+	item[i].SetTopLeft(x, y);
+	if (character.IsOverlap(item[i], boss1)) {
+		boss1.add_sub_hp(-5);
+		blood_boss1.SetAnimation(50, false);
+		blood_boss1.ShowBitmap();
+	}
+	else {
+		blood_boss1.SetAnimation(50, true);
+	}
+}
+
+
+void CGamestageBoss1::bricks_erase(vector<CMovingBitmap> &item) {
+
+	for (int i = 0; i < (int)item.size(); i++) {
+		if (item[i].GetTop() + 70 > 1065) {
+			item[i].SetTopLeft(character.GetLeft() + 10, character.GetTop());
+			item[i].stdx = character.GetLeft();
+			bricks[i].stdy = character.GetTop();
+		}
+	}
+
+}
+
+
+
+
 /////////////////////////////update data/////////////////
 
-void CGamestageBoss1::set_share_obj_data(CMovingBitmap &tmp_background, CMovingBitmap &tmp_character,
-	CMovingBitmap &tmp_opera, CMovingBitmap &tmp_blood_bar, CMovingBitmap &tmp_energy_bar, vector <CMovingBitmap> &tmp_dart, vector<CMovingBitmap> &tmp_bullet) {
 
+
+
+void CGamestageBoss1::set_share_obj_data(CMovingBitmap &tmp_background, CMovingBitmap &tmp_character, CMovingBitmap &tmp_opera, CMovingBitmap &tmp_blood_bar, CMovingBitmap &tmp_energy_bar,
+	vector <CMovingBitmap> &tmp_dart, vector<CMovingBitmap> &tmp_bullet, vector<CMovingBitmap> &tmp_bricks, vector<CMovingBitmap> &tmp_lightning) {
 	p_background = &tmp_background;
 	p_character = &tmp_character;
 	p_opera = &tmp_opera;
@@ -349,6 +445,8 @@ void CGamestageBoss1::set_share_obj_data(CMovingBitmap &tmp_background, CMovingB
 	p_energy_bar = &tmp_energy_bar;
 	p_dart = &tmp_dart;
 	p_bullet = &tmp_bullet;
+	p_bricks = &tmp_bricks;
+	p_lightning = &tmp_lightning;
 
 
 	background = tmp_background;
@@ -358,11 +456,12 @@ void CGamestageBoss1::set_share_obj_data(CMovingBitmap &tmp_background, CMovingB
 	energy_bar = tmp_energy_bar;
 	dart = tmp_dart;
 	bullet = tmp_bullet;
-
+	bricks = tmp_bricks;
+	lightning = tmp_lightning;
 }
 
 void CGamestageBoss1::move_share_obj_data(CMovingBitmap &tmp_background, CMovingBitmap &tmp_character,
-	CMovingBitmap &tmp_opera, CMovingBitmap &tmp_blood_bar, CMovingBitmap &tmp_energy_bar, vector <CMovingBitmap> &tmp_dart, vector<CMovingBitmap> &tmp_bullet) {
+	CMovingBitmap &tmp_opera, CMovingBitmap &tmp_blood_bar, CMovingBitmap &tmp_energy_bar, vector <CMovingBitmap> &tmp_dart, vector<CMovingBitmap> &tmp_bullet, vector<CMovingBitmap> &tmp_bricks) {
 
 	tmp_background = background;
 	tmp_character = character;
@@ -371,6 +470,7 @@ void CGamestageBoss1::move_share_obj_data(CMovingBitmap &tmp_background, CMoving
 	tmp_energy_bar = energy_bar;
 	tmp_dart = dart;
 	tmp_bullet = bullet;
+	tmp_bricks = bricks;
 };
 
 
@@ -383,7 +483,8 @@ void CGamestageBoss1::get_data() {
 	energy_bar = *p_energy_bar;
 	dart = *p_dart;
 	bullet = *p_bullet;
-
+	bricks = *p_bricks;
+	lightning = *p_lightning;
 };
 
 
@@ -396,5 +497,6 @@ void CGamestageBoss1::share_data() {
 	*p_energy_bar = energy_bar;
 	*p_dart = dart;
 	*p_bullet = bullet;
-
+	*p_bricks = bricks;
+	*p_lightning = lightning;
 };

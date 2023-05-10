@@ -19,6 +19,13 @@ CGameStateInit::CGameStateInit(CGame *g) : CGameState(g)
 
 void CGameStateInit::OnInit()
 {
+	CAudio::Instance()->Load(AUDIO_MenuSelect, "Resources/Audio/Select.wav");
+	CAudio::Instance()->Load(AUDIO_GameStage, "Resources/Audio/Goblins_Dance_(Battle).wav");
+	CAudio::Instance()->Load(AUDIO_GameBoss, "Resources/Audio/Goblins_Dance_(Battle).wav");
+	CAudio::Instance()->Load(AUDIO_GameOver, "Resources/Audio/Goblins_Dance_(Battle).wav");
+
+	CAudio::Instance()->Play(AUDIO_MenuSelect, true);
+
 	logo.LoadBitmapByString({ "Resources/health_ui/health_ui_0.bmp" }, RGB(255, 255, 255));
 	logo.SetTopLeft(510, 0);
 
@@ -92,6 +99,7 @@ void CGameStateInit::OnLButtonDown(UINT nFlags, CPoint point)
 
 		if (play_bg.GetLeft() <= point.x && point.x <= play_bg.GetLeft() + play_bg.GetWidth()
 			&& play_bg.GetTop() <= point.y && point.y <= play_bg.GetTop() + 130) {
+			CAudio::Instance()->Stop(AUDIO_MenuSelect);
 			GotoGameState(GAME_STATE_RUN);
 		}
 	}

@@ -34,21 +34,28 @@ namespace game_framework {
 		void blood_bar_progress(CMovingBitmap &blood_bar, CMovingBitmap &item_blood);
 		void show_text();
 
+		void lightning_move(vector<CMovingBitmap> &item);
+		void bricks_move(vector<CMovingBitmap> &item, int h, int k, int c, int x_move, int i);
+		void bricks_erase(vector<CMovingBitmap> &item);
+
 		///////////////////boss2////////////////
 
 		void boss2_move();
 		void boss2_bullet_move();
+		int isVector();
 		//////////////////sharing///////////////
-		void set_share_obj_data(CMovingBitmap &tmp_background, CMovingBitmap &tmp_character,
-			CMovingBitmap &tmp_opera, CMovingBitmap &tmp_blood_bar, CMovingBitmap &tmp_energy_bar, vector <CMovingBitmap> &tmp_dart, vector<CMovingBitmap> &tmp_bullet);
 
+		void set_share_obj_data(CMovingBitmap &tmp_background, CMovingBitmap &tmp_character, CMovingBitmap &tmp_opera, CMovingBitmap &tmp_blood_bar, CMovingBitmap &tmp_energy_bar,
+			vector <CMovingBitmap> &tmp_dart, vector<CMovingBitmap> &tmp_bullet, vector<CMovingBitmap> &tmp_bricks, vector<CMovingBitmap> &tmp_lightning);
+		//set data's pointer & data obj
 		void move_share_obj_data(CMovingBitmap &tmp_background, CMovingBitmap &tmp_character,
-			CMovingBitmap &tmp_opera, CMovingBitmap &tmp_blood_bar, CMovingBitmap &tmp_energy_bar, vector <CMovingBitmap> &tmp_dart, vector<CMovingBitmap> &tmp_bullet);
+			CMovingBitmap &tmp_opera, CMovingBitmap &tmp_blood_bar, CMovingBitmap &tmp_energy_bar, vector <CMovingBitmap> &tmp_dart, vector<CMovingBitmap> &tmp_bullet, vector<CMovingBitmap> &tmp_bricks);
 		//move data = run
 		void get_data(); // move now data to run with pointer
 		void share_data(); // move now data to run with pointer
 
 
+		int run = 1;
 
 
 	private:
@@ -61,21 +68,26 @@ namespace game_framework {
 		vector <CMovingBitmap> *p_dart;
 		vector<CMovingBitmap> *p_bullet;
 		vector<CMovingBitmap> *p_bricks;
+		vector<CMovingBitmap> *p_lightning;
 
-		CMovingBitmap character;
 		CMovingBitmap background;
+		CMovingBitmap character;
 		CMovingBitmap opera;
 		CMovingBitmap blood_bar;
 		CMovingBitmap energy_bar;
 		vector <CMovingBitmap> dart;
 		vector<CMovingBitmap> bullet;
-		vector<CMovingBitmap> bricks[4];
+		vector<CMovingBitmap> bricks;
+		vector<CMovingBitmap> lightning;
+
 		//share
 
 		CMovingBitmap boss2_range;
 		CMovingBitmap boss2;
 		vector<CMovingBitmap> boss2_bullet;
 		CMovingBitmap blood;
+		CMovingBitmap blood_bar_boss2;
+		CMovingBitmap blood_boss2;
 
 		double PI = 3.14159265358979323846;
 		double theta[8] = { 0.0, PI / 4, PI / 2, 3 * PI / 4, PI, 5 * PI / 4, 3 * PI / 2, 7 * PI / 4 };

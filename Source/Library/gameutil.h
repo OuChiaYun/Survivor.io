@@ -125,6 +125,7 @@ namespace game_framework {
 		void add_sub_hp(int blood);
 		void add_energy(int energy_v);
 
+		void dart_hit_monster(CMovingBitmap &dart, vector<CMovingBitmap> &monster, vector<CMovingBitmap> &monster_vanish);
 		void dart_hit_monster (vector<CMovingBitmap> &dart, vector<CMovingBitmap> &monster, vector<CMovingBitmap> &monster_vanish);
 		void item_hit(CMovingBitmap &character, vector<CMovingBitmap> &item);
 		void item_hit_energy(CMovingBitmap &character, vector<CMovingBitmap> &item, CMovingBitmap &energy_bar);
