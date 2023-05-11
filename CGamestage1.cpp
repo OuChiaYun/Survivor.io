@@ -41,9 +41,32 @@ void CGamestage1::OnInit() {
 			"Resources/monster/m16.bmp", "Resources/monster/m17.bmp" }, { 255,255,255 }, { 200, 191, 231 });  //255
 		monster[i].SetAnimation(50, false);
 		monster[i].set_hp(6);
+		monster[i].set_end = 30;
 
 	}
+	/*
+	big_monster.push_back(CMovingBitmap());
+	big_monster[0].LoadBitmapByString({"Resources/monster/big_monster.bmp" },RGB(255,255,255) );
+	big_monster[0].SetTopLeft(100, 100);
+	*/
 
+	for (int i = 0; i < 6; i++) {
+		random_born_big_monster(big_monster_vanish,{"Resources/monster/big_m0.bmp","Resources/monster/big_m1.bmp" ,"Resources/monster/big_m2.bmp" ,"Resources/monster/big_m3.bmp",
+											"Resources/monster/big_m4.bmp","Resources/monster/big_m5.bmp" ,"Resources/monster/big_m6.bmp" ,"Resources/monster/big_m7.bmp" },
+		big_monster_vanish, { "Resources/monster/big_e0.bmp","Resources/monster/big_e1.bmp" ,"Resources/monster/big_e2.bmp" ,"Resources/monster/big_e3.bmp",
+							  "Resources/monster/big_e4.bmp","Resources/monster/big_e5.bmp" ,"Resources/monster/big_e6.bmp" ,"Resources/monster/big_e7.bmp",
+							  "Resources/monster/big_e8.bmp","Resources/monster/big_e9.bmp","Resources/monster/m17.bmp" }, { 255,255,255 }, { 255, 255, 255 });  //255
+		//big_monster_vanish[i].SetAnimation(125, false);
+		big_monster_vanish[i].SetTopLeft(2000,2000);
+		big_monster_vanish[i].SetFrameIndexOfBitmap(18);
+		big_monster_vanish[i].set_hp(180);
+		big_monster_vanish[i].set_end = 8;
+	}
+	
+	
+
+
+	
 	blood.LoadBitmapByString({ "Resources/ignore.bmp", "Resources/blood/bloodfx001_01.bmp",
 							"Resources/blood/bloodfx001_02.bmp", "Resources/blood/bloodfx001_03.bmp",
 							"Resources/blood/bloodfx001_04.bmp", "Resources/blood/bloodfx001_05.bmp",
@@ -139,7 +162,10 @@ void CGamestage1::OnMove() {
 	}
 	if (magnet_trigger == 1 && magnet_once == 0) {
 		magnet_timer += 1;
-		magnet_animation();
+
+		if (magnet_timer % 2 == 0) {
+			magnet_animation();
+		}
 		if (magnet_timer > 100) {
 			magnet_trigger = 0;
 			magnet_timer = 0;
@@ -157,6 +183,7 @@ void CGamestage1::OnMove() {
 		bricks_move(bricks[i], character.GetLeft() + h[j], character.GetTop() + k[j], c[j], x_move[j]);
 		bricks_erase(bricks[i]);
 		character.dart_hit_monster(bricks[i], monster, monster_vanish);
+		character.dart_hit_monster(bricks[i], big_monster, big_monster_vanish);
 	}
 
 
@@ -186,10 +213,8 @@ void CGamestage1::show_img() {
 
 	background.ShowBitmap();
 	character.ShowBitmap();
-
-
-	for (int i = 0; i < (int)dart.size(); i++) {
-			dart[i].ShowBitmap();
+	for (int i = 0; i < (int)energy.size(); i++) {
+		energy[i].ShowBitmap();
 	}
 	
 	for (int i = 0; i < (int)(monster.size()); i++) {
@@ -201,9 +226,27 @@ void CGamestage1::show_img() {
 		}
 	}
 
+
+
 	for (int i = 0; i < (int)monster_vanish.size(); i++) {
 		monster_vanish[i].ShowBitmap();
 	}
+
+	for (int i = 0; i < (int)(big_monster.size()); i++) {
+		if (big_monster[i].GetFrameIndexOfBitmap() >= big_monster[i].limit_frame_end) {
+			big_monster[i].SetFrameIndexOfBitmap(big_monster[i].limit_frame_start);
+		}
+		if (big_monster[i].IsOverlap(background, big_monster[i])) {
+			big_monster[i].ShowBitmap();
+		}
+		//big_monster[i].ShowBitmap();
+		
+	}
+
+	for (int i = 0; i < (int)(big_monster_vanish.size()); i++) {
+		big_monster_vanish[i].ShowBitmap();
+	}
+
 
 	for (int i = 0; i < (int)bullet.size(); i++) {
 		bullet[i].ShowBitmap();
@@ -213,13 +256,14 @@ void CGamestage1::show_img() {
 		bricks[j].ShowBitmap();
 	}
 
+	for (int i = 0; i < (int)dart.size(); i++) {
+		dart[i].ShowBitmap();
+	}
 
 	for (int i = 0; i < (int)lightning.size(); i++) {
 		lightning[i].ShowBitmap();
 	}
-	for (int i = 0; i < (int)energy.size(); i++) {
-		energy[i].ShowBitmap();
-	}
+
 	magnet[0].ShowBitmap();
 	blood.ShowBitmap();
 	blood_bar.ShowBitmap();
@@ -410,6 +454,7 @@ void CGamestage1::dart_all(int setR) {
 			dart[i].set_timer(0);
 		}
 		character.dart_hit_monster(dart[i], monster, monster_vanish);
+		character.dart_hit_monster(dart[i], big_monster, big_monster_vanish);
 	}
 }
 
@@ -456,13 +501,53 @@ void CGamestage1::random_born_monster(vector<CMovingBitmap>&monster, vector<stri
 	}
 }
 
+
+void CGamestage1::random_born_big_monster(vector<CMovingBitmap>&monster, vector<string> str_monster, vector<CMovingBitmap>&monster_vanish, vector<string> str_monster_vanish, vector<int>rgb_monster, vector<int>rgb_monster_vanish) {
+
+	int min = -1450;
+	int max = 1450;
+	int tail = monster.size();
+
+	monster.push_back(CMovingBitmap());
+	monster[tail].LoadBitmapByString(str_monster, RGB(rgb_monster[0], rgb_monster[1], rgb_monster[2]));
+	monster[tail].LoadBitmapByString(str_monster_vanish, RGB(rgb_monster_vanish[0], rgb_monster_vanish[1], rgb_monster_vanish[2]));
+
+	int x = rand() % (max - min + 1) + min;
+	int y = rand() % (max - min + 1) + min;
+	monster[tail].SetTopLeft(x, y);
+	monster[tail].set_center(x + 45, y + 57);
+
+
+	monster[tail].SetFrameIndexOfBitmap(monster[tail].limit_frame_start);
+	monster[tail].set_limit_start_end(0, 3);
+
+
+}
+
+
+
 void CGamestage1::monster_all() {
+
 	for (int i = 0; i < (int)(monster.size()); i++) {
 		item_move(monster[i]);
 		if (!monster[i].IsOverlap(character, monster[i])) {
 			monster_move(monster[i]);
 			blood.SetAnimation(50, true);
 
+		}
+		else {
+			character.add_sub_hp(-5);
+			blood.SetAnimation(50, false);
+			blood.ShowBitmap();
+		}
+	}
+
+	for (int i = 0; i < (int)(big_monster.size()); i++) {
+		item_move(big_monster[i]);
+
+		if (!monster[i].IsOverlap(character, big_monster[i])) {
+			big_monster_move(big_monster[i]);
+			blood.SetAnimation(50, true);
 		}
 		else {
 			character.add_sub_hp(-5);
@@ -479,6 +564,23 @@ void CGamestage1::monster_all() {
 		monster[monster.size() - 1].set_hp(6);
 		monster_reset(monster[monster.size() - 1]);
 		monster_vanish.erase(monster_vanish.begin());
+	}
+
+	if (int(big_monster_vanish.size() > 2 && open_stat2 == 1)) {
+
+		big_monster.push_back(big_monster_vanish[0]);
+		big_monster[big_monster.size() - 1].SetFrameIndexOfBitmap(0);
+		big_monster[big_monster.size() - 1].SetAnimation(95, false);
+		big_monster[big_monster.size() - 1].set_hp(180);
+		big_monster[big_monster.size() - 1].set_limit_start_end(0, 3);
+		int min = -1450;
+		int max = 1450;
+		int tail = big_monster.size()-1;
+		int x = rand() % (max - min + 1) + min;
+		int y = rand() % (max - min + 1) + min;
+		big_monster[tail].SetTopLeft(x, y);
+		big_monster[tail].set_center(x + 45, y + 57);
+		big_monster_vanish.erase(big_monster_vanish.begin());
 	}
 
 	if (timer == 10000) {
@@ -549,12 +651,53 @@ void CGamestage1::monster_move(CMovingBitmap &monster) {
 
 };
 
+void CGamestage1::big_monster_move(CMovingBitmap &monster) {
+
+	int x = abs(monster.GetLeft() - character.GetLeft());
+	int y = abs(monster.GetTop() - character.GetTop());
+	double std_a = 4;
+	double a = pow((x*x + y * y), 0.5);
+	int _x = (int)(x / (a / std_a));
+	int _y = (int)(y / (a / std_a));
+
+	int np_x = 1;
+	int np_y = 1;
+
+	if (monster.GetLeft() < character.GetLeft()) {
+		np_x = 1;
+	}
+	else if (monster.GetLeft() > character.GetLeft()) {
+		np_x = -1;
+	}
+
+	if (monster.GetTop() < character.GetTop()) {
+		np_y = 1;
+	}
+	else if (monster.GetTop() > character.GetTop()) {
+		np_y = -1;
+	}
+
+
+	monster.SetTopLeft(monster.GetLeft() + (int)(np_x*_x*0.5), monster.GetTop() + (int)(np_y*_y*0.5));
+
+	if (isLeft(character, monster)) {
+		monster.set_limit_start_end(4, 7);
+
+	}
+	else {
+		monster.set_limit_start_end(0, 3);
+
+	}
+};
+
+
 void CGamestage1::bullet_move(vector<CMovingBitmap> &item) {
 	for (int i = 0; i < (int)item.size(); i++) {
 		item[i].SetTopLeft(character.GetLeft() + 10, item[i].GetTop() - 10);
 	
 	}
 	character.dart_hit_monster(item, monster, monster_vanish);
+	character.dart_hit_monster(item, big_monster, big_monster_vanish);
 }
 
 
@@ -613,6 +756,17 @@ void CGamestage1::monster_pop(int less_than_n) {
 	}
 }
 
+void CGamestage1::big_monster_born() {
+	int i = big_monster.size();
+	random_born_big_monster(big_monster, { "Resources/monster/big_m0.bmp","Resources/monster/big_m1.bmp" ,"Resources/monster/big_m2.bmp" ,"Resources/monster/big_m3.bmp",
+										"Resources/monster/big_m4.bmp","Resources/monster/big_m5.bmp" ,"Resources/monster/big_m6.bmp" ,"Resources/monster/big_m7.bmp" },
+		big_monster_vanish, { "Resources/monster/big_e0.bmp","Resources/monster/big_e1.bmp" ,"Resources/monster/big_e2.bmp" ,"Resources/monster/big_e3.bmp",
+							  "Resources/monster/big_e4.bmp","Resources/monster/big_e5.bmp" ,"Resources/monster/big_e6.bmp" ,"Resources/monster/big_e7.bmp",
+							  "Resources/monster/big_e8.bmp","Resources/monster/big_e9.bmp","Resources/monster/m17.bmp" }, { 255,255,255 }, { 255, 255, 255 });  //255
+	big_monster[i].SetAnimation(125, false);
+	big_monster[i].set_hp(180);
+}
+
 void CGamestage1::show_baclground_selected(int s) {
 
 	if (s == 0) {
@@ -643,6 +797,7 @@ void CGamestage1::lightning_move(vector<CMovingBitmap> &item) {
 
 		lightning[i].SetTopLeft(lightning[i].GetLeft() + lightning[i].ax, lightning[i].GetTop() + lightning[i].ay);
 		character.dart_hit_monster(item[i], monster, monster_vanish);
+		character.dart_hit_monster(item, big_monster, big_monster_vanish);
 	}
 
 	int axay[5][4] = { {-5,2},{5,2},{-5,-2},{5,-2} };

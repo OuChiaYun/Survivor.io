@@ -49,6 +49,7 @@ namespace game_framework {
 		AUDIO_GameStage,
 		AUDIO_GameBoss,
 		AUDIO_GameOver,
+		AUDIO_Attack,
 		AUDIO_DING,				// 0
 		AUDIO_LAKE,				// 1
 		AUDIO_NTUT				// 2

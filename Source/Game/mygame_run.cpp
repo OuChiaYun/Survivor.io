@@ -56,6 +56,7 @@ void CGameStateRun::OnMove()							// 移動遊戲元素
 			character.SetTopLeft(461, 252);
 			character.set_center(470, 270);
 			t1.select = 0;
+			t1.open_stat2 = 1;
 			CAudio::Instance()->Stop(AUDIO_GameBoss);
 			CAudio::Instance()->Play(AUDIO_GameStage, true);
 		}
@@ -64,6 +65,7 @@ void CGameStateRun::OnMove()							// 移動遊戲元素
 		b2.OnMove();  //boss2
 
 		if (b2.isVector() == 1) {
+			set_victory_value(1);
 			GotoGameState(GAME_STATE_OVER);
 		}
 
@@ -94,6 +96,7 @@ void CGameStateRun::OnMove()							// 移動遊戲元素
 		set_victory_value(0);
 		GotoGameState(GAME_STATE_OVER);
 	}
+	
 	
 	
 	
@@ -222,8 +225,6 @@ void CGameStateRun::OnMouseMove(UINT nFlags, CPoint point)	// 處理滑鼠的動
 		t1.OnMouseMove(nFlags, point);
 	}
 	
-	
-	
 }
 
 
@@ -294,13 +295,12 @@ void CMovingBitmap::dart_hit_monster(vector<CMovingBitmap> &dart, vector<CMoving
 
 				monster[i].add_sub_hp(-1);
 				if (monster[i].get_hp() <= 0) {
-
+					//CAudio::Instance()->Play(AUDIO_Attack, true);
 					monster_vanish.push_back(monster[i]);
 					monster_vanish[monster_vanish.size() - 1].SetAnimation(80, true);
 					monster_vanish[monster_vanish.size() - 1].ShowBitmap();
 					monster_vanish[monster_vanish.size() - 1].ToggleAnimation();
-					monster_vanish[monster_vanish.size() - 1].SetFrameIndexOfBitmap(30);
-
+					monster_vanish[monster_vanish.size() - 1].SetFrameIndexOfBitmap(monster[i].set_end);
 					monster.erase(monster.begin() + i);
 
 				}
@@ -325,7 +325,7 @@ void CMovingBitmap::dart_hit_monster(CMovingBitmap &dart, vector<CMovingBitmap> 
 					monster_vanish[monster_vanish.size() - 1].SetAnimation(80, true);
 					monster_vanish[monster_vanish.size() - 1].ShowBitmap();
 					monster_vanish[monster_vanish.size() - 1].ToggleAnimation();
-					monster_vanish[monster_vanish.size() - 1].SetFrameIndexOfBitmap(30);
+					monster_vanish[monster_vanish.size() - 1].SetFrameIndexOfBitmap(monster[i].set_end);
 
 					monster.erase(monster.begin() + i);
 					

@@ -284,7 +284,7 @@ void CGamestageBoss2::bullet_move(vector<CMovingBitmap> &item) {
 	for (int i = 0; i < (int)item.size(); i++) {
 		item[i].SetTopLeft(item[i].GetLeft(), item[i].GetTop() - 20);
 		if (character.IsOverlap(item[i], boss2)) {
-			boss2.add_sub_hp(-5);
+			boss2.add_sub_hp(-15);
 			blood_boss2.SetAnimation(50, false);
 			blood_boss2.ShowBitmap();
 		}
@@ -316,9 +316,13 @@ void CGamestageBoss2::dart_all(int setR) {
 		dart_move(dart[i], (dart[i].timer % 360) * 5, setR);
 		if (dart[i].get_timer() > 360) {
 			dart[i].set_timer(0);
+			blood_boss2.SetAnimation(50, true);
 		}
 		if (character.IsOverlap(dart[i], boss2)) {
-			boss2.add_sub_hp(-5);
+			boss2.add_sub_hp(-15);
+			
+			blood_boss2.SetAnimation(50, false);
+			blood_boss2.ShowBitmap();
 		}
 	}
 }
@@ -354,7 +358,7 @@ void CGamestageBoss2::lightning_move(vector<CMovingBitmap> &item) {
 
 		lightning[i].SetTopLeft(lightning[i].GetLeft() + lightning[i].ax, lightning[i].GetTop() + lightning[i].ay);
 		if (character.IsOverlap(lightning[i], boss2)) {
-			boss2.add_sub_hp(-5);
+			boss2.add_sub_hp(-15);
 			blood_boss2.SetAnimation(50, false);
 			blood_boss2.ShowBitmap();
 		}
@@ -383,7 +387,7 @@ void CGamestageBoss2::bricks_move(vector<CMovingBitmap> &item, int h, int k, int
 	int y = (x - h) * (x - h) / (4 * c) + k;
 	item[i].SetTopLeft(x, y);
 	if (character.IsOverlap(item[i], boss2)) {
-		boss2.add_sub_hp(-5);
+		boss2.add_sub_hp(-50);
 		blood_boss2.SetAnimation(50, false);
 		blood_boss2.ShowBitmap();
 	}

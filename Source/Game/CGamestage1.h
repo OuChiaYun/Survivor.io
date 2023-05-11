@@ -30,12 +30,19 @@ namespace game_framework {
 		void dart_all(int);
 		void dart_move(CMovingBitmap &item, int i, int setR);
 		void mygame_dart_born();
+
 		void random_born_monster(vector<CMovingBitmap>&monster, vector<string> str_monster, vector<CMovingBitmap>&monster_vanish, vector<string> str_monster_vanish, vector<int>rgb_monster, vector<int>rgb_monster_vanish);
+		void random_born_big_monster(vector<CMovingBitmap>&monster, vector<string> str_monster, vector<CMovingBitmap>&monster_vanish, vector<string> str_monster_vanish, vector<int>rgb_monster, vector<int>rgb_monster_vanish);
+
+
 		void monster_all();
 		void monster_pop(int less_than_n);
 		bool isLeft(CMovingBitmap &character, CMovingBitmap &item);
 		bool isDown(CMovingBitmap &character, CMovingBitmap &item);
 		void monster_move(CMovingBitmap &monster);
+		void big_monster_move(CMovingBitmap &monster);
+		void big_monster_born();
+
 		void bullet_move(vector<CMovingBitmap> &item);
 		void bullet_erase(vector<CMovingBitmap> &item);
 		void born_bullet(vector<CMovingBitmap> &item, vector<string> str, vector<int>rgb);
@@ -70,6 +77,8 @@ namespace game_framework {
 
 		int run = 1;
 
+		int open_stat2 = 0;
+
 
 	private:
 
@@ -100,8 +109,10 @@ namespace game_framework {
 		vector<CMovingBitmap> monster;
 		vector<CMovingBitmap> monster_vanish;
 		CMovingBitmap blood;
+		
 		vector<CMovingBitmap> big_monster;
 		vector<CMovingBitmap> big_monster_vanish;
+
 		vector <CMovingBitmap> energy;
 		int axay[4][2] = { {-2,2},{2,2},{-2,-2},{2,-2} };
 		int item_stdax;
@@ -119,6 +130,7 @@ namespace game_framework {
 		int k[4] = { -70, -100, -70, -100 };
 		int c[4] = { 40, 60, 40, 60 };
 		int x_move[4] = { -5, -5, 5, 5 };
+
 
 	};
 
