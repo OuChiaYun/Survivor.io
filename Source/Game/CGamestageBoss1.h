@@ -89,6 +89,11 @@ namespace game_framework {
 
 		CMovingBitmap lighting;
 		int timmer = 0;
+		int h[4] = { -30, -60, 30, 60 };
+		int k[4] = { -70, -100, -70, -100 };
+		int c[4] = { 40, 60, 40, 60 };
+		int x_move[4] = { -5, -5, 5, 5 };
+
 	};
 
 };

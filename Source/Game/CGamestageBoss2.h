@@ -58,6 +58,7 @@ namespace game_framework {
 		int run = 1;
 
 
+
 	private:
 
 		CMovingBitmap *p_background;
@@ -91,6 +92,11 @@ namespace game_framework {
 
 		double PI = 3.14159265358979323846;
 		double theta[8] = { 0.0, PI / 4, PI / 2, 3 * PI / 4, PI, 5 * PI / 4, 3 * PI / 2, 7 * PI / 4 };
+
+		int h[4] = { -30, -60, 30, 60 };
+		int k[4] = { -70, -100, -70, -100 };
+		int c[4] = { 40, 60, 40, 60 };
+		int x_move[4] = { -5, -5, 5, 5 };
 
 		int timmer = 0;
 	};

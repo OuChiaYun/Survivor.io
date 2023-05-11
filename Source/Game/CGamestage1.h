@@ -42,8 +42,8 @@ namespace game_framework {
 
 		void lightning_move(vector<CMovingBitmap> &item);
 		void lightning_born();
-		void bricks_move(vector<CMovingBitmap> &item, int h, int k, int c, int x_move,int i);
-		void bricks_erase(vector<CMovingBitmap> &item);
+		void bricks_move(CMovingBitmap &item, int h, int k, int c, int x_move);
+		void bricks_erase(CMovingBitmap &item);
 		void bricks_born(vector<CMovingBitmap> &item, vector<string> str, vector<int>rgb);
 		void monster_reset(CMovingBitmap &item);
 		void magnet_animation();
@@ -114,6 +114,11 @@ namespace game_framework {
 		int magnet_timer = 0;
 		int magnet_trigger = 0;
 		int magnet_once = 0;
+
+		int h[4] = { -30, -60, 30, 60 };
+		int k[4] = { -70, -100, -70, -100 };
+		int c[4] = { 40, 60, 40, 60 };
+		int x_move[4] = { -5, -5, 5, 5 };
 
 	};
 

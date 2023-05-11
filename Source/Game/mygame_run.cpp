@@ -42,28 +42,26 @@ void CGameStateRun::OnMove()							// 移動遊戲元素
 	if (energy_bar.get_energy() == 25 && t1.run == 1) {
 		boss_level++;
 		t1.run = 0;
+		CAudio::Instance()->Stop(AUDIO_GameStage);
+		CAudio::Instance()->Play(AUDIO_GameBoss, true);
 
 	}
 
 	if (boss_level == 1 && b1.run == 1) {
 		b1.OnMove();  //boss1
-		//CAudio::Instance()->Stop(AUDIO_GameStage);
-		//CAudio::Instance()->Play(AUDIO_GameBoss, true);
 		if (b1.run == 0) { //stage2
-			//CAudio::Instance()->Stop(AUDIO_GameBoss);
-			//CAudio::Instance()->Play(AUDIO_GameStage, true);
 			t1.run = 1;
 			energy_bar.set_energy(0);
 			energy_bar.SetFrameIndexOfBitmap(0);
 			character.SetTopLeft(461, 252);
 			character.set_center(470, 270);
 			t1.select = 0;
+			CAudio::Instance()->Stop(AUDIO_GameBoss);
+			CAudio::Instance()->Play(AUDIO_GameStage, true);
 		}
 	}
 	else if(boss_level == 2 && b2.run == 1){
 		b2.OnMove();  //boss2
-		//CAudio::Instance()->Stop(AUDIO_GameStage);
-		//CAudio::Instance()->Play(AUDIO_GameBoss, true);
 
 		if (b2.isVector() == 1) {
 			GotoGameState(GAME_STATE_OVER);
@@ -74,8 +72,8 @@ void CGameStateRun::OnMove()							// 移動遊戲元素
 			energy_bar.set_energy(0);
 			energy_bar.SetFrameIndexOfBitmap(0);
 			t1.select = 0;
-			//CAudio::Instance()->Stop(AUDIO_GameBoss);
-			//CAudio::Instance()->Play(AUDIO_GameStage, true);
+			CAudio::Instance()->Stop(AUDIO_GameBoss);
+			CAudio::Instance()->Play(AUDIO_GameStage, true);
 		}
 	}
 	if (select_stage.show == 1) {
@@ -84,16 +82,15 @@ void CGameStateRun::OnMove()							// 移動遊戲元素
 	else if(t1.run == 1)
 	{
 		t1.OnMove(); //stage1
-		//CAudio::Instance()->Play(AUDIO_GameStage, true);
 	}
 
 	/*t1.run = 0;
 	b1.run = 0;
-	boss_level = 1;
-	b2.run = 0;
-	b1.OnMove();  //boss2*/
+	boss_level = 2;
+	b2.run = 1;
+	b2.OnMove();  //boss2*/
 	
-	if (character.get_hp() == 0) {
+	if (character.get_hp() <= 0) {
 		set_victory_value(0);
 		GotoGameState(GAME_STATE_OVER);
 	}
@@ -109,7 +106,7 @@ void CGameStateRun::OnInit()  								// 遊戲的初值及圖形設定
 	background.LoadBitmapByString({ "Resources/background/Purple Nebula/Purple_Nebula_03.bmp", "Resources/background/Blue Nebula/Blue_Nebula_02.bmp" });
 	background.SetTopLeft(-1500, -1500);
 
-	character.LoadBitmapByString({ "Resources/character/char_04.bmp" }, RGB(200, 191, 231));
+	character.LoadBitmapByString({ "Resources/character/char_04.bmp", "Resources/character/char_04_right.bmp" }, RGB(200, 191, 231));
 	character.SetTopLeft(461, 252);
 	character.set_center(470, 270);
 	character.set_hp(5000);

@@ -145,13 +145,10 @@ void CGamestageBoss2::OnMove() {
 
 	}
 
-	int h[4] = { -30, -60, 30, 60 };
-	int k[4] = { -70, -100, -70, -100 };
-	int c[4] = { 40, 60, 40, 60 };
-	int x_move[4] = { -5, -5, 5, 5 };
 
 	for (int i = 0; i < (int)bricks.size(); i++) {
-		bricks_move(bricks, bricks[i].stdx + h[i], bricks[i].stdy + k[i], c[i], x_move[i], i);
+		int j = bricks[i].ram_n;
+		bricks_move(bricks, bricks[i].stdx + h[j], bricks[i].stdy + k[j], c[j], x_move[j], i);
 		bricks_erase(bricks);
 	}
 
@@ -209,7 +206,7 @@ void CGamestageBoss2::OnShow() {
 	blood.ShowBitmap();
 
 	blood_bar_boss2.ShowBitmap();
-	blood_bar_boss2.SetTopLeft(boss2.GetLeft(), boss2.GetTop() + 112 + 10);
+	blood_bar_boss2.SetTopLeft(boss2.GetLeft() + 40, boss2.GetTop() + 160 + 10);
 
 	opera.ShowBitmap();
 	boss2_range.ShowBitmap();
@@ -236,6 +233,11 @@ void CGamestageBoss2::show_text() {
 
 	CTextDraw::ChangeFontLog(pdc, 15, "Modern No. 20", RGB(255, 255, 255), 80);
 	CTextDraw::Print(pdc, blood_bar_boss2.GetLeft() + 30, blood_bar_boss2.GetTop() + 10 + 20, to_string(boss2.get_hp()));
+
+	if (timmer < 100) {
+		CTextDraw::ChangeFontLog(pdc, 25, "Modern No. 20", RGB(255, 255, 255), 80);
+		CTextDraw::Print(pdc, 400, 200, "Boss2 Assault!!");
+	}
 
 	CDDraw::ReleaseBackCDC();
 
@@ -315,6 +317,9 @@ void CGamestageBoss2::dart_all(int setR) {
 		if (dart[i].get_timer() > 360) {
 			dart[i].set_timer(0);
 		}
+		if (character.IsOverlap(dart[i], boss2)) {
+			boss2.add_sub_hp(-5);
+		}
 	}
 }
 
@@ -336,6 +341,7 @@ void CGamestageBoss2::lightning_move(vector<CMovingBitmap> &item) {
 
 
 	int flag = 0;
+	int f[8] = { 0,0,0,0, 0,0,0,0 };
 	for (int i = 0; i < (int)item.size(); i++) {
 
 		if ((lightning[i].GetLeft() <= (lightning[i].stdx - 300)) || (lightning[i].GetLeft() + 105 >= (lightning[i].stdx + 300))) {
@@ -343,6 +349,7 @@ void CGamestageBoss2::lightning_move(vector<CMovingBitmap> &item) {
 		}
 		if (lightning[i].GetTop() < (lightning[i].stdy - 1065) || lightning[i].GetTop() > (lightning[i].stdy + 1065)) {
 			flag++;
+			f[i] = 1;
 		}
 
 		lightning[i].SetTopLeft(lightning[i].GetLeft() + lightning[i].ax, lightning[i].GetTop() + lightning[i].ay);
@@ -357,13 +364,15 @@ void CGamestageBoss2::lightning_move(vector<CMovingBitmap> &item) {
 	}
 
 	int axay[5][4] = { {-5,2},{5,2},{-5,-2},{5,-2} };
-	if (flag == (int)lightning.size()) {
+	if (flag % 4 == 0 && flag != 0) {
 		for (int i = 0; i < (int)lightning.size(); i++) {
-			lightning[i].SetTopLeft(character.GetLeft() + character.GetWidth() / 2 - lightning[i].GetWidth() / 2, character.GetTop());
-			lightning[i].stdx = character.GetLeft() + (character.GetWidth() / 2);
-			lightning[i].stdy = character.GetTop();
-			lightning[i].ax = axay[i][0];
-			lightning[i].ay = axay[i][1];
+			if (f[i] == 1) {
+				lightning[i].SetTopLeft(character.GetLeft() + character.GetWidth() / 2 - lightning[i].GetWidth() / 2, character.GetTop());
+				lightning[i].stdx = character.GetLeft() + (character.GetWidth() / 2);
+				lightning[i].stdy = character.GetTop();
+				lightning[i].ax = axay[i % 4][0];
+				lightning[i].ay = axay[i % 4][1];
+			}
 		}
 	}
 };
@@ -392,6 +401,7 @@ void CGamestageBoss2::bricks_erase(vector<CMovingBitmap> &item) {
 			item[i].SetTopLeft(character.GetLeft() + 10, character.GetTop());
 			item[i].stdx = character.GetLeft();
 			bricks[i].stdy = character.GetTop();
+			item[i].ram_n = (rand() + timmer) % 4;
 		}
 	}
 
@@ -413,23 +423,23 @@ void CGamestageBoss2::boss2_move() {
 		boss2.ay = y;
 	}
 
-	if (boss2.GetLeft() < -300) {
+	if (boss2.GetLeft() < 0) {
 		int x = rand() % 13;
 		boss2.ax = x;
 		boss2.SetTopLeft(boss2.GetLeft() + boss2.ax, boss2.GetTop() + boss2.ay);
 	}
-	else if (boss2.GetLeft() + boss2.GetWidth() > 1300) {
+	else if (boss2.GetLeft() + boss2.GetWidth() > 1065) {
 		int x = 0 - rand() % 13;
 		boss2.ax = x;
 		boss2.SetTopLeft(boss2.GetLeft() + boss2.ax, boss2.GetTop() + boss2.ay);
 	}
 
-	if (boss2.GetTop() < -300) {
+	if (boss2.GetTop() < 0) {
 		int y = rand() % 13;
 		boss2.ay = y;
 		boss2.SetTopLeft(boss2.GetLeft() + boss2.ax, boss2.GetTop() + boss2.ay);
 	}
-	else if (boss2.GetTop() + boss2.GetHeight() > 1300) {
+	else if (boss2.GetTop() + boss2.GetHeight() > 1065) {
 		int y = 0 - rand() % 13;
 		boss2.ay = y;
 		boss2.SetTopLeft(boss2.GetLeft() + boss2.ax, boss2.GetTop() + boss2.ay);

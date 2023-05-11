@@ -135,13 +135,10 @@ void CGamestageBoss1::OnMove() {
 	dart_all(100);
 
 
-	int h[4] = { -30, -60, 30, 60 };
-	int k[4] = { -70, -100, -70, -100 };
-	int c[4] = { 40, 60, 40, 60 };
-	int x_move[4] = { -5, -5, 5, 5 };
 
 	for (int i = 0; i < (int)bricks.size(); i++) {
-		bricks_move(bricks, bricks[i].stdx + h[i], bricks[i].stdy + k[i], c[i], x_move[i], i);
+		int j = bricks[i].ram_n;
+		bricks_move(bricks, bricks[i].stdx + h[j], bricks[i].stdy + k[j], c[j], x_move[j], i);
 		bricks_erase(bricks);
 	}
 
@@ -150,9 +147,8 @@ void CGamestageBoss1::OnMove() {
 
 	lightning_move(lightning);
 
-	
-	if (timmer >= 300) {
 
+	if(timmer > 100){
 		boss1_bullet_move();
 		boss1_character_attack();
 
@@ -217,6 +213,11 @@ void CGamestageBoss1::show_text() {
 
 	CTextDraw::ChangeFontLog(pdc, 15, "Modern No. 20", RGB(255, 255, 255), 80);
 	CTextDraw::Print(pdc, blood_bar_boss1.GetLeft() + 30, blood_bar_boss1.GetTop() + 10 + 20, to_string(boss1.get_hp()));
+
+	if (timmer < 100) {
+		CTextDraw::ChangeFontLog(pdc, 30, "Modern No. 20", RGB(255, 255, 255), 80);
+		CTextDraw::Print(pdc, 350, 250, "Boss1 Assault!!");
+	}
 
 	CDDraw::ReleaseBackCDC();
 
@@ -295,7 +296,7 @@ void CGamestageBoss1::boss1_background() {
 void CGamestageBoss1::boss1_character_attack() {
 	for (int i = 0; i<int(bullet.size()); i++) {
 		if (boss1.IsOverlap(bullet[i], boss1)) {
-			boss1.add_sub_hp(-5);
+			boss1.add_sub_hp(-15);
 			blood_boss1.SetAnimation(50, false);
 			blood_boss1.ShowBitmap();
 		}
@@ -306,7 +307,7 @@ void CGamestageBoss1::boss1_character_attack() {
 
 	for (int i = 0; i<int(dart.size()); i++) {
 		if (boss1.IsOverlap(dart[i], boss1)) {
-			boss1.add_sub_hp(-5);
+			boss1.add_sub_hp(-15);
 			blood_boss1.SetAnimation(50, false);
 			blood_boss1.ShowBitmap();
 		}
@@ -368,6 +369,7 @@ void CGamestageBoss1::lightning_move(vector<CMovingBitmap> &item) {
 
 
 	int flag = 0;
+	int f[8] = { 0,0,0,0, 0,0,0,0 };
 	for (int i = 0; i < (int)item.size(); i++) {
 
 		if ((lightning[i].GetLeft() <= (lightning[i].stdx - 300)) || (lightning[i].GetLeft() +105 >= (lightning[i].stdx + 300))) {
@@ -375,11 +377,12 @@ void CGamestageBoss1::lightning_move(vector<CMovingBitmap> &item) {
 		}
 		if (lightning[i].GetTop() < (lightning[i].stdy - 365) || lightning[i].GetTop() > (lightning[i].stdy + 365)) {
 			flag++;
+			f[i] = 1;
 		}
 
 		lightning[i].SetTopLeft(lightning[i].GetLeft() + lightning[i].ax, lightning[i].GetTop() + lightning[i].ay);
 		if (character.IsOverlap(lightning[i], boss1)) {
-			boss1.add_sub_hp(-5);
+			boss1.add_sub_hp(-15);
 			blood_boss1.SetAnimation(50, false);
 			blood_boss1.ShowBitmap();
 		}
@@ -388,14 +391,17 @@ void CGamestageBoss1::lightning_move(vector<CMovingBitmap> &item) {
 		}
 	}
 
+
 	int axay[5][4] = { {-5,2},{5,2},{-5,-2},{5,-2} };
-	if (flag == (int)lightning.size()) {
+	if (flag % 4 == 0 && flag != 0) {
 		for (int i = 0; i < (int)lightning.size(); i++) {
-			lightning[i].SetTopLeft(character.GetLeft() + character.GetWidth() / 2 - lightning[i].GetWidth() / 2, character.GetTop());
-			lightning[i].stdx = character.GetLeft() + (character.GetWidth() / 2);
-			lightning[i].stdy = character.GetTop();
-			lightning[i].ax = axay[i][0];
-			lightning[i].ay = axay[i][1];
+			if (f[i] == 1) {
+				lightning[i].SetTopLeft(character.GetLeft() + character.GetWidth() / 2 - lightning[i].GetWidth() / 2, character.GetTop());
+				lightning[i].stdx = character.GetLeft() + (character.GetWidth() / 2);
+				lightning[i].stdy = character.GetTop();
+				lightning[i].ax = axay[i % 4][0];
+				lightning[i].ay = axay[i % 4][1];
+			}
 		}
 	}
 };
@@ -406,7 +412,7 @@ void CGamestageBoss1::bricks_move(vector<CMovingBitmap> &item, int h, int k, int
 	int y = (x - h) * (x - h) / (4 * c) + k;
 	item[i].SetTopLeft(x, y);
 	if (character.IsOverlap(item[i], boss1)) {
-		boss1.add_sub_hp(-5);
+		boss1.add_sub_hp(-15);
 		blood_boss1.SetAnimation(50, false);
 		blood_boss1.ShowBitmap();
 	}
@@ -423,6 +429,7 @@ void CGamestageBoss1::bricks_erase(vector<CMovingBitmap> &item) {
 			item[i].SetTopLeft(character.GetLeft() + 10, character.GetTop());
 			item[i].stdx = character.GetLeft();
 			bricks[i].stdy = character.GetTop();
+			item[i].ram_n = (rand() + timmer) % 4;
 		}
 	}
 

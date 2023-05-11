@@ -24,6 +24,7 @@ namespace game_framework {
 		void OnRButtonUp(UINT nFlags, CPoint point);
 		void OnMove();
 		void OnShow();
+		void show_text();
 
 		bool isSelect(UINT nFlags, CPoint point, CMovingBitmap & item);
 		//int weapon_list[3] = { 0,0,0 };

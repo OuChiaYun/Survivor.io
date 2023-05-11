@@ -144,6 +144,7 @@ namespace game_framework {
 		int stdy = 0;
 		vector<int> boss1_hit_x = { 0, 0, 0 };
 		vector<int> boss1_hit_y = { 0, 0, 0 };
+		int ram_n = 0;
 
 		//////////////
 		/* Getter */
