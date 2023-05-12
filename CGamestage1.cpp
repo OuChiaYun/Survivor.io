@@ -64,11 +64,11 @@ void CGamestage1::OnInit() {
 							"Resources/blood/bloodfx001_04.bmp", "Resources/blood/bloodfx001_05.bmp",
 							"Resources/ignore.bmp" }, RGB(255, 255, 255));
 	blood.SetTopLeft(character.GetLeft() + character.GetWidth(), character.GetTop());
-
+	
 	magnet.push_back(CMovingBitmap());
 	magnet[0].LoadBitmapByString({ "Resources/props/magnet.bmp" , "Resources/ignore.bmp" }, RGB(255, 255, 255));
 	magnet[0].SetTopLeft(character.GetLeft() - 300, character.GetTop() - 300);
-
+	
 }
 
 void CGamestage1::OnKeyDown(UINT, UINT, UINT) {};
@@ -147,6 +147,7 @@ void CGamestage1::OnMove() {
 			item_move(energy[i]);
 	}
 	character.item_hit_energy(character, energy, energy_bar);
+	
 	item_move(magnet[0]);
 	if (character.IsOverlap(character, magnet[0])) {
 		magnet_trigger = 1;
@@ -154,17 +155,19 @@ void CGamestage1::OnMove() {
 	}
 
 	if (magnet_trigger == 1 && magnet_once == 0) {
-		magnet_timer += 1;
 
-		if (magnet_timer % 2 == 0) {
+		magnet_timer += 1;
+		if (magnet_timer % 3 == 0) {
 			magnet_animation();
 		}
+
 		if (magnet_timer > 100) {
 			magnet_trigger = 0;
 			magnet_timer = 0;
 			magnet_once = 1;
 		}
 	}
+
 
 	monster_all();
 
@@ -890,10 +893,10 @@ void CGamestage1::magnet_animation() {
 			int b = y1 - m * x1;
 			int x = x2;
 			if (x > x1) {
-				x -= 20;
+				x -= 40;
 			}
 			else {
-				x += 20;
+				x += 40;
 			}
 			int y = m * x + b;
 			energy[i].SetTopLeft(x, y);

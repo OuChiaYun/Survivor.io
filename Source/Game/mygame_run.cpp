@@ -35,6 +35,9 @@ CGameStateRun::~CGameStateRun()
 
 void CGameStateRun::OnBeginState()
 {
+	t1.OnBeginState();
+	b1.OnBeginState();
+	b2.OnBeginState();
 }
 
 void CGameStateRun::OnMove()							// 移動遊戲元素

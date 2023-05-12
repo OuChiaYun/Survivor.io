@@ -296,7 +296,7 @@ void CGamestageBoss1::boss1_background() {
 void CGamestageBoss1::boss1_character_attack() {
 	for (int i = 0; i<int(bullet.size()); i++) {
 		if (boss1.IsOverlap(bullet[i], boss1)) {
-			boss1.add_sub_hp(-10);
+			boss1.add_sub_hp(-15);
 			CAudio::Instance()->Play(AUDIO_Attack, false);
 			blood_boss1.SetAnimation(50, false);
 			blood_boss1.ShowBitmap();
@@ -318,7 +318,6 @@ void CGamestageBoss1::boss1_character_attack() {
 		}
 	}
 }
-
 
 
 void CGamestageBoss1::bullet_move(vector<CMovingBitmap> &item) {

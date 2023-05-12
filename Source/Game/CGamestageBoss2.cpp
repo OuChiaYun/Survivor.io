@@ -17,7 +17,9 @@
 
 using namespace game_framework;
 
-void CGamestageBoss2::OnBeginState() {};
+void CGamestageBoss2::OnBeginState() {
+
+};
 
 void CGamestageBoss2::OnInit() {
 
