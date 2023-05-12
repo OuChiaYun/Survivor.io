@@ -224,8 +224,8 @@ void CGameStateRun::OnMouseMove(UINT nFlags, CPoint point)	// 處理滑鼠的動
 	
 	if (select_stage.show == 1) {
 		t1.OnMouseMove(false, point);
+		select_stage.OnMouseMove(nFlags, point);
 	}
-
 	else if (energy_bar.get_energy() == 25) {
 		b2.OnMouseMove(nFlags, point);
 	}

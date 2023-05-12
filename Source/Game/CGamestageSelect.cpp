@@ -57,10 +57,11 @@ void CGamestageSelect::OnInit() {
 	select_pic[1].SetAnimation(100,false);
 	select_pic[2].SetAnimation(100, false);
 
-	select_start.LoadBitmapByString({ "Resources/select_bar/s1.bmp","Resources/select_bar/s2.bmp","Resources/select_bar/s3.bmp" ,"Resources/select_bar/s4.bmp" ,"Resources/select_bar/s5.bmp" }, RGB(255, 255, 255));
-	select_start.SetAnimation(200, false);
+	select_start.LoadBitmapByString({ "Resources/select_bar/s1.bmp","Resources/select_bar/s2.bmp","Resources/select_bar/s3.bmp" ,"Resources/select_bar/s4.bmp" ,"Resources/select_bar/s5.bmp" ,"Resources/select_bar/s_s.bmp" }, RGB(255, 255, 255));
+	//select_start.SetAnimation(200, false);
 	select_start.SetTopLeft((select_bar.GetLeft() + 40 + ((select_bar.GetWidth() - 80) / 6) * 3) - (select_start.GetWidth() / 2), select_bar.GetTop() + 450);
-
+	select_start.set_limit_start_end(0,4);
+	
 	selected.LoadBitmapByString({ "Resources/select_bar/selected2.bmp", "Resources/select_bar/selected_ignore.bmp" }, RGB(255, 255, 255));
 	selected.SetTopLeft(select_pic_bg[0].GetLeft() + 2, select_pic_bg[0].GetTop());
 
@@ -91,12 +92,22 @@ void CGamestageSelect::OnLButtonDown(UINT nFlags, CPoint point) {
 	if (isSelect(nFlags, point, select_start)) {
 		show = 2;
 	};
+	
 };
 
 void CGamestageSelect::OnLButtonUp(UINT nFlags, CPoint point) {};
 
 void CGamestageSelect::OnMouseMove(UINT nFlags, CPoint point) {
-
+	if (isSelect(TRUE, point, select_start)) {
+		select_start.SetAnimation(200, true);
+		select_start.SetFrameIndexOfBitmap(5);
+		select_start.set_limit_start_end(0, 6);
+		
+	}
+	else {
+		select_start.SetAnimation(200, false);
+		select_start.set_limit_start_end(0, 5);
+	}
 };
 
 void CGamestageSelect::OnRButtonDown(UINT nFlags, CPoint point) {};
@@ -115,7 +126,11 @@ void CGamestageSelect::OnShow() {
 		select_pic[i].SetTopLeft((select_pic_bg[i].GetLeft() + select_pic_bg[i].GetWidth() / 2 - select_pic[i].GetWidth() / 2), select_pic_bg[i].GetTop() + 40);
 		select_pic[i].ShowBitmap();
 	}
+	if (select_start.GetFrameIndexOfBitmap() >= select_start.limit_frame_end) {
+		select_start.SetFrameIndexOfBitmap(select_start.limit_frame_start);
+	}
 	select_start.ShowBitmap();
+	
 	selected.ShowBitmap();
 	show_text();
 };
