@@ -69,9 +69,6 @@
     <ClCompile Include="Source\Game\CGamestageBoss2.cpp">
       <Filter>MyGame</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\Downloads\survivor.io_sunny_5_11\survivor.io\Source\Game\CGamestage2.cpp">
-      <Filter>MyGame</Filter>
-    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\Library\audio.h">
@@ -120,9 +117,6 @@
       <Filter>MyGame</Filter>
     </ClInclude>
     <ClInclude Include="Source\Game\CGamestageBoss2.h">
-      <Filter>MyGame</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\Downloads\survivor.io_sunny_5_11\survivor.io\Source\Game\CGamestage2.h">
       <Filter>MyGame</Filter>
     </ClInclude>
   </ItemGroup>

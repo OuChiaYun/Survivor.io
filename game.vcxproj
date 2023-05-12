@@ -236,7 +236,6 @@
     <None Include="RES\GAME.RC2" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\..\..\Downloads\survivor.io_sunny_5_11\survivor.io\Source\Game\CGamestage2.cpp" />
     <ClCompile Include="CGamestage1.cpp" />
     <ClCompile Include="Source\Core\game.cpp" />
     <ClCompile Include="Source\Core\gameDoc.cpp" />
@@ -259,7 +258,6 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\..\..\Downloads\survivor.io_sunny_5_11\survivor.io\Source\Game\CGamestage2.h" />
     <ClInclude Include="Source\Core\Game.h" />
     <ClInclude Include="Source\Core\gameDoc.h" />
     <ClInclude Include="Source\Core\gameView.h" />
