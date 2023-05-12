@@ -66,6 +66,7 @@ void CGameStateRun::OnMove()							// 移動遊戲元素
 
 		if (b2.isVector() == 1) {
 			set_victory_value(1);
+			set_over_data();
 			GotoGameState(GAME_STATE_OVER);
 		}
 
@@ -94,6 +95,7 @@ void CGameStateRun::OnMove()							// 移動遊戲元素
 	
 	if (character.get_hp() <= 0) {
 		set_victory_value(0);
+		set_over_data();
 		GotoGameState(GAME_STATE_OVER);
 	}
 	
@@ -140,6 +142,10 @@ void CGameStateRun::OnInit()  								// 遊戲的初值及圖形設定
 	weapon_logo[1].SetTopLeft(100, 180);
 	weapon_logo[2].LoadBitmapByString({ "Resources/weapon/lightning_icon.bmp" }, RGB(255, 255, 255));
 	weapon_logo[2].SetTopLeft(147, 182);
+
+	dead_logo.LoadBitmapByString({ "Resources/UI/skull.bmp" }, RGB(255, 255, 255));
+	dead_logo.SetTopLeft(15, 930);
+
 	/*
 	CMovingBitmap background;
 	CMovingBitmap character;
@@ -247,7 +253,7 @@ void CGameStateRun::OnRButtonUp(UINT nFlags, CPoint point)	// 處理滑鼠的動
 void CGameStateRun::OnShow()
 {
 
-	t1.show_baclground_selected(get_init_background_value());
+	show_baclground_selected();
 	select_stage.show = t1.select;
 	
 
@@ -274,7 +280,7 @@ void CGameStateRun::OnShow()
 		weapon_logo[i].ShowBitmap();
 		}
 	}
-
+	dead_logo.ShowBitmap();
 	timer_express.ShowBitmap();
 	show_text();
 
@@ -289,16 +295,33 @@ void CGameStateRun::show_text() {
 	CTextDraw::ChangeFontLog(pdc, 40, "Modern No. 20", RGB(255, 174, 201), 80);
 	CTextDraw::Print(pdc, 825, 925, to_string((t / 600)) + to_string((t / 60) % 10) + " : " + to_string((t / 10) % 6) + to_string(t % 10));
 
+	CTextDraw::ChangeFontLog(pdc, 40, "Modern No. 20", RGB(255, 255, 255), 60);
+	CTextDraw::Print(pdc, 120, 950,to_string(t1.get_dead_monster()));
+
+
 	CDDraw::ReleaseBackCDC();
 
 }
 
 void CGameStateRun::show_baclground_selected() {
 	
-	t1.show_baclground_selected(get_init_background_value());
-
+	background.SetFrameIndexOfBitmap(get_init_background_value());
 }
 
+
+void CGameStateRun::set_over_data() {
+	b = clock();
+	int t = (int)(b - a) / CLOCKS_PER_SEC;
+	string cout = "";
+	for (int i = 0; i < 3; i++) {
+		if (weapon_list[i] != 0) {
+			cout += weapon_name[i] + " ";
+		}
+	}
+	set_data(to_string((t / 600)) + to_string((t / 60) % 10) + " : " + to_string((t / 10) % 6) + to_string(t % 10),
+		to_string(t1.get_dead_monster()), cout);
+}
+//////////////////////////////////////////////////////////////////////////////////////////////
 void CMovingBitmap::dart_hit_monster(vector<CMovingBitmap> &dart, vector<CMovingBitmap> &monster, vector<CMovingBitmap> &monster_vanish) {
 
 	for (int i = 0; i < (int)monster.size(); i++) {
@@ -338,7 +361,6 @@ void CMovingBitmap::dart_hit_monster(CMovingBitmap &dart, vector<CMovingBitmap> 
 					monster_vanish[monster_vanish.size() - 1].ShowBitmap();
 					monster_vanish[monster_vanish.size() - 1].ToggleAnimation();
 					monster_vanish[monster_vanish.size() - 1].SetFrameIndexOfBitmap(monster[i].set_end);
-
 					monster.erase(monster.begin() + i);
 					
 

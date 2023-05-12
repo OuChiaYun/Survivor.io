@@ -38,7 +38,7 @@
  *      3. Use ShowInitProgress(percent) to display loading progress.
 */
 
-
+#include <string>
 namespace game_framework {
 	/////////////////////////////////////////////////////////////////////////////
 	// Constants
@@ -63,9 +63,16 @@ namespace game_framework {
 
 		static void set_victory_value(int);
 		static int get_victory_value();
+		static void set_data(string tmp_t, string tmp_dead, string tmp_name);
+		static string get_show_time();
+		static string get_dead_number();
+		static string get_weapon_name();
 	private:
 		static int init_background_value; //static => chaaracter 
 		static int victory;
+		static string show_time;
+		static string dead_number;
+		static string weapon_name;
 
 	};
 	/////////////////////////////////////////////////////////////////////////////
@@ -80,6 +87,8 @@ namespace game_framework {
 		void OnBeginState();							// 設定每次重玩所需的變數
 		void OnKeyUp(UINT, UINT, UINT); 				// 處理鍵盤Up的動作
 		void OnLButtonDown(UINT nFlags, CPoint point);  // 處理滑鼠的動作
+		void OnMouseMove(UINT nFlags, CPoint point);
+		bool isSelect(UINT nFlags, CPoint point, CMovingBitmap &item);
 	protected:
 		void OnShow();									// 顯示這個狀態的遊戲畫面
 	private:
@@ -118,6 +127,8 @@ namespace game_framework {
 		void show_baclground_selected();
 		void show_text();
 
+		void set_over_data();
+
 	protected:
 		void OnMove();									// 移動遊戲元素
 		void OnShow();		// 顯示這個狀態的遊戲畫面
@@ -138,6 +149,7 @@ namespace game_framework {
 		vector<CMovingBitmap> lightning;
 
 		CMovingBitmap timer_express;
+		CMovingBitmap dead_logo;
 		clock_t a, b;
 		int boss_level = 0;
 		int level = 0;
@@ -146,6 +158,7 @@ namespace game_framework {
 
 
 		int weapon_list[3] = { 0,0,0 };//s
+		string weapon_name[3] = { "bricks","dart","lightning" };//s
 
 
 

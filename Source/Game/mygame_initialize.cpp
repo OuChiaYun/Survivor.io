@@ -57,7 +57,7 @@ void CGameStateInit::OnInit()
 	play_bg.LoadBitmapByString({ "Resources/UI/play_bg.bmp" }, RGB(255, 255, 255));
 	play_bg.SetTopLeft(350, 780);
 
-	play.LoadBitmapByString({ "Resources/UI/play.bmp" }, RGB(255, 255, 255));
+	play.LoadBitmapByString({ "Resources/UI/play.bmp","Resources/UI/play_s.bmp" }, RGB(255, 255, 255));
 	play.SetTopLeft(375, 790);
 	//
 	// 當圖很多時，OnInit載入所有的圖要花很多時間。為避免玩遊戲的人
@@ -81,6 +81,23 @@ void CGameStateInit::OnKeyUp(UINT nChar, UINT nRepCnt, UINT nFlags)
 {
 
 }
+
+void CGameStateInit::OnMouseMove(UINT nFlags, CPoint point)
+{
+	
+	if (play.GetFrameSizeOfBitmap() == 2 ) {
+
+		if (isSelect(TRUE, point, play)) {
+			play.SetFrameIndexOfBitmap(1);
+		}
+		else {
+			play.SetFrameIndexOfBitmap(0);
+		}
+
+	}
+
+}
+
 
 void CGameStateInit::OnLButtonDown(UINT nFlags, CPoint point)
 {
@@ -133,4 +150,18 @@ void CGameStateInit::OnShow()
 	play_bg.ShowBitmap();
 	play.ShowBitmap();
 	
+}
+
+bool CGameStateInit::isSelect(UINT nFlags, CPoint point, CMovingBitmap &item) {
+	if (nFlags == TRUE) {
+		if (item.GetLeft() <= point.x && point.x <= (item.GetLeft() + item.GetWidth())
+			&& item.GetTop() <= point.y && point.y <= (item.GetTop() + item.GetHeight())) {
+
+			return true;
+		}
+		else {
+			return false;
+		}
+	}
+	return false;
 }

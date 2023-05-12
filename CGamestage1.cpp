@@ -44,28 +44,20 @@ void CGamestage1::OnInit() {
 		monster[i].set_end = 30;
 
 	}
-	/*
-	big_monster.push_back(CMovingBitmap());
-	big_monster[0].LoadBitmapByString({"Resources/monster/big_monster.bmp" },RGB(255,255,255) );
-	big_monster[0].SetTopLeft(100, 100);
-	*/
 
 	for (int i = 0; i < 6; i++) {
 		random_born_big_monster(big_monster_vanish,{"Resources/monster/big_m0.bmp","Resources/monster/big_m1.bmp" ,"Resources/monster/big_m2.bmp" ,"Resources/monster/big_m3.bmp",
 											"Resources/monster/big_m4.bmp","Resources/monster/big_m5.bmp" ,"Resources/monster/big_m6.bmp" ,"Resources/monster/big_m7.bmp" },
-		big_monster_vanish, { "Resources/monster/big_e0.bmp","Resources/monster/big_e1.bmp" ,"Resources/monster/big_e2.bmp" ,"Resources/monster/big_e3.bmp",
-							  "Resources/monster/big_e4.bmp","Resources/monster/big_e5.bmp" ,"Resources/monster/big_e6.bmp" ,"Resources/monster/big_e7.bmp",
+		big_monster_vanish, { "Resources/monster/big_e0.bmp","Resources/monster/big_e1.bmp","Resources/monster/big_e2.bmp" ,"Resources/monster/big_e3.bmp",
+							  "Resources/monster/big_e4.bmp","Resources/monster/big_e5.bmp","Resources/monster/big_e6.bmp" ,"Resources/monster/big_e7.bmp",
 							  "Resources/monster/big_e8.bmp","Resources/monster/big_e9.bmp","Resources/monster/m17.bmp" }, { 255,255,255 }, { 255, 255, 255 });  //255
-		//big_monster_vanish[i].SetAnimation(125, false);
+
 		big_monster_vanish[i].SetTopLeft(2000,2000);
 		big_monster_vanish[i].SetFrameIndexOfBitmap(18);
 		big_monster_vanish[i].set_hp(40);
 		big_monster_vanish[i].set_end = 8;
 	}
 	
-	
-
-
 	
 	blood.LoadBitmapByString({ "Resources/ignore.bmp", "Resources/blood/bloodfx001_01.bmp",
 							"Resources/blood/bloodfx001_02.bmp", "Resources/blood/bloodfx001_03.bmp",
@@ -76,8 +68,6 @@ void CGamestage1::OnInit() {
 	magnet.push_back(CMovingBitmap());
 	magnet[0].LoadBitmapByString({ "Resources/props/magnet.bmp" , "Resources/ignore.bmp" }, RGB(255, 255, 255));
 	magnet[0].SetTopLeft(character.GetLeft() - 300, character.GetTop() - 300);
-
-
 
 }
 
@@ -91,6 +81,7 @@ void CGamestage1::OnLButtonUp(UINT nFlags, CPoint point) {};
 
 void CGamestage1::OnMouseMove(UINT nFlags, CPoint point) {
 	get_data();
+
 	if (nFlags == FALSE) {
 		opera.SetTopLeft(437, 682);
 		opera.set_center(491, 736);
@@ -184,8 +175,11 @@ void CGamestage1::OnMove() {
 		int j = bricks[i].ram_n;
 		bricks_move(bricks[i], character.GetLeft() + h[j], character.GetTop() + k[j], c[j], x_move[j]);
 		bricks_erase(bricks[i]);
+
+		int k = monster.size();
 		character.dart_hit_monster(bricks[i], monster, monster_vanish);
 		character.dart_hit_monster(bricks[i], big_monster, big_monster_vanish);
+		dead_monster += k - monster.size();
 	}
 
 
@@ -456,8 +450,10 @@ void CGamestage1::dart_all(int setR) {
 		if (dart[i].get_timer() > 360) {
 			dart[i].set_timer(0);
 		}
+		int k = monster.size();
 		character.dart_hit_monster(dart[i], monster, monster_vanish);
 		character.dart_hit_monster(dart[i], big_monster, big_monster_vanish);
+		dead_monster += k - monster.size();
 	}
 }
 
@@ -697,8 +693,10 @@ void CGamestage1::big_monster_move(CMovingBitmap &monster) {
 void CGamestage1::bullet_move(vector<CMovingBitmap> &item) {
 	for (int i = 0; i < (int)item.size(); i++) {
 		item[i].SetTopLeft(character.GetLeft() + 10, item[i].GetTop() - 10);
+		int k = monster.size();
 		character.dart_hit_monster(item[i], monster, monster_vanish);
 		character.dart_hit_monster(item[i], big_monster, big_monster_vanish);
+		dead_monster += k - monster.size();
 	}
 }
 
@@ -798,8 +796,10 @@ void CGamestage1::lightning_move(vector<CMovingBitmap> &item) {
 		}
 
 		lightning[i].SetTopLeft(lightning[i].GetLeft() + lightning[i].ax, lightning[i].GetTop() + lightning[i].ay);
+		int k = monster.size();
 		character.dart_hit_monster(item[i], monster, monster_vanish);
 		character.dart_hit_monster(item[i], big_monster, big_monster_vanish);
+		dead_monster += k - monster.size();
 	}
 
 	int axay[5][4] = { {-5,2},{5,2},{-5,-2},{5,-2} };
@@ -900,7 +900,9 @@ void CGamestage1::magnet_animation() {
 		}
 	}
 }
-
+int CGamestage1::get_dead_monster() {
+	return dead_monster;
+}
 
 /////////////////////////////update data/////////////////
 

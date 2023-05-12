@@ -47,7 +47,7 @@ void CGameStateOver::OnInit()
 	Sleep(1000);
 
 	victory.LoadBitmapByString({ "Resources/UI/victory.bmp" }, RGB(255, 255, 255));
-	victory.SetTopLeft(100, 300);
+	victory.SetTopLeft(110, 290);
 	die.LoadBitmapByString({ "Resources/UI/died.bmp" }, RGB(255, 255, 255));
 	die.SetTopLeft(100, 300);
 }
@@ -60,4 +60,27 @@ void CGameStateOver::OnShow()
 	if (get_victory_value() == 0) {
 		die.ShowBitmap();
 	}
+
+	CDC *pdc = CDDraw::GetBackCDC();
+
+	CTextDraw::ChangeFontLog(pdc, 70, "Modern No. 20", RGB(158, 45, 118), 60);
+	CTextDraw::Print(pdc, 350, 490, "TIME");
+
+	CTextDraw::ChangeFontLog(pdc, 40, "Modern No. 20", RGB(255, 255, 255), 60);
+	CTextDraw::Print(pdc, 385, 590,"[ "+get_show_time()+" ]");
+
+	CTextDraw::ChangeFontLog(pdc, 32, "Modern No. 20", RGB(158, 45, 118), 60);
+	CTextDraw::Print(pdc, 310, 690, "KILL MONSTER ");
+
+	CTextDraw::ChangeFontLog(pdc, 40, "Modern No. 20", RGB(255, 255, 255), 60);
+	CTextDraw::Print(pdc, 310, 740,"[ "+ get_dead_number()+" ]");
+
+	CTextDraw::ChangeFontLog(pdc, 30, "Modern No. 20", RGB(158, 45, 118), 60);
+	CTextDraw::Print(pdc, 340, 850, "USE WEAPON ");
+
+	CTextDraw::ChangeFontLog(pdc, 35, "Modern No. 20", RGB(255, 255, 255), 60);
+	CTextDraw::Print(pdc, 310, 900,"[ "+ get_weapon_name()+" ]");
+
+
+	CDDraw::ReleaseBackCDC();
 }

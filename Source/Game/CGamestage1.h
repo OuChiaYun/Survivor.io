@@ -54,6 +54,7 @@ namespace game_framework {
 		void bricks_born(vector<CMovingBitmap> &item, vector<string> str, vector<int>rgb);
 		void monster_reset(CMovingBitmap &item);
 		void magnet_animation();
+		int get_dead_monster();
 
 		void show_text();
 		void show_img();
@@ -113,6 +114,8 @@ namespace game_framework {
 		vector<CMovingBitmap> big_monster;
 		vector<CMovingBitmap> big_monster_vanish;
 
+		vector<CMovingBitmap> heart;
+
 		vector <CMovingBitmap> energy;
 		int axay[4][2] = { {-2,2},{2,2},{-2,-2},{2,-2} };
 		int item_stdax;
@@ -130,6 +133,8 @@ namespace game_framework {
 		int k[4] = { -70, -100, -70, -100 };
 		int c[4] = { 40, 60, 40, 60 };
 		int x_move[4] = { -5, -5, 5, 5 };
+
+		int dead_monster = 0;
 
 
 	};

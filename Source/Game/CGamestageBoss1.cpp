@@ -296,7 +296,7 @@ void CGamestageBoss1::boss1_background() {
 void CGamestageBoss1::boss1_character_attack() {
 	for (int i = 0; i<int(bullet.size()); i++) {
 		if (boss1.IsOverlap(bullet[i], boss1)) {
-			boss1.add_sub_hp(-20);
+			boss1.add_sub_hp(-10);
 			CAudio::Instance()->Play(AUDIO_Attack, false);
 			blood_boss1.SetAnimation(50, false);
 			blood_boss1.ShowBitmap();
@@ -308,7 +308,7 @@ void CGamestageBoss1::boss1_character_attack() {
 
 	for (int i = 0; i<int(dart.size()); i++) {
 		if (boss1.IsOverlap(dart[i], boss1)) {
-			boss1.add_sub_hp(-20);
+			boss1.add_sub_hp(-10);
 			blood_boss1.SetAnimation(50, false);
 			blood_boss1.ShowBitmap();
 			CAudio::Instance()->Play(AUDIO_Attack, false);
@@ -384,7 +384,7 @@ void CGamestageBoss1::lightning_move(vector<CMovingBitmap> &item) {
 
 		lightning[i].SetTopLeft(lightning[i].GetLeft() + lightning[i].ax, lightning[i].GetTop() + lightning[i].ay);
 		if (character.IsOverlap(lightning[i], boss1)) {
-			boss1.add_sub_hp(-15);
+			boss1.add_sub_hp(-5);
 			CAudio::Instance()->Play(AUDIO_Attack, false);
 			blood_boss1.SetAnimation(50, false);
 			blood_boss1.ShowBitmap();
@@ -415,7 +415,7 @@ void CGamestageBoss1::bricks_move(vector<CMovingBitmap> &item, int h, int k, int
 	int y = (x - h) * (x - h) / (4 * c) + k;
 	item[i].SetTopLeft(x, y);
 	if (character.IsOverlap(item[i], boss1)) {
-		boss1.add_sub_hp(-15);
+		boss1.add_sub_hp(-20);
 		CAudio::Instance()->Play(AUDIO_Attack, false);
 		blood_boss1.SetAnimation(50, false);
 		blood_boss1.ShowBitmap();
