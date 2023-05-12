@@ -142,8 +142,10 @@ namespace game_framework {
 		int boss_level = 0;
 		int level = 0;
 
+		CMovingBitmap weapon_logo[3] ;
 
-		int weapon_list[3] = { 1,0,0 };//s
+
+		int weapon_list[3] = { 0,0,0 };//s
 
 
 

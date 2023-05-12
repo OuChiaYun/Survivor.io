@@ -108,7 +108,7 @@ void CGamestageSelect::OnMove() {
 };
 
 void CGamestageSelect::OnShow() {
-	select_bar.ShowBitmap();
+	//select_bar.ShowBitmap();
 	
 	for (int i = 0; i < 3; i++) {
 		select_pic_bg[i].ShowBitmap();
@@ -124,23 +124,23 @@ void CGamestageSelect::show_text() {
 	CDC *pdc = CDDraw::GetBackCDC();
 
 	CTextDraw::ChangeFontLog(pdc, 25, "Modern No. 20", RGB(255, 255, 255), 80);
-	CTextDraw::Print(pdc, select_pic_bg[0].GetLeft() + 75, select_pic[0].GetTop() + 85, "Brick");
+	CTextDraw::Print(pdc, select_pic_bg[0].GetLeft() + 75+10, select_pic[0].GetTop() + 85, "Brick");
 	CTextDraw::ChangeFontLog(pdc, 12, "Modern No. 20", RGB(255, 255, 255), 80);
-	CTextDraw::Print(pdc, select_pic_bg[0].GetLeft() + 65, select_pic[0].GetTop() + 140, "Throws 1 brick");
+	CTextDraw::Print(pdc, select_pic_bg[0].GetLeft() + 65+10, select_pic[0].GetTop() + 140, "Throws 1 brick");
 
 	CTextDraw::ChangeFontLog(pdc, 25, "Modern No. 20", RGB(255, 255, 255), 80);
-	CTextDraw::Print(pdc, select_pic_bg[1].GetLeft() + 45, select_pic[1].GetTop() + 85, "Guardian");
+	CTextDraw::Print(pdc, select_pic_bg[1].GetLeft() + 45+10, select_pic[1].GetTop() + 85, "Guardian");
 	CTextDraw::ChangeFontLog(pdc, 12, "Modern No. 20", RGB(255, 255, 255), 80);
-	CTextDraw::Print(pdc, select_pic_bg[1].GetLeft() + 32, select_pic[1].GetTop() + 140, "Summoons 1 tops that");
+	CTextDraw::Print(pdc, select_pic_bg[1].GetLeft() + 32+10, select_pic[1].GetTop() + 140, "Summoons 1 tops that");
 	CTextDraw::ChangeFontLog(pdc, 12, "Modern No. 20", RGB(255, 255, 255), 80);
-	CTextDraw::Print(pdc, select_pic_bg[1].GetLeft() + 32, select_pic[1].GetTop() + 165, "circle you Stops bullets");
+	CTextDraw::Print(pdc, select_pic_bg[1].GetLeft() + 32+10, select_pic[1].GetTop() + 165, "circle you Stops bullets");
 
 	CTextDraw::ChangeFontLog(pdc, 25, "Modern No. 20", RGB(255, 255, 255), 80);
-	CTextDraw::Print(pdc, select_pic_bg[2].GetLeft() + 35, select_pic[2].GetTop() + 85, "Lightning");
+	CTextDraw::Print(pdc, select_pic_bg[2].GetLeft() + 35+10, select_pic[2].GetTop() + 85, "Lightning");
 	CTextDraw::ChangeFontLog(pdc, 12, "Modern No. 20", RGB(255, 255, 255), 80);
-	CTextDraw::Print(pdc, select_pic_bg[2].GetLeft() + 33, select_pic[2].GetTop() + 140, "Lightning shower on");
+	CTextDraw::Print(pdc, select_pic_bg[2].GetLeft() + 33+12, select_pic[2].GetTop() + 140, "Lightning shower on");
 	CTextDraw::ChangeFontLog(pdc, 12, "Modern No. 20", RGB(255, 255, 255), 80);
-	CTextDraw::Print(pdc, select_pic_bg[2].GetLeft() + 40, select_pic[2].GetTop() + 165, "random target area");
+	CTextDraw::Print(pdc, select_pic_bg[2].GetLeft() + 40+12, select_pic[2].GetTop() + 165, "random target area");
 
 	CDDraw::ReleaseBackCDC();
 }

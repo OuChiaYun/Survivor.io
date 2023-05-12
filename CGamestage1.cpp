@@ -28,7 +28,7 @@ void CGamestage1::OnInit() {
 	}
 
 
-	for (int i = 0; i < 45; i++) {
+	for (int i = 0; i < 35; i++) {
 		int arr[] = { 1,2,3 };
 		random_born_monster(monster, {
 			"Resources/monster/m1.bmp","Resources/monster/m2.bmp","Resources/monster/m3.bmp","Resources/monster/m4.bmp","Resources/monster/m5.bmp",
@@ -59,7 +59,7 @@ void CGamestage1::OnInit() {
 		//big_monster_vanish[i].SetAnimation(125, false);
 		big_monster_vanish[i].SetTopLeft(2000,2000);
 		big_monster_vanish[i].SetFrameIndexOfBitmap(18);
-		big_monster_vanish[i].set_hp(180);
+		big_monster_vanish[i].set_hp(40);
 		big_monster_vanish[i].set_end = 8;
 	}
 	
@@ -76,6 +76,7 @@ void CGamestage1::OnInit() {
 	magnet.push_back(CMovingBitmap());
 	magnet[0].LoadBitmapByString({ "Resources/props/magnet.bmp" , "Resources/ignore.bmp" }, RGB(255, 255, 255));
 	magnet[0].SetTopLeft(character.GetLeft() - 300, character.GetTop() - 300);
+
 
 
 }
@@ -160,6 +161,7 @@ void CGamestage1::OnMove() {
 		magnet_trigger = 1;
 		magnet[0].SetFrameIndexOfBitmap(1);
 	}
+
 	if (magnet_trigger == 1 && magnet_once == 0) {
 		magnet_timer += 1;
 
@@ -265,6 +267,7 @@ void CGamestage1::show_img() {
 	}
 
 	magnet[0].ShowBitmap();
+	
 	blood.ShowBitmap();
 	blood_bar.ShowBitmap();
 	opera.ShowBitmap();
@@ -571,7 +574,7 @@ void CGamestage1::monster_all() {
 		big_monster.push_back(big_monster_vanish[0]);
 		big_monster[big_monster.size() - 1].SetFrameIndexOfBitmap(0);
 		big_monster[big_monster.size() - 1].SetAnimation(95, false);
-		big_monster[big_monster.size() - 1].set_hp(180);
+		big_monster[big_monster.size() - 1].set_hp(40);
 		big_monster[big_monster.size() - 1].set_limit_start_end(0, 3);
 		int min = -1450;
 		int max = 1450;
@@ -694,10 +697,9 @@ void CGamestage1::big_monster_move(CMovingBitmap &monster) {
 void CGamestage1::bullet_move(vector<CMovingBitmap> &item) {
 	for (int i = 0; i < (int)item.size(); i++) {
 		item[i].SetTopLeft(character.GetLeft() + 10, item[i].GetTop() - 10);
-	
+		character.dart_hit_monster(item[i], monster, monster_vanish);
+		character.dart_hit_monster(item[i], big_monster, big_monster_vanish);
 	}
-	character.dart_hit_monster(item, monster, monster_vanish);
-	character.dart_hit_monster(item, big_monster, big_monster_vanish);
 }
 
 
@@ -764,7 +766,7 @@ void CGamestage1::big_monster_born() {
 							  "Resources/monster/big_e4.bmp","Resources/monster/big_e5.bmp" ,"Resources/monster/big_e6.bmp" ,"Resources/monster/big_e7.bmp",
 							  "Resources/monster/big_e8.bmp","Resources/monster/big_e9.bmp","Resources/monster/m17.bmp" }, { 255,255,255 }, { 255, 255, 255 });  //255
 	big_monster[i].SetAnimation(125, false);
-	big_monster[i].set_hp(180);
+	big_monster[i].set_hp(40);
 }
 
 void CGamestage1::show_baclground_selected(int s) {
@@ -797,7 +799,7 @@ void CGamestage1::lightning_move(vector<CMovingBitmap> &item) {
 
 		lightning[i].SetTopLeft(lightning[i].GetLeft() + lightning[i].ax, lightning[i].GetTop() + lightning[i].ay);
 		character.dart_hit_monster(item[i], monster, monster_vanish);
-		character.dart_hit_monster(item, big_monster, big_monster_vanish);
+		character.dart_hit_monster(item[i], big_monster, big_monster_vanish);
 	}
 
 	int axay[5][4] = { {-5,2},{5,2},{-5,-2},{5,-2} };

@@ -124,11 +124,12 @@ void CGamestageBoss2::OnRButtonDown(UINT nFlags, CPoint point) {};
 void CGamestageBoss2::OnRButtonUp(UINT nFlags, CPoint point) {};
 
 void CGamestageBoss2::OnMove() {
+	get_data();
 	timmer++;
 
 
-	if (timmer > 100) {
-		get_data();
+	if (timmer > 150) {
+		
 
 		boss2_move();
 
@@ -137,7 +138,7 @@ void CGamestageBoss2::OnMove() {
 		}
 
 		if (timmer > 10000) {
-			timmer = 0;
+			timmer = 151;
 		}
 	}
 	else {
@@ -283,10 +284,11 @@ void CGamestageBoss2::background_move() {
 void CGamestageBoss2::bullet_move(vector<CMovingBitmap> &item) {
 	for (int i = 0; i < (int)item.size(); i++) {
 		item[i].SetTopLeft(item[i].GetLeft(), item[i].GetTop() - 20);
-		if (character.IsOverlap(item[i], boss2)) {
+		if (character.IsOverlap(item[i], boss2) && timmer>150) {
 			boss2.add_sub_hp(-15);
 			blood_boss2.SetAnimation(50, false);
 			blood_boss2.ShowBitmap();
+			CAudio::Instance()->Play(AUDIO_Attack, false);
 		}
 		else {
 			blood_boss2.SetAnimation(50, true);
@@ -318,9 +320,9 @@ void CGamestageBoss2::dart_all(int setR) {
 			dart[i].set_timer(0);
 			blood_boss2.SetAnimation(50, true);
 		}
-		if (character.IsOverlap(dart[i], boss2)) {
+		if (character.IsOverlap(dart[i], boss2)&&timmer > 150) {
 			boss2.add_sub_hp(-15);
-			
+			CAudio::Instance()->Play(AUDIO_Attack, false);
 			blood_boss2.SetAnimation(50, false);
 			blood_boss2.ShowBitmap();
 		}
@@ -357,10 +359,11 @@ void CGamestageBoss2::lightning_move(vector<CMovingBitmap> &item) {
 		}
 
 		lightning[i].SetTopLeft(lightning[i].GetLeft() + lightning[i].ax, lightning[i].GetTop() + lightning[i].ay);
-		if (character.IsOverlap(lightning[i], boss2)) {
+		if (character.IsOverlap(lightning[i], boss2)&& timmer > 150) {
 			boss2.add_sub_hp(-15);
 			blood_boss2.SetAnimation(50, false);
 			blood_boss2.ShowBitmap();
+			CAudio::Instance()->Play(AUDIO_Attack, false);
 		}
 		else {
 			blood_boss2.SetAnimation(50, true);
@@ -386,10 +389,11 @@ void CGamestageBoss2::bricks_move(vector<CMovingBitmap> &item, int h, int k, int
 	int x = item[i].GetLeft() + x_move;
 	int y = (x - h) * (x - h) / (4 * c) + k;
 	item[i].SetTopLeft(x, y);
-	if (character.IsOverlap(item[i], boss2)) {
+	if (character.IsOverlap(item[i], boss2)&& timmer > 150) {
 		boss2.add_sub_hp(-50);
 		blood_boss2.SetAnimation(50, false);
 		blood_boss2.ShowBitmap();
+		CAudio::Instance()->Play(AUDIO_Attack, false);
 	}
 	else {
 		blood_boss2.SetAnimation(50, true);
@@ -416,7 +420,7 @@ void CGamestageBoss2::bricks_erase(vector<CMovingBitmap> &item) {
 
 void CGamestageBoss2::boss2_move() {
 	boss2.add_timer(1);
-	if (boss2.get_timer() < 200) {
+	if (boss2.get_timer() < 300) {
 		boss2.SetTopLeft(boss2.GetLeft() + boss2.ax, boss2.GetTop() + boss2.ay);
 	}
 	else {
@@ -469,6 +473,7 @@ void CGamestageBoss2::boss2_bullet_move() {
 			character.add_sub_hp(-15);
 			blood.SetAnimation(50, false);
 			blood.ShowBitmap();
+			CAudio::Instance()->Play(AUDIO_Attack, false);
 		}
 		else {
 			blood.SetAnimation(50, true);

@@ -134,7 +134,12 @@ void CGameStateRun::OnInit()  								// 遊戲的初值及圖形設定
 	bullet[0].LoadBitmapByString({ "Resources/weapon/bullet.bmp" }, RGB(255, 255, 255));
 	bullet[0].SetTopLeft(character.GetLeft() + 10, character.GetTop());
 	
-
+	weapon_logo[0].LoadBitmapByString({ "Resources/weapon/cleaver_icon.bmp" }, RGB(255, 255, 255));
+	weapon_logo[0].SetTopLeft(60, 180);
+	weapon_logo[1].LoadBitmapByString({ "Resources/weapon/dart_icon.bmp" }, RGB(255, 255, 255));
+	weapon_logo[1].SetTopLeft(100, 180);
+	weapon_logo[2].LoadBitmapByString({ "Resources/weapon/lightning_icon.bmp" }, RGB(255, 255, 255));
+	weapon_logo[2].SetTopLeft(147, 182);
 	/*
 	CMovingBitmap background;
 	CMovingBitmap character;
@@ -180,24 +185,27 @@ void CGameStateRun::OnLButtonDown(UINT nFlags, CPoint point)  // 處理滑鼠的
 		select_stage.OnLButtonDown(nFlags, point);
 		if (select_stage.show == 2) {
 			t1.select = select_stage.show;
-			weapon_list[select_stage.weapon_selected] += 1;
+			
 
 			if (select_stage.weapon_selected == BRICKS) {
 				//t1.get_data();
 				t1.bricks_born(bricks, { "Resources/weapon/cleaver.bmp" }, { 255, 255, 255 });
 				t1.get_data();
+				weapon_list[select_stage.weapon_selected] += 1;
 			}
 
 			if (select_stage.weapon_selected == DART) {
 				
 				t1.mygame_dart_born();
 				t1.share_data();
+				weapon_list[select_stage.weapon_selected] += 1;
 			}
 			
 			if (select_stage.weapon_selected == LIGHTNING) {
 
 				t1.lightning_born();
 				t1.share_data();
+				weapon_list[select_stage.weapon_selected] += 1;
 			}
 			
 		}
@@ -244,10 +252,10 @@ void CGameStateRun::OnShow()
 	
 
 
-	if (boss_level == 1) {
+	if (boss_level == 1 && b1.run == 1) {
 		b1.OnShow();
 	}
-	else if (boss_level == 2) {
+	else if (boss_level == 2 &&b2.run == 1) {
 		b2.OnShow();
 	}
 
@@ -261,6 +269,11 @@ void CGameStateRun::OnShow()
 	}
 
 
+	for (int i = 0; i < 3; i++) {
+		if(weapon_list[i] != 0){
+		weapon_logo[i].ShowBitmap();
+		}
+	}
 
 	timer_express.ShowBitmap();
 	show_text();
@@ -294,8 +307,8 @@ void CMovingBitmap::dart_hit_monster(vector<CMovingBitmap> &dart, vector<CMoving
 			if ((i < (int)monster.size()) && IsOverlap(dart[j], monster[i])) {
 
 				monster[i].add_sub_hp(-1);
+				CAudio::Instance()->Play(AUDIO_Attack, false);
 				if (monster[i].get_hp() <= 0) {
-					//CAudio::Instance()->Play(AUDIO_Attack, true);
 					monster_vanish.push_back(monster[i]);
 					monster_vanish[monster_vanish.size() - 1].SetAnimation(80, true);
 					monster_vanish[monster_vanish.size() - 1].ShowBitmap();
@@ -318,9 +331,8 @@ void CMovingBitmap::dart_hit_monster(CMovingBitmap &dart, vector<CMovingBitmap> 
 			if ((i < (int)monster.size()) && IsOverlap(dart, monster[i])) {
 
 				monster[i].add_sub_hp(-1);
+				CAudio::Instance()->Play(AUDIO_Attack, false);
 				if (monster[i].get_hp() <= 0) {
-
-					
 					monster_vanish.push_back(monster[i]);
 					monster_vanish[monster_vanish.size() - 1].SetAnimation(80, true);
 					monster_vanish[monster_vanish.size() - 1].ShowBitmap();

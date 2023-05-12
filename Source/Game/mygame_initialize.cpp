@@ -23,7 +23,7 @@ void CGameStateInit::OnInit()
 	CAudio::Instance()->Load(AUDIO_GameStage, "Resources/Audio/Goblins_Dance_(Battle).wav");
 	CAudio::Instance()->Load(AUDIO_GameBoss, "Resources/Audio/battle.wav");
 	CAudio::Instance()->Load(AUDIO_GameOver, "Resources/Audio/Goblins_Dance_(Battle).wav");
-	//CAudio::Instance()->Load(AUDIO_Attack, "Resources/Audio/bubbles.wav");
+	CAudio::Instance()->Load(AUDIO_Attack, "Resources/Audio/bubbles.wav");
 
 	CAudio::Instance()->Play(AUDIO_MenuSelect, true);
 
