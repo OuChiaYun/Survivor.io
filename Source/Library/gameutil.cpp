@@ -459,8 +459,20 @@ namespace game_framework {
 		hp = blood;
 	}
 
+	void CMovingBitmap::set_hp_max(int blood) {
+		hp_max = blood;
+	}
+
+	void CMovingBitmap::set_hurted(int b) {
+		hurted = b;
+	};
+
 	int CMovingBitmap::get_hp(){
 		return hp;
+	};
+
+	int CMovingBitmap::get_hp_max() {
+		return hp_max;
 	};
 
 	void CMovingBitmap::add_sub_hp(int blood) {
@@ -489,6 +501,15 @@ namespace game_framework {
 	};
 	int CMovingBitmap::get_hit_y(int index) {
 		return boss1_hit_y[index];
+	};
+
+	int CMovingBitmap::ishurted() {
+		if (hurted == 0) {
+			return 0;
+		}
+		else {
+			return 1;
+		}
 	};
 
 	/////////////////////////////

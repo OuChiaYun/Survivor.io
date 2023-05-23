@@ -38,7 +38,6 @@ void CGameStateInit::OnInit()
 
 	check_blank1.LoadBitmapByString({ "Resources/UI/check_blank.bmp" }, RGB(255, 255, 255));
 	check_blank1.SetTopLeft(100+20, 400);
-
 	check_blank2.LoadBitmapByString({ "Resources/UI/check_blank.bmp" }, RGB(255, 255, 255));
 	check_blank2.SetTopLeft(select1.GetLeft() + select1.GetWidth() + 50 + 20, 400);
 
@@ -55,10 +54,10 @@ void CGameStateInit::OnInit()
 	select_scene2.SetTopLeft(select_scene1.GetLeft() + select_scene1.GetWidth() + 250+15, 450);
 
 	play_bg.LoadBitmapByString({ "Resources/UI/play_bg.bmp" }, RGB(255, 255, 255));
-	play_bg.SetTopLeft(350, 780);
+	play_bg.SetTopLeft(1065 / 2 - play_bg.GetWidth() / 2, 780);
 
 	play.LoadBitmapByString({ "Resources/UI/play.bmp","Resources/UI/play_s.bmp" }, RGB(255, 255, 255));
-	play.SetTopLeft(375, 790);
+	play.SetTopLeft((play_bg.GetLeft() + play_bg.GetWidth()/2) - play.GetWidth()/2+5, 790);
 	//
 	// 當圖很多時，OnInit載入所有的圖要花很多時間。為避免玩遊戲的人
 	//     等的不耐煩，遊戲會出現「Loading ...」，顯示Loading的進度。
@@ -117,9 +116,11 @@ void CGameStateInit::OnLButtonDown(UINT nFlags, CPoint point)
 
 		if (play_bg.GetLeft() <= point.x && point.x <= play_bg.GetLeft() + play_bg.GetWidth()
 			&& play_bg.GetTop() <= point.y && point.y <= play_bg.GetTop() + 130) {
-			CAudio::Instance()->Stop(AUDIO_MenuSelect);
-			CAudio::Instance()->Play(AUDIO_GameStage, true);
-			GotoGameState(GAME_STATE_RUN);
+			if (get_init_background_value() == 0 || get_init_background_value() ==1) {
+				CAudio::Instance()->Stop(AUDIO_MenuSelect);
+				CAudio::Instance()->Play(AUDIO_GameStage, true);
+				GotoGameState(GAME_STATE_RUN);
+			}
 		}
 	}
 }
@@ -128,8 +129,8 @@ void CGameStateInit::OnShow()
 {
 	CDC *pdc = CDDraw::GetBackCDC();
 
-	CTextDraw::ChangeFontLog(pdc, 105, "Modern No. 20", RGB(255, 255, 255), 1000);
-	CTextDraw::Print(pdc, 165, 130, "Survivor.io");
+	CTextDraw::ChangeFontLog(pdc, 105, "Vivaldi", RGB(255, 255, 255), 1000);
+	CTextDraw::Print(pdc, 165, 130, "Survivor.io");	//Magneto Modern No. 20
 
 	CTextDraw::ChangeFontLog(pdc, 25, "Ink Free", RGB(255, 255, 255), 400);
 	CTextDraw::Print(pdc, 320, 300, "Made By - Turtle & Sunny");
@@ -138,7 +139,7 @@ void CGameStateInit::OnShow()
 	CTextDraw::Print(pdc, 185, 730, "Please select the scene which do you like");
 
 	CDDraw::ReleaseBackCDC();
-
+	
 	select1.ShowBitmap();
 	select2.ShowBitmap();
 	check_blank1.ShowBitmap();

@@ -108,18 +108,23 @@ namespace game_framework {
 		void set_center(int x, int y);
 		void set_timer(int t);
 		void set_hp(int blood);
+		void set_hp_max(int blood);
 		void set_energy(int energy_v);
 		void set_limit_start_end(int start,int end);
 		void set_hit_x(int x, int index);
 		void set_hit_y(int y, int index);
+		void set_hurted(int b);
 
 		int get_center_x();
 		int get_center_y();
 		int get_timer();
 		int get_hp();
+		int get_hp_max();
 		int get_energy();
 		int get_hit_x(int index);
 		int get_hit_y(int index);
+
+		int ishurted();
 
 		void add_timer(int s);
 		void add_sub_hp(int blood);
@@ -135,6 +140,7 @@ namespace game_framework {
 		int center_y = 0;
 		int timer = 0;
 		int hp = 0;
+		int hp_max = 0;
 		int limit_frame_start = 0;
 		int limit_frame_end = 0;
 		int ax = 0;
@@ -146,6 +152,7 @@ namespace game_framework {
 		vector<int> boss1_hit_y = { 0, 0, 0 };
 		int ram_n = 0;
 		int set_end = 0;
+		int hurted = 0;
 
 		//////////////
 		/* Getter */

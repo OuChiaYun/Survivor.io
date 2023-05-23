@@ -24,7 +24,7 @@ namespace game_framework {
 		void show_baclground_selected(int s);
 
 		void background_move();
-		void blood_bar_progress(CMovingBitmap &blood_bar, CMovingBitmap &item_blood);
+		void blood_bar_progress(CMovingBitmap &blood_bar, CMovingBitmap &item_blood);//have some bug
 		void random_born_item(vector<CMovingBitmap>&item, vector<string> str, vector<int>rgb);
 		void item_move(CMovingBitmap &item);
 		void dart_all(int);

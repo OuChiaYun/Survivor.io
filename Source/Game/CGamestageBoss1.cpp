@@ -27,6 +27,7 @@ void CGamestageBoss1::OnInit() {
 
 	boss1.SetAnimation(150, false);
 	boss1.set_hp(5000);
+	boss1.set_hp_max(5000);
 
 	boss1_range.LoadBitmapByString({ "Resources/boss1/boss1_range.bmp" }, RGB(255, 255, 255));
 	boss1_range.SetTopLeft(200,65 + 125 + 10);
@@ -204,13 +205,13 @@ void CGamestageBoss1::OnShow() {
 void CGamestageBoss1::show_text() {
 
 	CDC *pdc = CDDraw::GetBackCDC();
-
+	/*
 	CTextDraw::ChangeFontLog(pdc, 25, "Modern No. 20", RGB(255, 255, 255), 80);
 	CTextDraw::Print(pdc, 305, 10, to_string(character.get_hp()));
-
+	
 	CTextDraw::ChangeFontLog(pdc, 25, "Modern No. 20", RGB(255, 255, 255), 80);
 	CTextDraw::Print(pdc, 305, energy_bar.GetTop() + 20 + 25, to_string(energy_bar.get_energy()) + "/ 25");
-
+	*/
 	CTextDraw::ChangeFontLog(pdc, 15, "Modern No. 20", RGB(255, 255, 255), 80);
 	CTextDraw::Print(pdc, blood_bar_boss1.GetLeft() + 30, blood_bar_boss1.GetTop() + 10 + 20, to_string(boss1.get_hp()));
 
@@ -360,8 +361,11 @@ void CGamestageBoss1::dart_move(CMovingBitmap &item, int i, int setR) {
 }
 
 void CGamestageBoss1::blood_bar_progress(CMovingBitmap &blood_bar, CMovingBitmap &item_blood) {
-	if (blood_bar.GetFrameIndexOfBitmap() > 0 && item_blood.get_hp() < (1000 * blood_bar.GetFrameIndexOfBitmap())) {
-		blood_bar.SetFrameIndexOfBitmap(blood_bar.GetFrameIndexOfBitmap() - 1);
+	if (item_blood.get_hp() == item_blood.get_hp_max()) {
+		blood_bar.SetFrameIndexOfBitmap(blood_bar.GetFrameSizeOfBitmap() - 1);
+	}
+	else if (item_blood.get_hp() > 0) {
+		blood_bar.SetFrameIndexOfBitmap(((item_blood.get_hp()) / (item_blood.get_hp_max() / 5)));
 	}
 }
 

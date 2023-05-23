@@ -182,6 +182,7 @@ void CGamestage1::OnMove() {
 		int k = monster.size();
 		character.dart_hit_monster(bricks[i], monster, monster_vanish);
 		character.dart_hit_monster(bricks[i], big_monster, big_monster_vanish);
+
 		dead_monster += k - monster.size();
 	}
 
@@ -237,8 +238,18 @@ void CGamestage1::show_img() {
 		}
 		if (big_monster[i].IsOverlap(background, big_monster[i])) {
 			big_monster[i].ShowBitmap();
+			
+
+			/*
+			if (big_monster[i].ishurted() == 1) {
+				blood.SetAnimation(100, false);
+			}
+			else {
+				blood.SetAnimation(100, true);
+			}
+			*/
+			
 		}
-		//big_monster[i].ShowBitmap();
 		
 	}
 
@@ -273,16 +284,6 @@ void CGamestage1::show_img() {
 }
 
 void CGamestage1::show_text() {
-
-	CDC *pdc = CDDraw::GetBackCDC();
-
-	CTextDraw::ChangeFontLog(pdc, 25, "Modern No. 20", RGB(255, 255, 255), 80);
-	CTextDraw::Print(pdc, 305, 10, to_string(character.get_hp()));
-
-	CTextDraw::ChangeFontLog(pdc, 25, "Modern No. 20", RGB(255, 255, 255), 80);
-	CTextDraw::Print(pdc, 305, energy_bar.GetTop() + 20 + 25, to_string(energy_bar.get_energy()) + "/ 25");
-
-	CDDraw::ReleaseBackCDC();
 
 }
 
@@ -356,8 +357,12 @@ void CGamestage1::background_move() {
 }
 
 void CGamestage1::blood_bar_progress(CMovingBitmap &blood_bar, CMovingBitmap &item_blood) {
-	if (blood_bar.GetFrameIndexOfBitmap() > 0 && item_blood.get_hp() < (1000 * blood_bar.GetFrameIndexOfBitmap())) {
-		blood_bar.SetFrameIndexOfBitmap(blood_bar.GetFrameIndexOfBitmap() - 1);
+
+	if (item_blood.get_hp() == item_blood.get_hp_max()) {
+		blood_bar.SetFrameIndexOfBitmap(blood_bar.GetFrameSizeOfBitmap()-1);
+	}
+	else if (item_blood.get_hp() >0) {
+		blood_bar.SetFrameIndexOfBitmap(     (  (item_blood.get_hp())/(item_blood.get_hp_max()/5 )));
 	}
 }
 

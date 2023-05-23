@@ -171,6 +171,9 @@ namespace game_framework {
 	public:
 		CGameStateOver(CGame *g);
 		void OnBeginState();							// 設定每次重玩所需的變數
+		void OnMouseMove(UINT nFlags, CPoint point);
+		void OnLButtonDown(UINT nFlags, CPoint point);  // 處理滑鼠的動作
+		bool isSelect(UINT nFlags, CPoint point, CMovingBitmap &item);
 		void OnInit();
 	protected:
 		void OnMove();									// 移動遊戲元素
@@ -180,6 +183,7 @@ namespace game_framework {
 
 		CMovingBitmap victory;
 		CMovingBitmap die;
+		CMovingBitmap again;
 	};
 
 }

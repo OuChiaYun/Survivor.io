@@ -114,10 +114,11 @@ void CGameStateRun::OnInit()  								// 遊戲的初值及圖形設定
 	background.LoadBitmapByString({ "Resources/background/Purple Nebula/Purple_Nebula_03.bmp", "Resources/background/Blue Nebula/Blue_Nebula_02.bmp" });
 	background.SetTopLeft(-1500, -1500);
 
-	character.LoadBitmapByString({ "Resources/character/char_04.bmp", "Resources/character/char_04_right.bmp" }, RGB(200, 191, 231));
+	character.LoadBitmapByString({ "Resources/character/char_04_left_final.bmp", "Resources/character/char_04_right.bmp" }, RGB(200, 191, 231));
 	character.SetTopLeft(461, 252);
 	character.set_center(470, 270);
 	character.set_hp(5000);
+	character.set_hp_max(5000);
 
 	opera.LoadBitmapByString({ "Resources/operator.bmp" }, RGB(105, 106, 106));
 	opera.SetTopLeft(437, 682);
@@ -128,9 +129,11 @@ void CGameStateRun::OnInit()  								// 遊戲的初值及圖形設定
 							   "Resources/health_ui/health_ui_4.bmp" }, RGB(255, 255, 255));
 	blood_bar.SetFrameIndexOfBitmap(blood_bar.GetFrameSizeOfBitmap() - 1);
 
+	blood_bar.SetTopLeft(10, 15);
+
 	energy_bar.LoadBitmapByString({ "Resources/energy_bar/00.bmp" }, RGB(255, 255, 255));
-	energy_bar.LoadBitmapByString({ "Resources/energy_bar/1.bmp", "Resources/energy_bar/2.bmp", "Resources/energy_bar/3.bmp", "Resources/energy_bar/4.bmp", "Resources/energy_bar/5.bmp" }, RGB(200, 191, 231));
-	energy_bar.SetTopLeft(0, 65);
+	energy_bar.LoadBitmapByString({ "Resources/energy_bar/1.bmp", "Resources/energy_bar/2.bmp", "Resources/energy_bar/3.bmp", "Resources/energy_bar/4.bmp", "Resources/energy_bar/5.bmp" }, RGB(255, 255, 255));
+	energy_bar.SetTopLeft(18, 105);
 	energy_bar.set_energy(0);
 
 
@@ -255,11 +258,9 @@ void CGameStateRun::OnRButtonUp(UINT nFlags, CPoint point)	// 處理滑鼠的動
 
 void CGameStateRun::OnShow()
 {
-
+	
 	show_baclground_selected();
 	select_stage.show = t1.select;
-	
-
 
 	if (boss_level == 1 && b1.run == 1) {
 		b1.OnShow();
@@ -286,7 +287,7 @@ void CGameStateRun::OnShow()
 	dead_logo.ShowBitmap();
 	timer_express.ShowBitmap();
 	show_text();
-
+	
 }
 
 void CGameStateRun::show_text() {
@@ -300,6 +301,14 @@ void CGameStateRun::show_text() {
 
 	CTextDraw::ChangeFontLog(pdc, 40, "Modern No. 20", RGB(255, 255, 255), 60);
 	CTextDraw::Print(pdc, 120, 950,to_string(t1.get_dead_monster()));
+
+
+
+	CTextDraw::ChangeFontLog(pdc, 25, "Modern No. 20", RGB(255, 255, 255), 80);
+	CTextDraw::Print(pdc, 305, blood_bar.GetTop() + 2, to_string(character.get_hp()));
+
+	CTextDraw::ChangeFontLog(pdc, 25, "Modern No. 20", RGB(255, 255, 255), 80);
+	CTextDraw::Print(pdc, 305, energy_bar.GetTop() +2, to_string(energy_bar.get_energy()) + "/ 25");
 
 
 	CDDraw::ReleaseBackCDC();
@@ -334,6 +343,7 @@ void CMovingBitmap::dart_hit_monster(vector<CMovingBitmap> &dart, vector<CMoving
 
 				monster[i].add_sub_hp(-1);
 				CAudio::Instance()->Play(AUDIO_Attack, false);
+				monster[i].set_hurted(1);
 				if (monster[i].get_hp() <= 0) {
 					monster_vanish.push_back(monster[i]);
 					monster_vanish[monster_vanish.size() - 1].SetAnimation(80, true);
@@ -341,9 +351,12 @@ void CMovingBitmap::dart_hit_monster(vector<CMovingBitmap> &dart, vector<CMoving
 					monster_vanish[monster_vanish.size() - 1].ToggleAnimation();
 					monster_vanish[monster_vanish.size() - 1].SetFrameIndexOfBitmap(monster[i].set_end);
 					monster.erase(monster.begin() + i);
+					monster[i].set_hurted(1);
 
 				}
-
+			}
+			else {
+				monster[i].set_hurted(0);
 			}
 		}
 	}
@@ -358,6 +371,7 @@ void CMovingBitmap::dart_hit_monster(CMovingBitmap &dart, vector<CMovingBitmap> 
 
 				monster[i].add_sub_hp(-1);
 				CAudio::Instance()->Play(AUDIO_Attack, false);
+				monster[i].set_hurted(1);
 				if (monster[i].get_hp() <= 0) {
 					monster_vanish.push_back(monster[i]);
 					monster_vanish[monster_vanish.size() - 1].SetAnimation(80, true);
@@ -365,11 +379,14 @@ void CMovingBitmap::dart_hit_monster(CMovingBitmap &dart, vector<CMovingBitmap> 
 					monster_vanish[monster_vanish.size() - 1].ToggleAnimation();
 					monster_vanish[monster_vanish.size() - 1].SetFrameIndexOfBitmap(monster[i].set_end);
 					monster.erase(monster.begin() + i);
-					
 
 				}
 
 			}
+			else {
+				monster[i].set_hurted(0);
+			}
+
 		
 	}
 }

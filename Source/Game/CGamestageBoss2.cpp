@@ -26,6 +26,7 @@ void CGamestageBoss2::OnInit() {
 	boss2.LoadBitmapByString({ "Resources/boss2/boss2_f0.bmp", "Resources/boss2/boss2_f1.bmp", "Resources/boss2/boss2_f2.bmp", "Resources/boss2/boss2_f3.bmp" }, RGB(255, 255, 255));
 	boss2.SetAnimation(150, false);
 	boss2.set_hp(5000);
+	boss2.set_hp_max(5000);
 	boss2.SetTopLeft(420, 500);
 	boss2.set_center((boss2.GetLeft() + boss2.GetWidth() / 2), (boss2.GetTop() + boss2.GetHeight() / 2));
 	boss2.set_timer(1500);
@@ -228,12 +229,6 @@ void CGamestageBoss2::show_text() {
 
 	CDC *pdc = CDDraw::GetBackCDC();
 
-	CTextDraw::ChangeFontLog(pdc, 25, "Modern No. 20", RGB(255, 255, 255), 80);
-	CTextDraw::Print(pdc, 305, 10, to_string(character.get_hp()));
-
-	CTextDraw::ChangeFontLog(pdc, 25, "Modern No. 20", RGB(255, 255, 255), 80);
-	CTextDraw::Print(pdc, 305, energy_bar.GetTop() + 20 + 25, to_string(energy_bar.get_energy()) + "/ 25");
-
 	CTextDraw::ChangeFontLog(pdc, 15, "Modern No. 20", RGB(255, 255, 255), 80);
 	CTextDraw::Print(pdc, blood_bar_boss2.GetLeft() + 30, blood_bar_boss2.GetTop() + 10 + 20, to_string(boss2.get_hp()));
 
@@ -339,8 +334,11 @@ void CGamestageBoss2::dart_move(CMovingBitmap &item, int i, int setR) {
 }
 
 void CGamestageBoss2::blood_bar_progress(CMovingBitmap &blood_bar, CMovingBitmap &item_blood) {
-	if (blood_bar.GetFrameIndexOfBitmap() > 0 && item_blood.get_hp() < (1000 * blood_bar.GetFrameIndexOfBitmap())) {
-		blood_bar.SetFrameIndexOfBitmap(blood_bar.GetFrameIndexOfBitmap() - 1);
+	if (item_blood.get_hp() == item_blood.get_hp_max()) {
+		blood_bar.SetFrameIndexOfBitmap(blood_bar.GetFrameSizeOfBitmap() - 1);
+	}
+	else if (item_blood.get_hp() > 0) {
+		blood_bar.SetFrameIndexOfBitmap(((item_blood.get_hp()) / (item_blood.get_hp_max() / 5)));
 	}
 }
 
@@ -468,7 +466,7 @@ void CGamestageBoss2::boss2_bullet_move() {
 		int d = 10;
 		int t = 1;
 		double x = x0 + d * cos(theta[i]) + v * t*cos(theta[i]);
-		double y = y0 + d * sin(theta[i]) + v * t*sin(theta[i]);
+		double y = y0 + d * sin(theta[i]) + v * t*sin(theta[i]); //chage to calculate one time in class initing ,neverthless it will waste too much runing time
 		boss2_bullet[i].SetTopLeft((int)(x), (int)(y));
 
 		if (boss2.IsOverlap(boss2_bullet[i], character)) {

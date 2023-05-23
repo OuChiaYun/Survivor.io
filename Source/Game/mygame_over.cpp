@@ -28,6 +28,31 @@ void CGameStateOver::OnBeginState()
 	
 }
 
+void CGameStateOver::OnLButtonDown(UINT nFlags, CPoint point) {
+
+	if (again.GetFrameSizeOfBitmap() == 2) {
+
+		if (isSelect(nFlags, point, again)) {
+			GotoGameState(GAME_STATE_INIT);
+		}
+
+	}
+};
+void CGameStateOver::OnMouseMove(UINT nFlags, CPoint point) {
+
+	if (again.GetFrameSizeOfBitmap() == 2) {
+
+		if (isSelect(TRUE, point, again)) {
+			again.SetFrameIndexOfBitmap(1);
+		}
+		else {
+			again.SetFrameIndexOfBitmap(0);
+		}
+
+	}
+	
+}
+
 void CGameStateOver::OnInit()
 {
 	//
@@ -50,10 +75,23 @@ void CGameStateOver::OnInit()
 	victory.SetTopLeft(110, 290);
 	die.LoadBitmapByString({ "Resources/UI/died.bmp" }, RGB(255, 255, 255));
 	die.SetTopLeft(100, 300);
+
+	again.LoadBitmapByString({ "Resources/UI/again.bmp","Resources/UI/again2.bmp" }, RGB(255, 255, 255));
+	again.SetTopLeft(400, 100);
+	again.SetFrameIndexOfBitmap(0);
 }
 
 void CGameStateOver::OnShow()
 {
+	again.ShowBitmap();
+
+
+
+
+
+
+
+
 	if (get_victory_value() == 1) {
 		victory.ShowBitmap();	
 	}
@@ -84,3 +122,22 @@ void CGameStateOver::OnShow()
 
 	CDDraw::ReleaseBackCDC();
 }
+
+
+/////////
+
+bool CGameStateOver::isSelect(UINT nFlags, CPoint point, CMovingBitmap &item) {
+
+	if (nFlags == TRUE) {
+		if (item.GetLeft() <= point.x && point.x <= (item.GetLeft() + item.GetWidth())
+			&& item.GetTop() <= point.y && point.y <= (item.GetTop() + item.GetHeight())) {
+
+			return true;
+		}
+		else {
+			return false;
+		}
+	}
+	return false;
+
+};
