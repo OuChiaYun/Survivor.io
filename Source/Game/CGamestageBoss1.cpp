@@ -114,6 +114,16 @@ void CGamestageBoss1::OnMouseMove(UINT nFlags, CPoint point) {
 			}
 		}
 	}
+
+
+	if (opera.center_x < 491) {
+
+		character.set_limit_start_end(8, 15);
+	}
+	else if (opera.center_x > 491) {
+
+		character.set_limit_start_end(0, 7);
+	}
 	share_data();
 
 };
@@ -192,6 +202,9 @@ void CGamestageBoss1::OnShow() {
 	}
 	blood_bar.ShowBitmap();
 	energy_bar.ShowBitmap();
+	if (character.GetFrameIndexOfBitmap() >= character.limit_frame_end) {
+		character.SetFrameIndexOfBitmap(character.limit_frame_start);
+	}
 	character.ShowBitmap();
 	opera.ShowBitmap();
 

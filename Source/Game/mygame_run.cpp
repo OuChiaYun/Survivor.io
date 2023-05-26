@@ -114,7 +114,15 @@ void CGameStateRun::OnInit()  								// 遊戲的初值及圖形設定
 	background.LoadBitmapByString({ "Resources/background/Purple Nebula/Purple_Nebula_03.bmp", "Resources/background/Blue Nebula/Blue_Nebula_02.bmp" });
 	background.SetTopLeft(-1500, -1500);
 
-	character.LoadBitmapByString({ "Resources/character/char_04_left_final.bmp", "Resources/character/char_04_right.bmp" }, RGB(200, 191, 231));
+	character.LoadBitmapByString(
+		{ 
+		"Resources/character/d1.bmp","Resources/character/d2.bmp","Resources/character/d3.bmp","Resources/character/d4.bmp","Resources/character/d5.bmp","Resources/character/d6.bmp",
+		"Resources/character/w1.bmp","Resources/character/w2.bmp","Resources/character/w3.bmp","Resources/character/w4.bmp","Resources/character/w5.bmp","Resources/character/w6.bmp","Resources/character/w7.bmp","Resources/character/w8.bmp" ,
+		"Resources/character/k1.bmp","Resources/character/k2.bmp","Resources/character/k3.bmp","Resources/character/k4.bmp","Resources/character/k5.bmp","Resources/character/k6.bmp","Resources/character/k7.bmp","Resources/character/k8.bmp" ,
+		}, RGB(255, 255, 255));//RGB(20, 191, 231)
+	character.set_limit_start_end(0, 5);
+
+	character.SetAnimation(100, false);
 	character.SetTopLeft(461, 252);
 	character.set_center(470, 270);
 	character.set_hp(5000);

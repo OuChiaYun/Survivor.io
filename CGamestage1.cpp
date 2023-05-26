@@ -116,6 +116,22 @@ void CGamestage1::OnMouseMove(UINT nFlags, CPoint point) {
 			}
 		}
 	}
+
+	if (opera.center_x < 491) {
+	
+		character.set_limit_start_end(14, 21);
+	}
+	else if (opera.center_x > 491) {
+		
+		character.set_limit_start_end(6, 13);
+	}
+	else {
+		character.set_limit_start_end(0, 5);
+	}
+	if (character.GetFrameIndexOfBitmap() >= character.limit_frame_end || character.GetFrameIndexOfBitmap() <= character.limit_frame_start) {
+		character.SetFrameIndexOfBitmap(character.limit_frame_start);
+	}
+
 	share_data();
 };
 
@@ -212,6 +228,10 @@ void CGamestage1::OnShow() {
 void CGamestage1::show_img() {
 
 	background.ShowBitmap();
+
+	if (character.GetFrameIndexOfBitmap() >= character.limit_frame_end) {
+		character.SetFrameIndexOfBitmap(character.limit_frame_start);
+	}
 	character.ShowBitmap();
 	for (int i = 0; i < (int)energy.size(); i++) {
 		energy[i].ShowBitmap();
@@ -302,11 +322,12 @@ void CGamestage1::background_move() {
 
 	if (opera.center_x < 491) {
 		ax = 1;
-		character.SetFrameIndexOfBitmap(0);
+		//character.SetFrameIndexOfBitmap(0);
+		//character.set_limit_start_end(8, 15);
 	}
 	else if (opera.center_x > 491) {
 		ax = -1;
-		character.SetFrameIndexOfBitmap(1);
+		//character.set_limit_start_end(0,7 );
 	}
 
 	if (opera.center_y < 736) {

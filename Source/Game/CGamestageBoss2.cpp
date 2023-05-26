@@ -117,6 +117,15 @@ void CGamestageBoss2::OnMouseMove(UINT nFlags, CPoint point) {
 			}
 		}
 	}
+
+	if (opera.center_x < 491) {
+
+		character.set_limit_start_end(8, 15);
+	}
+	else if (opera.center_x > 491) {
+
+		character.set_limit_start_end(0, 7);
+	}
 	share_data();
 
 };
@@ -204,6 +213,9 @@ void CGamestageBoss2::OnShow() {
 		lightning[i].ShowBitmap();
 	}
 
+	if (character.GetFrameIndexOfBitmap() >= character.limit_frame_end) {
+		character.SetFrameIndexOfBitmap(character.limit_frame_start);
+	}
 	character.ShowBitmap();
 
 	blood.SetTopLeft((character.GetLeft() + character.GetWidth() / 2), character.GetTop());

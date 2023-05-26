@@ -135,9 +135,6 @@ void CGameStateInit::OnShow()
 	CTextDraw::ChangeFontLog(pdc, 25, "Ink Free", RGB(255, 255, 255), 400);
 	CTextDraw::Print(pdc, 320, 300, "Made By - Turtle & Sunny");
 
-	CTextDraw::ChangeFontLog(pdc, 25, "Ink Free", RGB(255, 255, 255), 200);
-	CTextDraw::Print(pdc, 185, 730, "Please select the scene which do you like");
-
 	CDDraw::ReleaseBackCDC();
 	
 	select1.ShowBitmap();
