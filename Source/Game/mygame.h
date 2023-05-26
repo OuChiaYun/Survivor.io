@@ -133,7 +133,8 @@ namespace game_framework {
 		void OnMove();									// 移動遊戲元素
 		void OnShow();		// 顯示這個狀態的遊戲畫面
 	private:
-		CGamestage2 t1;
+		CGamestage1 t1;
+		CGamestage2 t2;
 		CGamestageSelect select_stage; 
 		CGamestageBoss1 b1;
 		CGamestageBoss2 b2;
@@ -153,6 +154,8 @@ namespace game_framework {
 		clock_t a, b;
 		int boss_level = 0;
 		int level = 0;
+		int current_t = 0;
+		int pre_boss_t = 0;
 
 		CMovingBitmap weapon_logo[3] ;
 

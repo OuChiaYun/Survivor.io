@@ -67,9 +67,7 @@ void CGamestage2::OnInit() {
 								  "Resources/monster/big_e4.bmp","Resources/monster/big_e5.bmp","Resources/monster/big_e6.bmp" ,"Resources/monster/big_e7.bmp",
 								  "Resources/monster/big_e8.bmp","Resources/monster/big_e9.bmp","Resources/monster/m17.bmp" }, { 255,255,255 }, { 255, 255, 255 });  //255
 		fast_monster[i].set_limit_start_end(0, 5);
-		//fast_monster_vanish[i].SetTopLeft(2000, 2000);
-		//fast_monster_vanish[i].SetFrameIndexOfBitmap(fast_monster_vanish[i].GetFrameSizeOfBitmap()-1);
-		fast_monster[i].set_hp(40);
+		fast_monster[i].set_hp(10);
 		fast_monster[i].set_end = 11;
 		fast_monster[i].SetFrameIndexOfBitmap(0);
 		fast_monster[i].SetAnimation(100, false);

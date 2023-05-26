@@ -42,6 +42,9 @@ void CGameStateRun::OnBeginState()
 
 void CGameStateRun::OnMove()							// 移動遊戲元素
 {
+	b = clock();
+	current_t = (int)(b - a) / CLOCKS_PER_SEC;
+	/*
 	if (energy_bar.get_energy() == 25 && t1.run == 1) {
 		boss_level++;
 		t1.run = 0;
@@ -49,21 +52,51 @@ void CGameStateRun::OnMove()							// 移動遊戲元素
 		CAudio::Instance()->Play(AUDIO_GameBoss, true);
 
 	}
+	*/
 
-	if (boss_level == 1 && b1.run == 1) {
-		b1.OnMove();  //boss1
-		if (b1.run == 0) { //stage2
-			t1.run = 1;
-			energy_bar.set_energy(0);
-			energy_bar.SetFrameIndexOfBitmap(0);
-			character.SetTopLeft(461, 252);
-			character.set_center(470, 270);
-			t1.select = 0;
-			t1.open_stat2 = 1;
-			CAudio::Instance()->Stop(AUDIO_GameBoss);
-			CAudio::Instance()->Play(AUDIO_GameStage, true);
+
+	if (current_t- pre_boss_t > 20) {
+		t1.run = 0;
+		t2.run = 0;
+
+		if (boss_level == 0) {
+			b1.OnMove(); 
+			if (b1.run == 0) {
+				boss_level++;
+				//t1.run = 1;
+				t2.run = 1;
+				energy_bar.set_energy(0);
+				energy_bar.SetFrameIndexOfBitmap(0);
+				character.SetTopLeft(461, 252);
+				character.set_center(470, 270);
+				t1.select = 0;
+				t1.open_stat2 = 1;
+				pre_boss_t = (int)(b - a) / CLOCKS_PER_SEC;
+				CAudio::Instance()->Stop(AUDIO_GameBoss);
+				CAudio::Instance()->Play(AUDIO_GameStage, true);
+			}
 		}
+
+
+		else if (boss_level == 1) {
+			b2.OnMove();
+			if (b2.run == 0) {
+				boss_level++;
+				t1.run = 1;
+				energy_bar.set_energy(0);
+				energy_bar.SetFrameIndexOfBitmap(0);
+				character.SetTopLeft(461, 252);
+				character.set_center(470, 270);
+				t1.select = 0;
+				t1.open_stat2 = 1;
+				pre_boss_t = (int)(b - a) / CLOCKS_PER_SEC;
+				CAudio::Instance()->Stop(AUDIO_GameBoss);
+				CAudio::Instance()->Play(AUDIO_GameStage, true);
+			}
+		}
+		
 	}
+	/*
 	else if(boss_level == 2 && b2.run == 1){
 		b2.OnMove();  //boss2
 
@@ -82,6 +115,8 @@ void CGameStateRun::OnMove()							// 移動遊戲元素
 			CAudio::Instance()->Play(AUDIO_GameStage, true);
 		}
 	}
+	*/
+
 	if (select_stage.show == 1) {
 		select_stage.OnMove();
 	}
@@ -90,17 +125,24 @@ void CGameStateRun::OnMove()							// 移動遊戲元素
 		t1.OnMove(); //stage1
 	}
 
+	else if (t2.run == 1)
+	{
+		t2.OnMove(); //stage1
+	}
+
 	/*t1.run = 0;
 	b1.run = 0;
 	boss_level = 2;
 	b2.run = 1;
 	b2.OnMove();  //boss2*/
-	
+
+	/*
 	if (character.get_hp() <= 0) {
 		set_victory_value(0);
 		set_over_data();
 		GotoGameState(GAME_STATE_OVER);
 	}
+	*/
 	
 	
 	
@@ -173,6 +215,9 @@ void CGameStateRun::OnInit()  								// 遊戲的初值及圖形設定
 
 	t1.set_share_obj_data(background, character, opera, blood_bar, energy_bar, dart, bullet, bricks,lightning);
 	t1.OnInit();
+
+	t2.set_share_obj_data(background, character, opera, blood_bar, energy_bar, dart, bullet, bricks, lightning);
+	t2.OnInit();
 
 	select_stage.OnInit();
 
@@ -249,7 +294,7 @@ void CGameStateRun::OnMouseMove(UINT nFlags, CPoint point)	// 處理滑鼠的動
 	else if (energy_bar.get_energy() == 25) {
 		b2.OnMouseMove(nFlags, point);
 	}
-	else {
+	else{
 		t1.OnMouseMove(nFlags, point);
 	}
 	
@@ -266,10 +311,12 @@ void CGameStateRun::OnRButtonUp(UINT nFlags, CPoint point)	// 處理滑鼠的動
 
 void CGameStateRun::OnShow()
 {
-	
+
+
 	show_baclground_selected();
 	select_stage.show = t1.select;
 
+	/*
 	if (boss_level == 1 && b1.run == 1) {
 		b1.OnShow();
 	}
@@ -277,14 +324,36 @@ void CGameStateRun::OnShow()
 		b2.OnShow();
 	}
 
-	if (select_stage.show == 1) {
-		t1.OnShow();
-		select_stage.OnShow();
-	}
+
 	else if (t1.run == 1)
 	{
 		t1.OnShow();
 	}
+	*/
+
+	if (current_t - pre_boss_t > 20) {
+		if (boss_level == 0) {
+			b1.OnShow();
+		}
+		else if (boss_level == 1) {
+			b2.OnShow();
+		}
+	}
+	else {
+
+		if (boss_level == 0) {
+			//t1.OnShow();
+			t1.OnShow();
+		}
+		else if (boss_level == 1) {
+			t2.OnShow();
+		}
+		if (select_stage.show == 1) {
+			t1.OnShow();
+			select_stage.OnShow();
+		}
+	}
+
 
 
 	for (int i = 0; i < 3; i++) {
