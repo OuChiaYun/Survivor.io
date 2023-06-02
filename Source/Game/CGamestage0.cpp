@@ -16,9 +16,8 @@
 
 using namespace game_framework;
 
-void CGamestage2::OnBeginState() {
-	run = 0;
-
+void CGamestage0::OnBeginState() {
+	run = 1;
 	int min = -1450;
 	int max = 1450;
 
@@ -50,7 +49,7 @@ void CGamestage2::OnBeginState() {
 	}
 };
 
-void CGamestage2::OnInit() {
+void CGamestage0::OnInit() {
 
 
 	for (int i = 0; i < 100; i++) {
@@ -77,35 +76,6 @@ void CGamestage2::OnInit() {
 
 	}
 
-	for (int i = 0; i < 6; i++) {
-		random_born_big_monster(big_monster, { "Resources/monster/big_m0.bmp","Resources/monster/big_m1.bmp" ,"Resources/monster/big_m2.bmp" ,"Resources/monster/big_m3.bmp",
-											"Resources/monster/big_m4.bmp","Resources/monster/big_m5.bmp" ,"Resources/monster/big_m6.bmp" ,"Resources/monster/big_m7.bmp" },
-			big_monster_vanish, { "Resources/monster/big_e0.bmp","Resources/monster/big_e1.bmp","Resources/monster/big_e2.bmp" ,"Resources/monster/big_e3.bmp",
-								  "Resources/monster/big_e4.bmp","Resources/monster/big_e5.bmp","Resources/monster/big_e6.bmp" ,"Resources/monster/big_e7.bmp",
-								  "Resources/monster/big_e8.bmp","Resources/monster/big_e9.bmp","Resources/monster/m17.bmp" }, { 255,255,255 }, { 255, 255, 255 });  //255
-		big_monster[i].SetAnimation(100, false);
-		big_monster[i].set_hp(40);
-		big_monster[i].set_end = 8;
-	}
-
-
-	for (int i = 0; i < 6; i++) {
-		random_born_big_monster(fast_monster, {
-			"Resources/fast_monster/b1.bmp","Resources/fast_monster/b2.bmp" ,"Resources/fast_monster/b3.bmp" ,"Resources/fast_monster/b4.bmp" ,"Resources/fast_monster/b5.bmp" ,"Resources/fast_monster/b6.bmp",
-			"Resources/fast_monster/c1.bmp","Resources/fast_monster/c2.bmp" ,"Resources/fast_monster/c3.bmp" ,"Resources/fast_monster/c4.bmp" ,"Resources/fast_monster/c5.bmp" ,"Resources/fast_monster/c6.bmp" },
-			fast_monster_vanish, { "Resources/monster/big_e0.bmp","Resources/monster/big_e1.bmp","Resources/monster/big_e2.bmp" ,"Resources/monster/big_e3.bmp",
-								  "Resources/monster/big_e4.bmp","Resources/monster/big_e5.bmp","Resources/monster/big_e6.bmp" ,"Resources/monster/big_e7.bmp",
-								  "Resources/monster/big_e8.bmp","Resources/monster/big_e9.bmp","Resources/monster/m17.bmp" }, { 255,255,255 }, { 255, 255, 255 });  //255
-		fast_monster[i].set_limit_start_end(0, 5);
-		fast_monster[i].set_hp(10);
-		fast_monster[i].set_end = 11;
-		fast_monster[i].SetFrameIndexOfBitmap(0);
-		fast_monster[i].SetAnimation(100, false);
-		fast_monster[i].ay = 12;
-		fast_monster[i].ax = 12;
-	}
-
-
 
 	blood.LoadBitmapByString({ "Resources/ignore.bmp", "Resources/blood/bloodfx001_01.bmp",
 							"Resources/blood/bloodfx001_02.bmp", "Resources/blood/bloodfx001_03.bmp",
@@ -119,15 +89,15 @@ void CGamestage2::OnInit() {
 
 }
 
-void CGamestage2::OnKeyDown(UINT, UINT, UINT) {};
+void CGamestage0::OnKeyDown(UINT, UINT, UINT) {};
 
-void CGamestage2::OnKeyUp(UINT, UINT, UINT) {};
+void CGamestage0::OnKeyUp(UINT, UINT, UINT) {};
 
-void CGamestage2::OnLButtonDown(UINT nFlags, CPoint point) {};
+void CGamestage0::OnLButtonDown(UINT nFlags, CPoint point) {};
 
-void CGamestage2::OnLButtonUp(UINT nFlags, CPoint point) {};
+void CGamestage0::OnLButtonUp(UINT nFlags, CPoint point) {};
 
-void CGamestage2::OnMouseMove(UINT nFlags, CPoint point) {
+void CGamestage0::OnMouseMove(UINT nFlags, CPoint point) {
 	get_data();
 
 	if (nFlags == FALSE) {
@@ -183,11 +153,11 @@ void CGamestage2::OnMouseMove(UINT nFlags, CPoint point) {
 	share_data();
 };
 
-void CGamestage2::OnRButtonDown(UINT nFlags, CPoint point) {};
+void CGamestage0::OnRButtonDown(UINT nFlags, CPoint point) {};
 
-void CGamestage2::OnRButtonUp(UINT nFlags, CPoint point) {};
+void CGamestage0::OnRButtonUp(UINT nFlags, CPoint point) {};
 
-void CGamestage2::OnMove() {
+void CGamestage0::OnMove() {
 	get_data();
 	timer += 1;
 
@@ -197,10 +167,10 @@ void CGamestage2::OnMove() {
 	blood_bar_progress(blood_bar, character);
 
 
-	if (energy_bar.GetFrameIndexOfBitmap() == energy_bar.GetFrameSizeOfBitmap() - 1) {
+	if (energy_bar.get_energy() == 25) {
 
 		select = 1;
-		
+
 	}
 	dart_all(200);
 
@@ -244,8 +214,6 @@ void CGamestage2::OnMove() {
 
 		int k = monster.size();
 		character.dart_hit_monster(bricks[i], monster, monster_vanish);
-		character.dart_hit_monster(bricks[i], big_monster, big_monster_vanish);
-		character.dart_hit_monster(bricks[i], fast_monster, fast_monster_vanish);
 		dead_monster += k - monster.size();
 	}
 
@@ -265,14 +233,14 @@ void CGamestage2::OnMove() {
 	share_data();
 };
 
-void CGamestage2::OnShow() {
+void CGamestage0::OnShow() {
 	get_data();
 	show_img();
 	show_text();
 	share_data();
 };
 
-void CGamestage2::show_img() {
+void CGamestage0::show_img() {
 
 	background.ShowBitmap();
 
@@ -299,48 +267,6 @@ void CGamestage2::show_img() {
 		monster_vanish[i].ShowBitmap();
 	}
 
-	for (int i = 0; i < (int)(big_monster.size()); i++) {
-		if (big_monster[i].GetFrameIndexOfBitmap() >= big_monster[i].limit_frame_end) {
-			big_monster[i].SetFrameIndexOfBitmap(big_monster[i].limit_frame_start);
-		}
-		if (big_monster[i].IsOverlap(background, big_monster[i])) {
-			big_monster[i].ShowBitmap();
-
-
-			/*
-			if (big_monster[i].ishurted() == 1) {
-				blood.SetAnimation(100, false);
-			}
-			else {
-				blood.SetAnimation(100, true);
-			}
-			*/
-
-		}
-
-	}
-
-
-	for (int i = 0; i < (int)(fast_monster.size()); i++) {
-		if (fast_monster[i].GetFrameIndexOfBitmap() >= fast_monster[i].limit_frame_end) {
-			fast_monster[i].SetFrameIndexOfBitmap(fast_monster[i].limit_frame_start);
-		}
-		if (fast_monster[i].IsOverlap(background, fast_monster[i])) {
-			fast_monster[i].ShowBitmap();
-		}
-
-	}
-
-
-	for (int i = 0; i < (int)(big_monster_vanish.size()); i++) {
-		big_monster_vanish[i].ShowBitmap();
-	}
-
-	for (int i = 0; i < (int)(fast_monster_vanish.size()); i++) {
-		fast_monster_vanish[i].ShowBitmap();
-	}
-
-
 	for (int i = 0; i < (int)bullet.size(); i++) {
 		bullet[i].ShowBitmap();
 	}
@@ -366,11 +292,11 @@ void CGamestage2::show_img() {
 
 }
 
-void CGamestage2::show_text() {
+void CGamestage0::show_text() {
 
 }
 
-void CGamestage2::background_move() {
+void CGamestage0::background_move() {
 	double rate = 0.1;
 
 	int ch_x = character.GetLeft();
@@ -440,7 +366,7 @@ void CGamestage2::background_move() {
 	}
 }
 
-void CGamestage2::blood_bar_progress(CMovingBitmap &blood_bar, CMovingBitmap &item_blood) {
+void CGamestage0::blood_bar_progress(CMovingBitmap &blood_bar, CMovingBitmap &item_blood) {
 
 	if (item_blood.get_hp() == item_blood.get_hp_max()) {
 		blood_bar.SetFrameIndexOfBitmap(blood_bar.GetFrameSizeOfBitmap() - 1);
@@ -450,7 +376,7 @@ void CGamestage2::blood_bar_progress(CMovingBitmap &blood_bar, CMovingBitmap &it
 	}
 }
 
-void CGamestage2::random_born_item(vector<CMovingBitmap>&item, vector<string> str, vector<int>rgb) {
+void CGamestage0::random_born_item(vector<CMovingBitmap>&item, vector<string> str, vector<int>rgb) {
 	int min = -1450;
 	int max = 1450;
 	int tail = item.size();
@@ -464,7 +390,7 @@ void CGamestage2::random_born_item(vector<CMovingBitmap>&item, vector<string> st
 	//	item[tail].SetTopLeft(600, 600);
 };
 
-void CGamestage2::item_move(CMovingBitmap &item) {
+void CGamestage0::item_move(CMovingBitmap &item) {
 	double rate = 0.12;
 	int x = item.GetLeft() - int((opera.GetLeft() - 437)*rate);
 	int y = item.GetTop() - int((opera.GetTop() - 682)*rate);
@@ -513,7 +439,7 @@ void CGamestage2::item_move(CMovingBitmap &item) {
 	}
 }
 
-void CGamestage2::mygame_dart_born() {
+void CGamestage0::mygame_dart_born() {
 
 	dart.push_back(CMovingBitmap());
 	int i = dart.size() - 1;
@@ -535,7 +461,7 @@ void CGamestage2::mygame_dart_born() {
 	}
 }
 
-void CGamestage2::dart_all(int setR) {
+void CGamestage0::dart_all(int setR) {
 	for (int i = 0; i < (int)dart.size(); i++) {
 		dart[i].add_timer(1);
 		dart_move(dart[i], (dart[i].timer % 360) * 5, setR);
@@ -544,20 +470,19 @@ void CGamestage2::dart_all(int setR) {
 		}
 		int k = monster.size();
 		character.dart_hit_monster(dart[i], monster, monster_vanish);
-		character.dart_hit_monster(dart[i], big_monster, big_monster_vanish);
-		character.dart_hit_monster(dart[i], fast_monster, fast_monster_vanish);
+
 		dead_monster += k - monster.size();
 	}
 }
 
-void CGamestage2::dart_move(CMovingBitmap &item, int i, int setR) {
+void CGamestage0::dart_move(CMovingBitmap &item, int i, int setR) {
 	int r = setR;;
 	int px = character.get_center_x() + (int)(r *cos(i * 3.14 / 180));
 	int py = character.get_center_y() + (int)(r *sin(i * 3.14 / 180));
 	item.SetTopLeft(px, py);
 }
 
-void CGamestage2::random_born_monster(vector<CMovingBitmap>&monster, vector<string> str_monster, vector<CMovingBitmap>&monster_vanish, vector<string> str_monster_vanish, vector<int>rgb_monster, vector<int>rgb_monster_vanish) {
+void CGamestage0::random_born_monster(vector<CMovingBitmap>&monster, vector<string> str_monster, vector<CMovingBitmap>&monster_vanish, vector<string> str_monster_vanish, vector<int>rgb_monster, vector<int>rgb_monster_vanish) {
 
 	int min = -1450;
 	int max = 1450;
@@ -594,7 +519,7 @@ void CGamestage2::random_born_monster(vector<CMovingBitmap>&monster, vector<stri
 }
 
 
-void CGamestage2::random_born_big_monster(vector<CMovingBitmap>&monster, vector<string> str_monster, vector<CMovingBitmap>&monster_vanish, vector<string> str_monster_vanish, vector<int>rgb_monster, vector<int>rgb_monster_vanish) {
+void CGamestage0::random_born_big_monster(vector<CMovingBitmap>&monster, vector<string> str_monster, vector<CMovingBitmap>&monster_vanish, vector<string> str_monster_vanish, vector<int>rgb_monster, vector<int>rgb_monster_vanish) {
 
 	int min = -1450;
 	int max = 1450;
@@ -618,7 +543,7 @@ void CGamestage2::random_born_big_monster(vector<CMovingBitmap>&monster, vector<
 
 
 
-void CGamestage2::monster_all() {
+void CGamestage0::monster_all() {
 
 	for (int i = 0; i < (int)(monster.size()); i++) {
 		item_move(monster[i]);
@@ -632,46 +557,8 @@ void CGamestage2::monster_all() {
 			blood.SetAnimation(50, false);
 			blood.ShowBitmap();
 		}
-
-
 	}
 
-	for (int i = 0; i < (int)(big_monster.size()); i++) {
-		item_move(big_monster[i]);
-
-		if (!monster[i].IsOverlap(character, big_monster[i])) {
-			big_monster_move(big_monster[i]);
-			blood.SetAnimation(50, true);
-		}
-		else {
-			character.add_sub_hp(-5);
-			blood.SetAnimation(50, false);
-			blood.ShowBitmap();
-		}
-	}
-
-	for (int i = 0; i < (int)(fast_monster.size()); i++) {
-		item_move(fast_monster[i]);
-
-		if (!fast_monster[i].IsOverlap(character, fast_monster[i])) {
-			big_monster_move(fast_monster[i]);
-			blood.SetAnimation(50, true);
-		}
-		else {
-			character.add_sub_hp(-5);
-			blood.SetAnimation(50, false);
-			blood.ShowBitmap();
-		}
-
-		if (isLeft(character, fast_monster[i])) {
-			fast_monster[i].set_limit_start_end(6, 11);
-
-		}
-		else {
-			fast_monster[i].set_limit_start_end(0, 5);
-
-		}
-	}
 
 	if (int(monster.size()) < 30 && monster_vanish.size() != 0) {
 
@@ -683,29 +570,12 @@ void CGamestage2::monster_all() {
 		monster_vanish.erase(monster_vanish.begin());
 	}
 
-	if (int(big_monster_vanish.size() > 2)) {
-
-		big_monster.push_back(big_monster_vanish[0]);
-		big_monster[big_monster.size() - 1].SetFrameIndexOfBitmap(0);
-		big_monster[big_monster.size() - 1].SetAnimation(95, false);
-		big_monster[big_monster.size() - 1].set_hp(40);
-		big_monster[big_monster.size() - 1].set_limit_start_end(0, 3);
-		int min = -1450;
-		int max = 1450;
-		int tail = big_monster.size() - 1;
-		int x = rand() % (max - min + 1) + min;
-		int y = rand() % (max - min + 1) + min;
-		big_monster[tail].SetTopLeft(x, y);
-		big_monster[tail].set_center(x + 45, y + 57);
-		big_monster_vanish.erase(big_monster_vanish.begin());
-	}
-
 	if (timer == 10000) {
 		timer = 0;
 	}
 }
 
-bool CGamestage2::isLeft(CMovingBitmap &character, CMovingBitmap &item) {
+bool CGamestage0::isLeft(CMovingBitmap &character, CMovingBitmap &item) {
 	if (item.GetLeft() < character.GetLeft()) {
 		return false;
 	}
@@ -714,7 +584,7 @@ bool CGamestage2::isLeft(CMovingBitmap &character, CMovingBitmap &item) {
 	}
 };
 
-bool CGamestage2::isDown(CMovingBitmap &character, CMovingBitmap &item) {
+bool CGamestage0::isDown(CMovingBitmap &character, CMovingBitmap &item) {
 	if (item.GetTop() - 200 < character.GetTop()) {
 		return false;
 	}
@@ -723,7 +593,7 @@ bool CGamestage2::isDown(CMovingBitmap &character, CMovingBitmap &item) {
 	}
 };
 
-void CGamestage2::monster_move(CMovingBitmap &monster) {
+void CGamestage0::monster_move(CMovingBitmap &monster) {
 
 	int x = abs(monster.GetLeft() - character.GetLeft());
 	int y = abs(monster.GetTop() - character.GetTop());
@@ -768,59 +638,16 @@ void CGamestage2::monster_move(CMovingBitmap &monster) {
 
 };
 
-void CGamestage2::big_monster_move(CMovingBitmap &monster) {
-
-	int x = abs(monster.GetLeft() - character.GetLeft());
-	int y = abs(monster.GetTop() - character.GetTop());
-	double std_a = 4;
-	double a = pow((x*x + y * y), 0.5);
-	int _x = (int)(x / (a / std_a));
-	int _y = (int)(y / (a / std_a));
-
-	int np_x = 1;
-	int np_y = 1;
-
-	if (monster.GetLeft() < character.GetLeft()) {
-		np_x = 1;
-	}
-	else if (monster.GetLeft() > character.GetLeft()) {
-		np_x = -1;
-	}
-
-	if (monster.GetTop() < character.GetTop()) {
-		np_y = 1;
-	}
-	else if (monster.GetTop() > character.GetTop()) {
-		np_y = -1;
-	}
-
-
-	monster.SetTopLeft(monster.GetLeft() + (int)(np_x*_x*0.5*(1+monster.ax/10.0)), monster.GetTop() + (int)(np_y*_y*0.5*((1 + monster.ay/10.0) ) ) );
-
-	if (isLeft(character, monster)) {
-		monster.set_limit_start_end(4, 7);
-
-	}
-	else {
-		monster.set_limit_start_end(0, 3);
-
-	}
-};
-
-
-void CGamestage2::bullet_move(vector<CMovingBitmap> &item) {
+void CGamestage0::bullet_move(vector<CMovingBitmap> &item) {
 	for (int i = 0; i < (int)item.size(); i++) {
 		item[i].SetTopLeft(character.GetLeft() + 10, item[i].GetTop() - 10);
 		int k = monster.size();
 		character.dart_hit_monster(item[i], monster, monster_vanish);
-		character.dart_hit_monster(item[i], big_monster, big_monster_vanish);
-		character.dart_hit_monster(item[i], fast_monster, fast_monster_vanish);
 		dead_monster += k - monster.size();
 	}
 }
 
-
-void CGamestage2::bullet_erase(vector<CMovingBitmap> &item) {
+void CGamestage0::bullet_erase(vector<CMovingBitmap> &item) {
 
 	for (int i = 0; i < (int)item.size(); i++) {
 		if (item[i].GetTop() < 0) {
@@ -829,7 +656,7 @@ void CGamestage2::bullet_erase(vector<CMovingBitmap> &item) {
 	}
 }
 
-void CGamestage2::bricks_move(CMovingBitmap &item, int h, int k, int c, int x_move) {
+void CGamestage0::bricks_move(CMovingBitmap &item, int h, int k, int c, int x_move) {
 	int x = item.GetLeft() + x_move;
 	int y = (x - h) * (x - h) / (4 * c) + k;
 	item.SetTopLeft(x, y);
@@ -837,7 +664,7 @@ void CGamestage2::bricks_move(CMovingBitmap &item, int h, int k, int c, int x_mo
 
 }
 
-void CGamestage2::bricks_born(vector<CMovingBitmap> &item, vector<string> str, vector<int>rgb) {
+void CGamestage0::bricks_born(vector<CMovingBitmap> &item, vector<string> str, vector<int>rgb) {
 	int tail = item.size();
 	item.push_back(CMovingBitmap());
 	item[tail].LoadBitmapByString(str, RGB(rgb[0], rgb[1], rgb[2]));
@@ -845,7 +672,7 @@ void CGamestage2::bricks_born(vector<CMovingBitmap> &item, vector<string> str, v
 	item[tail].ram_n = rand() % 4;
 }
 
-void CGamestage2::born_bullet(vector<CMovingBitmap> &item, vector<string> str, vector<int>rgb) {
+void CGamestage0::born_bullet(vector<CMovingBitmap> &item, vector<string> str, vector<int>rgb) {
 	int tail = item.size();
 	if (item[tail - 1].GetTop() < 0) {
 		item.push_back(CMovingBitmap());
@@ -855,7 +682,7 @@ void CGamestage2::born_bullet(vector<CMovingBitmap> &item, vector<string> str, v
 }
 
 
-void CGamestage2::bricks_erase(CMovingBitmap &item) {
+void CGamestage0::bricks_erase(CMovingBitmap &item) {
 	if (item.GetTop() + 70 > 1065) {
 		//item.erase(item.begin());
 		item.ram_n = (rand() + timer) % 4;
@@ -863,7 +690,7 @@ void CGamestage2::bricks_erase(CMovingBitmap &item) {
 	}
 }
 
-void CGamestage2::monster_pop(int less_than_n) {
+void CGamestage0::monster_pop(int less_than_n) {
 
 	for (int i = 0; i < (int)monster.size(); i++) {
 		if ((int)monster.size() > less_than_n) {
@@ -875,18 +702,7 @@ void CGamestage2::monster_pop(int less_than_n) {
 	}
 }
 
-void CGamestage2::big_monster_born() {
-	int i = big_monster.size();
-	random_born_big_monster(big_monster, { "Resources/monster/big_m0.bmp","Resources/monster/big_m1.bmp" ,"Resources/monster/big_m2.bmp" ,"Resources/monster/big_m3.bmp",
-										"Resources/monster/big_m4.bmp","Resources/monster/big_m5.bmp" ,"Resources/monster/big_m6.bmp" ,"Resources/monster/big_m7.bmp" },
-		big_monster_vanish, { "Resources/monster/big_e0.bmp","Resources/monster/big_e1.bmp" ,"Resources/monster/big_e2.bmp" ,"Resources/monster/big_e3.bmp",
-							  "Resources/monster/big_e4.bmp","Resources/monster/big_e5.bmp" ,"Resources/monster/big_e6.bmp" ,"Resources/monster/big_e7.bmp",
-							  "Resources/monster/big_e8.bmp","Resources/monster/big_e9.bmp","Resources/monster/m17.bmp" }, { 255,255,255 }, { 255, 255, 255 });  //255
-	big_monster[i].SetAnimation(125, false);
-	big_monster[i].set_hp(40);
-}
-
-void CGamestage2::show_baclground_selected(int s) {
+void CGamestage0::show_baclground_selected(int s) {
 
 	if (s == 0) {
 		background.SetFrameIndexOfBitmap(0);
@@ -899,7 +715,7 @@ void CGamestage2::show_baclground_selected(int s) {
 
 }
 
-void CGamestage2::lightning_move(vector<CMovingBitmap> &item) {
+void CGamestage0::lightning_move(vector<CMovingBitmap> &item) {
 
 
 	int flag = 0;
@@ -917,8 +733,6 @@ void CGamestage2::lightning_move(vector<CMovingBitmap> &item) {
 		lightning[i].SetTopLeft(lightning[i].GetLeft() + lightning[i].ax, lightning[i].GetTop() + lightning[i].ay);
 		int k = monster.size();
 		character.dart_hit_monster(item[i], monster, monster_vanish);
-		character.dart_hit_monster(item[i], big_monster, big_monster_vanish);
-		character.dart_hit_monster(item[i], fast_monster, fast_monster_vanish);
 		dead_monster += k - monster.size();
 	}
 
@@ -939,7 +753,7 @@ void CGamestage2::lightning_move(vector<CMovingBitmap> &item) {
 
 
 
-void CGamestage2::monster_reset(CMovingBitmap &item) {
+void CGamestage0::monster_reset(CMovingBitmap &item) {
 
 
 	int min = -1450;
@@ -973,7 +787,7 @@ void CGamestage2::monster_reset(CMovingBitmap &item) {
 };
 
 
-void CGamestage2::lightning_born() {
+void CGamestage0::lightning_born() {
 
 	int axay[5][4] = { {-5,2},{5,2},{-5,-2},{5,-2} };
 	int a = (int)lightning.size();
@@ -996,7 +810,7 @@ void CGamestage2::lightning_born() {
 };
 
 
-void CGamestage2::magnet_animation() {
+void CGamestage0::magnet_animation() {
 	int x1 = character.GetLeft();
 	int y1 = character.GetTop();
 	for (int i = 0; i < (int)(energy.size()); i++) {
@@ -1020,14 +834,14 @@ void CGamestage2::magnet_animation() {
 		}
 	}
 }
-int CGamestage2::get_dead_monster() {
+int CGamestage0::get_dead_monster() {
 	return dead_monster;
 }
 
 /////////////////////////////update data/////////////////
 
 
-void CGamestage2::set_share_obj_data(CMovingBitmap &tmp_background, CMovingBitmap &tmp_character, CMovingBitmap &tmp_opera, CMovingBitmap &tmp_blood_bar, CMovingBitmap &tmp_energy_bar,
+void CGamestage0::set_share_obj_data(CMovingBitmap &tmp_background, CMovingBitmap &tmp_character, CMovingBitmap &tmp_opera, CMovingBitmap &tmp_blood_bar, CMovingBitmap &tmp_energy_bar,
 	vector <CMovingBitmap> &tmp_dart, vector<CMovingBitmap> &tmp_bullet, vector<CMovingBitmap> &tmp_bricks, vector<CMovingBitmap> &tmp_lightning) {
 	p_background = &tmp_background;
 	p_character = &tmp_character;
@@ -1051,7 +865,7 @@ void CGamestage2::set_share_obj_data(CMovingBitmap &tmp_background, CMovingBitma
 
 }
 
-void CGamestage2::move_share_obj_data(CMovingBitmap &tmp_background, CMovingBitmap &tmp_character, CMovingBitmap &tmp_opera, CMovingBitmap &tmp_blood_bar,
+void CGamestage0::move_share_obj_data(CMovingBitmap &tmp_background, CMovingBitmap &tmp_character, CMovingBitmap &tmp_opera, CMovingBitmap &tmp_blood_bar,
 	CMovingBitmap &tmp_energy_bar, vector <CMovingBitmap> &tmp_dart, vector<CMovingBitmap> &tmp_bullet, vector<CMovingBitmap> &tmp_bricks, vector<CMovingBitmap> &tmp_lightning) {
 
 	tmp_background = background;
@@ -1066,7 +880,7 @@ void CGamestage2::move_share_obj_data(CMovingBitmap &tmp_background, CMovingBitm
 };
 
 
-void CGamestage2::get_data() {
+void CGamestage0::get_data() {
 
 	background = *p_background;
 	character = *p_character;
@@ -1080,7 +894,7 @@ void CGamestage2::get_data() {
 };
 
 
-void CGamestage2::share_data() {
+void CGamestage0::share_data() {
 
 	*p_background = background;
 	*p_character = character;

@@ -16,7 +16,38 @@
 
 using namespace game_framework;
 
-void CGamestage1::OnBeginState() {};
+void CGamestage1::OnBeginState() {
+	run = 1;
+	int min = -1450;
+	int max = 1450;
+
+	for (int i = int(monster.size()); i < 35; i++) {
+
+		monster.push_back(monster_vanish[0]);
+		monster[monster.size() - 1].SetFrameIndexOfBitmap(0);
+		monster[monster.size() - 1].SetAnimation(50, false);
+		monster[monster.size() - 1].set_hp(6);
+		monster_reset(monster[monster.size() - 1]);
+		monster_vanish.erase(monster_vanish.begin());
+	}
+
+	for (int i = 0; i<int(monster.size()); i++) {
+
+		int x = rand() % (max - min + 1) + min;
+		int y = rand() % (max - min + 1) + min;
+		monster[i].SetTopLeft(x, y);
+		monster[i].set_center(x + 45, y + 57);
+	}
+
+	vector<CMovingBitmap>().swap(energy);
+	max = 2000;
+	for (int i = 0; i < 100; i++) {
+		random_born_item(energy, { "Resources/gem/gem1.bmp", "Resources/gem/gem2.bmp",
+								   "Resources/gem/gem3.bmp","Resources/gem/gem4.bmp","Resources/gem/gem5.bmp" }, { 200, 191, 231 });
+		energy[i].SetAnimation(100, false);
+
+	}
+};
 
 void CGamestage1::OnInit() {
 
@@ -46,16 +77,14 @@ void CGamestage1::OnInit() {
 	}
 
 	for (int i = 0; i < 6; i++) {
-		random_born_big_monster(big_monster_vanish,{"Resources/monster/big_m0.bmp","Resources/monster/big_m1.bmp" ,"Resources/monster/big_m2.bmp" ,"Resources/monster/big_m3.bmp",
+		random_born_big_monster(big_monster,{"Resources/monster/big_m0.bmp","Resources/monster/big_m1.bmp" ,"Resources/monster/big_m2.bmp" ,"Resources/monster/big_m3.bmp",
 											"Resources/monster/big_m4.bmp","Resources/monster/big_m5.bmp" ,"Resources/monster/big_m6.bmp" ,"Resources/monster/big_m7.bmp" },
 		big_monster_vanish, { "Resources/monster/big_e0.bmp","Resources/monster/big_e1.bmp","Resources/monster/big_e2.bmp" ,"Resources/monster/big_e3.bmp",
 							  "Resources/monster/big_e4.bmp","Resources/monster/big_e5.bmp","Resources/monster/big_e6.bmp" ,"Resources/monster/big_e7.bmp",
 							  "Resources/monster/big_e8.bmp","Resources/monster/big_e9.bmp","Resources/monster/m17.bmp" }, { 255,255,255 }, { 255, 255, 255 });  //255
-
-		big_monster_vanish[i].SetTopLeft(2000,2000);
-		big_monster_vanish[i].SetFrameIndexOfBitmap(18);
-		big_monster_vanish[i].set_hp(40);
-		big_monster_vanish[i].set_end = 8;
+		big_monster[i].set_hp(40);
+		big_monster[i].SetAnimation(100, false);
+		big_monster[i].set_end = 8;
 	}
 	
 	
@@ -149,11 +178,9 @@ void CGamestage1::OnMove() {
 	blood_bar_progress(blood_bar, character);
 
 	
-	if (energy_bar.GetFrameIndexOfBitmap() > 2) {
-
-		if (select != 2) {
+	if (energy_bar.get_energy() == 25) {
 			select = 1;
-		}
+
 	}
 	dart_all(200);
 	
@@ -238,7 +265,7 @@ void CGamestage1::show_img() {
 	}
 	
 	for (int i = 0; i < (int)(monster.size()); i++) {
-		if (monster[i].GetFrameIndexOfBitmap() >= monster[i].limit_frame_end) {
+		if (monster[i].GetFrameIndexOfBitmap() >=monster[i].limit_frame_end) {
 			monster[i].SetFrameIndexOfBitmap(monster[i].limit_frame_start);
 		}
 		if (monster[i].IsOverlap(background, monster[i])) {
@@ -253,7 +280,7 @@ void CGamestage1::show_img() {
 	}
 
 	for (int i = 0; i < (int)(big_monster.size()); i++) {
-		if (big_monster[i].GetFrameIndexOfBitmap() >= big_monster[i].limit_frame_end) {
+		if (big_monster[i].GetFrameIndexOfBitmap() > big_monster[i].limit_frame_end) {
 			big_monster[i].SetFrameIndexOfBitmap(big_monster[i].limit_frame_start);
 		}
 		if (big_monster[i].IsOverlap(background, big_monster[i])) {
@@ -545,10 +572,8 @@ void CGamestage1::random_born_big_monster(vector<CMovingBitmap>&monster, vector<
 	monster[tail].SetTopLeft(x, y);
 	monster[tail].set_center(x + 45, y + 57);
 
-
 	monster[tail].SetFrameIndexOfBitmap(monster[tail].limit_frame_start);
 	monster[tail].set_limit_start_end(0, 3);
-
 
 }
 
@@ -813,7 +838,7 @@ void CGamestage1::lightning_move(vector<CMovingBitmap> &item) {
 
 
 	int flag = 0;
-	int f[8] = { 0,0,0,0, 0,0,0,0 };
+	int f[100] = { 0,0,0,0, 0,0,0,0 };
 	for (int i = 0; i < (int)item.size(); i++) {
 
 		if ((lightning[i].GetLeft() <= (lightning[i].stdx - 300)) || (lightning[i].GetLeft() + 105 >= (lightning[i].stdx + 300))) {

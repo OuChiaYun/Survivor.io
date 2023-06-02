@@ -35,27 +35,49 @@ CGameStateRun::~CGameStateRun()
 
 void CGameStateRun::OnBeginState()
 {
+
+	character.set_hp(5000);
+	character.SetTopLeft(461, 252);
+	character.set_center(470, 270);
+
+
+	vector<CMovingBitmap>().swap(dart);		
+	energy_bar.set_energy(0);
+	energy_bar.SetFrameIndexOfBitmap(0);
+	blood_bar.SetFrameIndexOfBitmap(blood_bar.GetFrameSizeOfBitmap()-1);
+//	vector<CMovingBitmap>().swap(bullet);
+	vector<CMovingBitmap>().swap(bricks);
+	vector<CMovingBitmap>().swap(lightning);
+
+	for (int i = 0; i < 3; i++) {
+		weapon_list[i] = 0; 
+	}
+
+	boss_level = 0;
+	level = 0;
+	current_t = 0;
+	pre_boss_t = 0;
+	current_stage = 0;
+
+	t0.OnBeginState();
 	t1.OnBeginState();
+	t2.OnBeginState();
 	b1.OnBeginState();
 	b2.OnBeginState();
+
+	select_stage.OnBeginState();
+	a = clock();
+	b = clock();
+	
 }
 
 void CGameStateRun::OnMove()							// 移動遊戲元素
 {
 	b = clock();
 	current_t = (int)(b - a) / CLOCKS_PER_SEC;
-	/*
-	if (energy_bar.get_energy() == 25 && t1.run == 1) {
-		boss_level++;
-		t1.run = 0;
-		CAudio::Instance()->Stop(AUDIO_GameStage);
-		CAudio::Instance()->Play(AUDIO_GameBoss, true);
 
-	}
-	*/
-
-
-	if (current_t- pre_boss_t > 20) {
+	if (current_t- pre_boss_t > 40) {
+		t0.run = 0;
 		t1.run = 0;
 		t2.run = 0;
 
@@ -63,14 +85,11 @@ void CGameStateRun::OnMove()							// 移動遊戲元素
 			b1.OnMove(); 
 			if (b1.run == 0) {
 				boss_level++;
-				//t1.run = 1;
-				t2.run = 1;
+				t1.run = 1;
 				energy_bar.set_energy(0);
 				energy_bar.SetFrameIndexOfBitmap(0);
 				character.SetTopLeft(461, 252);
 				character.set_center(470, 270);
-				t1.select = 0;
-				t1.open_stat2 = 1;
 				pre_boss_t = (int)(b - a) / CLOCKS_PER_SEC;
 				CAudio::Instance()->Stop(AUDIO_GameBoss);
 				CAudio::Instance()->Play(AUDIO_GameStage, true);
@@ -82,13 +101,11 @@ void CGameStateRun::OnMove()							// 移動遊戲元素
 			b2.OnMove();
 			if (b2.run == 0) {
 				boss_level++;
-				t1.run = 1;
+				t2.run = 1;
 				energy_bar.set_energy(0);
 				energy_bar.SetFrameIndexOfBitmap(0);
 				character.SetTopLeft(461, 252);
 				character.set_center(470, 270);
-				t1.select = 0;
-				t1.open_stat2 = 1;
 				pre_boss_t = (int)(b - a) / CLOCKS_PER_SEC;
 				CAudio::Instance()->Stop(AUDIO_GameBoss);
 				CAudio::Instance()->Play(AUDIO_GameStage, true);
@@ -96,39 +113,25 @@ void CGameStateRun::OnMove()							// 移動遊戲元素
 		}
 		
 	}
-	/*
-	else if(boss_level == 2 && b2.run == 1){
-		b2.OnMove();  //boss2
-
-		if (b2.isVector() == 1) {
-			set_victory_value(1);
-			set_over_data();
-			GotoGameState(GAME_STATE_OVER);
+	else {
+		if (select_stage.show == 1) {
+			select_stage.OnMove();
+		}
+		else if (t0.run == 1)
+		{
+			t0.OnMove(); //stage1
 		}
 
-		if (b2.run == 0) {
-			t1.run = 1;
-			energy_bar.set_energy(0);
-			energy_bar.SetFrameIndexOfBitmap(0);
-			t1.select = 0;
-			CAudio::Instance()->Stop(AUDIO_GameBoss);
-			CAudio::Instance()->Play(AUDIO_GameStage, true);
+		else if (t1.run == 1)
+		{
+			t1.OnMove(); //stage1
+		}
+		else if (t2.run == 1)
+		{
+			t2.OnMove(); //stage1
 		}
 	}
-	*/
 
-	if (select_stage.show == 1) {
-		select_stage.OnMove();
-	}
-	else if(t1.run == 1)
-	{
-		t1.OnMove(); //stage1
-	}
-
-	else if (t2.run == 1)
-	{
-		t2.OnMove(); //stage1
-	}
 
 	/*t1.run = 0;
 	b1.run = 0;
@@ -143,6 +146,7 @@ void CGameStateRun::OnMove()							// 移動遊戲元素
 		GotoGameState(GAME_STATE_OVER);
 	}
 	*/
+	
 	
 	
 	
@@ -213,6 +217,9 @@ void CGameStateRun::OnInit()  								// 遊戲的初值及圖形設定
 	*/
 	lightning.size();
 
+	t0.set_share_obj_data(background, character, opera, blood_bar, energy_bar, dart, bullet, bricks, lightning);
+	t0.OnInit();
+
 	t1.set_share_obj_data(background, character, opera, blood_bar, energy_bar, dart, bullet, bricks,lightning);
 	t1.OnInit();
 
@@ -232,7 +239,6 @@ void CGameStateRun::OnInit()  								// 遊戲的初值及圖形設定
 
 	a = clock();
 
-
 }
 
 void CGameStateRun::OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags)
@@ -249,34 +255,21 @@ void CGameStateRun::OnLButtonDown(UINT nFlags, CPoint point)  // 處理滑鼠的
 	if (select_stage.show == 1) {
 		select_stage.OnLButtonDown(nFlags, point);
 		if (select_stage.show == 2) {
-			t1.select = select_stage.show;
-			
 
-			if (select_stage.weapon_selected == BRICKS) {
-				//t1.get_data();
-				t1.bricks_born(bricks, { "Resources/weapon/cleaver.bmp" }, { 255, 255, 255 });
-				t1.get_data();
-				weapon_list[select_stage.weapon_selected] += 1;
+			if (current_stage == 0) {
+				select_temp(t0);
+			}
+			else if (current_stage == 1) {
+				select_temp(t1);
 			}
 
-			if (select_stage.weapon_selected == DART) {
-				
-				t1.mygame_dart_born();
-				t1.share_data();
-				weapon_list[select_stage.weapon_selected] += 1;
+			else if(current_stage == 2) {
+				select_temp(t2);
 			}
-			
-			if (select_stage.weapon_selected == LIGHTNING) {
 
-				t1.lightning_born();
-				t1.share_data();
-				weapon_list[select_stage.weapon_selected] += 1;
-			}
-			
 		}
 	}
-	
-	
+
 }
 
 void CGameStateRun::OnLButtonUp(UINT nFlags, CPoint point)	// 處理滑鼠的動作
@@ -314,24 +307,8 @@ void CGameStateRun::OnShow()
 
 
 	show_baclground_selected();
-	select_stage.show = t1.select;
 
-	/*
-	if (boss_level == 1 && b1.run == 1) {
-		b1.OnShow();
-	}
-	else if (boss_level == 2 &&b2.run == 1) {
-		b2.OnShow();
-	}
-
-
-	else if (t1.run == 1)
-	{
-		t1.OnShow();
-	}
-	*/
-
-	if (current_t - pre_boss_t > 20) {
+	if (current_t - pre_boss_t > 40) {
 		if (boss_level == 0) {
 			b1.OnShow();
 		}
@@ -342,14 +319,24 @@ void CGameStateRun::OnShow()
 	else {
 
 		if (boss_level == 0) {
-			//t1.OnShow();
-			t1.OnShow();
+			t0.OnShow();
+			current_stage = 0;
+			select_stage.show = t0.select;
 		}
-		else if (boss_level == 1) {
+		else if (boss_level == 1 && b1.run == 0) {
+			t1.OnShow();
+			current_stage = 1;
+			select_stage.show = t1.select;
+		}
+		else if (boss_level == 1 && b2.run == 0) {
 			t2.OnShow();
+			current_stage = 2;
+			select_stage.show = t2.select;
 		}
+
+
 		if (select_stage.show == 1) {
-			t1.OnShow();
+			
 			select_stage.OnShow();
 		}
 	}
@@ -364,7 +351,6 @@ void CGameStateRun::OnShow()
 	dead_logo.ShowBitmap();
 	timer_express.ShowBitmap();
 	show_text();
-	
 }
 
 void CGameStateRun::show_text() {
@@ -410,6 +396,39 @@ void CGameStateRun::set_over_data() {
 	set_data(to_string((t / 600)) + to_string((t / 60) % 10) + " : " + to_string((t / 10) % 6) + to_string(t % 10),
 		to_string(t1.get_dead_monster()), cout);
 }
+
+
+template<typename T>
+void CGameStateRun::select_temp(T &t) {
+
+	if (select_stage.weapon_selected == BRICKS) {
+		t.bricks_born(bricks, { "Resources/weapon/cleaver.bmp" }, { 255, 255, 255 });
+		t.get_data();
+		weapon_list[select_stage.weapon_selected] += 1;
+		select_stage.show = 0;
+	}
+
+	if (select_stage.weapon_selected == DART) {
+
+		t.mygame_dart_born();
+		t.share_data();
+		weapon_list[select_stage.weapon_selected] += 1;
+		select_stage.show = 0;
+	}
+
+	if (select_stage.weapon_selected == LIGHTNING) {
+
+		t.lightning_born();
+		t.share_data();
+		weapon_list[select_stage.weapon_selected] += 1;
+		select_stage.show = 0;
+	}
+	t.select = select_stage.show;
+
+	energy_bar.set_energy(0);
+	energy_bar.SetFrameIndexOfBitmap(0);
+
+};
 //////////////////////////////////////////////////////////////////////////////////////////////
 void CMovingBitmap::dart_hit_monster(vector<CMovingBitmap> &dart, vector<CMovingBitmap> &monster, vector<CMovingBitmap> &monster_vanish) {
 

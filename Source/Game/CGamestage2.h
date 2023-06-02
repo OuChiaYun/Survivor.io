@@ -78,7 +78,7 @@ namespace game_framework {
 
 		int run = 1;
 
-		int open_stat2 = 0;
+		//int open_stat2 = 0;
 
 
 	private:

@@ -18,7 +18,7 @@
 using namespace game_framework;
 
 void CGamestageBoss2::OnBeginState() {
-
+	run = 1;
 };
 
 void CGamestageBoss2::OnInit() {
@@ -176,7 +176,9 @@ void CGamestageBoss2::OnMove() {
 	//born_bullet(bullet, { "Resources/weapon/bullet.bmp" }, { 255, 255, 255 });
 	bullet_erase(bullet);
 
-	//if (boss2.get_hp() == 0) {
+	if (boss2.get_hp() == 0) {
+		run = 0;
+	}
 		//set_victory_value(1);
 		//GotoGameState(GAME_STATE_OVER);
 		//GotoGameState(GAME_STATE_RUN);
@@ -359,7 +361,7 @@ void CGamestageBoss2::lightning_move(vector<CMovingBitmap> &item) {
 
 
 	int flag = 0;
-	int f[8] = { 0,0,0,0, 0,0,0,0 };
+	int f[100] = { 0,0,0,0, 0,0,0,0 };
 	for (int i = 0; i < (int)item.size(); i++) {
 
 		if ((lightning[i].GetLeft() <= (lightning[i].stdx - 300)) || (lightning[i].GetLeft() + 105 >= (lightning[i].stdx + 300))) {

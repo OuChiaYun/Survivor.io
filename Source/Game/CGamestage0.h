@@ -1,26 +1,26 @@
 
 #include "stdafx.h"
 
-#ifndef CG_H
-#define CG_H
+#ifndef CG0_H
+#define CG0_H
 
 namespace game_framework {
 
-	class CGamestage1{
+	class CGamestage0 {
 	public:
-		CGamestage1() {};
-		~CGamestage1() {};	
-		void OnBeginState();					
-		void OnInit();  							
+		CGamestage0() {};
+		~CGamestage0() {};
+		void OnBeginState();
+		void OnInit();
 		void OnKeyDown(UINT, UINT, UINT);
 		void OnKeyUp(UINT, UINT, UINT);
-		void OnLButtonDown(UINT nFlags, CPoint point); 
-		void OnLButtonUp(UINT nFlags, CPoint point);	
-		void OnMouseMove(UINT nFlags, CPoint point);	
+		void OnLButtonDown(UINT nFlags, CPoint point);
+		void OnLButtonUp(UINT nFlags, CPoint point);
+		void OnMouseMove(UINT nFlags, CPoint point);
 		void OnRButtonDown(UINT nFlags, CPoint point);
-		void OnRButtonUp(UINT nFlags, CPoint point);	
-		void OnMove();		
-		void OnShow();	
+		void OnRButtonUp(UINT nFlags, CPoint point);
+		void OnMove();
+		void OnShow();
 		void show_baclground_selected(int s);
 
 		void background_move();
@@ -40,8 +40,8 @@ namespace game_framework {
 		bool isLeft(CMovingBitmap &character, CMovingBitmap &item);
 		bool isDown(CMovingBitmap &character, CMovingBitmap &item);
 		void monster_move(CMovingBitmap &monster);
-		void big_monster_move(CMovingBitmap &monster);
-		void big_monster_born();
+		//void big_monster_move(CMovingBitmap &monster);
+		//void big_monster_born();
 
 		void bullet_move(vector<CMovingBitmap> &item);
 		void bullet_erase(vector<CMovingBitmap> &item);
@@ -61,12 +61,12 @@ namespace game_framework {
 
 
 		/////////////////////////////update data/////////////////
-		void set_share_obj_data(CMovingBitmap &tmp_background, CMovingBitmap &tmp_character,CMovingBitmap &tmp_opera, CMovingBitmap &tmp_blood_bar, CMovingBitmap &tmp_energy_bar, 
+		void set_share_obj_data(CMovingBitmap &tmp_background, CMovingBitmap &tmp_character, CMovingBitmap &tmp_opera, CMovingBitmap &tmp_blood_bar, CMovingBitmap &tmp_energy_bar,
 			vector <CMovingBitmap> &tmp_dart, vector<CMovingBitmap> &tmp_bullet, vector<CMovingBitmap> &tmp_bricks, vector<CMovingBitmap> &tmp_lightning);
 
 
 
-		void move_share_obj_data(CMovingBitmap &tmp_background, CMovingBitmap &tmp_character,CMovingBitmap &tmp_opera, CMovingBitmap &tmp_blood_bar, CMovingBitmap &tmp_energy_bar, 
+		void move_share_obj_data(CMovingBitmap &tmp_background, CMovingBitmap &tmp_character, CMovingBitmap &tmp_opera, CMovingBitmap &tmp_blood_bar, CMovingBitmap &tmp_energy_bar,
 			vector <CMovingBitmap> &tmp_dart, vector<CMovingBitmap> &tmp_bullet, vector<CMovingBitmap> &tmp_bricks, vector<CMovingBitmap> &tmp_lightning);
 		//move data = run
 
@@ -105,14 +105,14 @@ namespace game_framework {
 
 		////////////////////////
 		vector<CMovingBitmap> magnet;
-//share
+		//share
 
 		vector<CMovingBitmap> monster;
 		vector<CMovingBitmap> monster_vanish;
 		CMovingBitmap blood;
-		
-		vector<CMovingBitmap> big_monster;
-		vector<CMovingBitmap> big_monster_vanish;
+
+	//	vector<CMovingBitmap> big_monster;
+	//	vector<CMovingBitmap> big_monster_vanish;
 
 		vector<CMovingBitmap> heart;
 

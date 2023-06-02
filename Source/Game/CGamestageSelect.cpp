@@ -17,7 +17,9 @@
 
 using namespace game_framework;
 
-void CGamestageSelect::OnBeginState() {};
+void CGamestageSelect::OnBeginState() {
+	show = 0;
+};
 
 void CGamestageSelect::OnInit() {
 

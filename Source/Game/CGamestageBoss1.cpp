@@ -17,7 +17,21 @@
 
 using namespace game_framework;
 
-void CGamestageBoss1::OnBeginState() {};
+void CGamestageBoss1::OnBeginState() {
+	run = 1;
+	boss1.set_hp(5000);
+	blood_bar_boss1.SetFrameIndexOfBitmap(0);
+
+	int x[5] = { 5, 10, -2 };
+	int y[5] = { 3,  -2,   8 };
+
+	for (int i = 0; i < 3; i++) {
+		boss1_bullet[i].SetTopLeft(boss1_range.GetLeft() + 270 + 10, boss1_range.GetTop() + 130);
+		boss1.set_hit_x(x[i], i);
+		boss1.set_hit_y(y[i], i);
+	}
+
+};
 
 void CGamestageBoss1::OnInit() {
 
@@ -387,7 +401,7 @@ void CGamestageBoss1::lightning_move(vector<CMovingBitmap> &item) {
 
 
 	int flag = 0;
-	int f[8] = { 0,0,0,0, 0,0,0,0 };
+	int f[100] = { 0,0,0,0, 0,0,0,0 };
 	for (int i = 0; i < (int)item.size(); i++) {
 
 		if ((lightning[i].GetLeft() <= (lightning[i].stdx - 300)) || (lightning[i].GetLeft() +105 >= (lightning[i].stdx + 300))) {

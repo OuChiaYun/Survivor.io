@@ -244,6 +244,7 @@
     <ClCompile Include="Source\Core\StdAfx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
     </ClCompile>
+    <ClCompile Include="Source\Game\CGamestage0.cpp" />
     <ClCompile Include="Source\Game\CGamestageBoss1.cpp" />
     <ClCompile Include="Source\Game\CGamestageBoss2.cpp" />
     <ClCompile Include="Source\Game\CGamestageSelect.cpp" />
@@ -265,6 +266,7 @@
     <ClInclude Include="Source\Core\MainFrm.h" />
     <ClInclude Include="Source\Core\Resource.h" />
     <ClInclude Include="Source\Core\StdAfx.h" />
+    <ClInclude Include="Source\Game\CGamestage0.h" />
     <ClInclude Include="Source\Game\CGamestageBoss1.h" />
     <ClInclude Include="Source\Game\CGamestageBoss2.h" />
     <ClInclude Include="Source\Game\CGamestageSelect.h" />

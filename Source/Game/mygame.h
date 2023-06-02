@@ -55,6 +55,14 @@ namespace game_framework {
 		AUDIO_NTUT				// 2
 	};
 
+	class CGanestage {
+		public:
+			CGanestage() {};
+		private:
+			int a;
+
+	};
+
 	class CGameStateValueStorage {
 	public:
 		CGameStateValueStorage();
@@ -135,6 +143,9 @@ namespace game_framework {
 	private:
 		CGamestage1 t1;
 		CGamestage2 t2;
+		CGamestage0 t0;
+
+
 		CGamestageSelect select_stage; 
 		CGamestageBoss1 b1;
 		CGamestageBoss2 b2;
@@ -156,8 +167,13 @@ namespace game_framework {
 		int level = 0;
 		int current_t = 0;
 		int pre_boss_t = 0;
+		int current_stage = 0;
 
 		CMovingBitmap weapon_logo[3] ;
+
+		template<typename T>
+		void select_temp(T &t);
+
 
 
 		int weapon_list[3] = { 0,0,0 };//s
