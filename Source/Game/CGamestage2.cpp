@@ -93,9 +93,10 @@ void CGamestage2::OnInit() {
 		random_born_big_monster(fast_monster, {
 			"Resources/fast_monster/b1.bmp","Resources/fast_monster/b2.bmp" ,"Resources/fast_monster/b3.bmp" ,"Resources/fast_monster/b4.bmp" ,"Resources/fast_monster/b5.bmp" ,"Resources/fast_monster/b6.bmp",
 			"Resources/fast_monster/c1.bmp","Resources/fast_monster/c2.bmp" ,"Resources/fast_monster/c3.bmp" ,"Resources/fast_monster/c4.bmp" ,"Resources/fast_monster/c5.bmp" ,"Resources/fast_monster/c6.bmp" },
-			fast_monster_vanish, { "Resources/monster/big_e0.bmp","Resources/monster/big_e1.bmp","Resources/monster/big_e2.bmp" ,"Resources/monster/big_e3.bmp",
-								  "Resources/monster/big_e4.bmp","Resources/monster/big_e5.bmp","Resources/monster/big_e6.bmp" ,"Resources/monster/big_e7.bmp",
-								  "Resources/monster/big_e8.bmp","Resources/monster/big_e9.bmp","Resources/monster/m17.bmp" }, { 255,255,255 }, { 255, 255, 255 });  //255
+			fast_monster_vanish, { "Resources/fast_monster/k1.bmp","Resources/fast_monster/k2.bmp","Resources/fast_monster/k3.bmp" ,"Resources/fast_monster/k4.bmp",
+								 "Resources/fast_monster/k5.bmp","Resources/fast_monster/k6.bmp","Resources/fast_monster/k7.bmp" ,"Resources/fast_monster/k8.bmp",
+								 "Resources/fast_monster/k9.bmp","Resources/fast_monster/k10.bmp","Resources/fast_monster/k11.bmp" ,"Resources/fast_monster/k12.bmp",
+								 "Resources/fast_monster/k13.bmp","Resources/fast_monster/k14.bmp","Resources/monster/m17.bmp" }, { 255,255,255 }, { 255, 255, 255 });  //255
 		fast_monster[i].set_limit_start_end(0, 5);
 		fast_monster[i].set_hp(10);
 		fast_monster[i].set_end = 11;
@@ -465,7 +466,7 @@ void CGamestage2::random_born_item(vector<CMovingBitmap>&item, vector<string> st
 };
 
 void CGamestage2::item_move(CMovingBitmap &item) {
-	double rate = 0.12;
+	double rate = 0.15;
 	int x = item.GetLeft() - int((opera.GetLeft() - 437)*rate);
 	int y = item.GetTop() - int((opera.GetTop() - 682)*rate);
 
@@ -699,6 +700,31 @@ void CGamestage2::monster_all() {
 		big_monster[tail].set_center(x + 45, y + 57);
 		big_monster_vanish.erase(big_monster_vanish.begin());
 	}
+	/*
+	if (int(fast_monster_vanish.size() > 2)) {
+
+		fast_monster.push_back(fast_monster_vanish[0]);
+		fast_monster[fast_monster.size() - 1].SetFrameIndexOfBitmap(0);
+		fast_monster[fast_monster.size() - 1].SetAnimation(95, false);
+		fast_monster[fast_monster.size() - 1].set_hp(8);
+		fast_monster[fast_monster.size() - 1].set_limit_start_end(0, 5);
+		int min = -1450;
+		int max = 1450;
+		int tail = fast_monster.size() - 1;
+		int x = rand() % (max - min + 1) + min;
+		int y = rand() % (max - min + 1) + min;
+		fast_monster[tail].SetTopLeft(x, y);
+		fast_monster[tail].set_center(x + 45, y + 57);
+		fast_monster_vanish.erase(fast_monster_vanish.begin());
+
+		fast_monster[i].set_limit_start_end(0, 5);
+		fast_monster[i].set_hp(10);
+		fast_monster[i].set_end = 11;
+		fast_monster[i].SetFrameIndexOfBitmap(0);
+		fast_monster[i].SetAnimation(100, false);
+		fast_monster[i].ay = 12;
+		fast_monster[i].ax = 12;
+	}*/
 
 	if (timer == 10000) {
 		timer = 0;

@@ -247,6 +247,7 @@
     <ClCompile Include="Source\Game\CGamestage0.cpp" />
     <ClCompile Include="Source\Game\CGamestageBoss1.cpp" />
     <ClCompile Include="Source\Game\CGamestageBoss2.cpp" />
+    <ClCompile Include="Source\Game\CGamestageBoss3.cpp" />
     <ClCompile Include="Source\Game\CGamestageSelect.cpp" />
     <ClCompile Include="Source\Game\mygame_initialize.cpp" />
     <ClCompile Include="Source\Game\mygame_over.cpp" />
@@ -269,6 +270,7 @@
     <ClInclude Include="Source\Game\CGamestage0.h" />
     <ClInclude Include="Source\Game\CGamestageBoss1.h" />
     <ClInclude Include="Source\Game\CGamestageBoss2.h" />
+    <ClInclude Include="Source\Game\CGamestageBoss3.h" />
     <ClInclude Include="Source\Game\CGamestageSelect.h" />
     <ClInclude Include="Source\Game\CGamestage_all.h" />
     <ClInclude Include="Source\Game\config.h" />

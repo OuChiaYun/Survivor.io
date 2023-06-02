@@ -7,3 +7,4 @@
 #include"../Game/CGamestageSelect.h"
 #include "../Game/CGamestageBoss1.h"
 #include "../Game/CGamestageBoss2.h"
+#include "../Game/CGamestageBoss3.h"

@@ -429,7 +429,7 @@ void CGamestage1::random_born_item(vector<CMovingBitmap>&item, vector<string> st
 };
 
 void CGamestage1::item_move(CMovingBitmap &item) {
-	double rate = 0.12;
+	double rate = 0.14;
 	int x = item.GetLeft() - int((opera.GetLeft() - 437)*rate);
 	int y = item.GetTop() - int((opera.GetTop() - 682)*rate);
 

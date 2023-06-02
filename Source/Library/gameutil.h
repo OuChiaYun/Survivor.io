@@ -148,8 +148,12 @@ namespace game_framework {
 		int energy = 0;
 		int stdx = 0;
 		int stdy = 0;
+
 		vector<int> boss1_hit_x = { 0, 0, 0 };
 		vector<int> boss1_hit_y = { 0, 0, 0 };
+		vector<int> boss3_hit_x = { 0, 0, 0 };
+		vector<int> boss3_hit_y = { 0, 0, 0 };
+
 		int ram_n = 0;
 		int set_end = 0;
 		int hurted = 0;

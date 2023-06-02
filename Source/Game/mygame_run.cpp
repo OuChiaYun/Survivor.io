@@ -68,6 +68,8 @@ void CGameStateRun::OnBeginState()
 	select_stage.OnBeginState();
 	a = clock();
 	b = clock();
+
+	t0.run = 1;
 	
 }
 
@@ -111,8 +113,17 @@ void CGameStateRun::OnMove()							// 移動遊戲元素
 				CAudio::Instance()->Play(AUDIO_GameStage, true);
 			}
 		}
+		else if (boss_level == 2) {
+			b3.OnMove();
+			if (b3.run == 0) {
+				set_victory_value(1);
+				set_over_data();
+				GotoGameState(GAME_STATE_OVER);
+			}
+		}
 		
 	}
+
 	else {
 		if (select_stage.show == 1) {
 			select_stage.OnMove();
@@ -234,6 +245,9 @@ void CGameStateRun::OnInit()  								// 遊戲的初值及圖形設定
 	b2.set_share_obj_data(background, character, opera, blood_bar, energy_bar, dart, bullet, bricks, lightning);
 	b2.OnInit();
 
+	b3.set_share_obj_data(background, character, opera, blood_bar, energy_bar, dart, bullet, bricks, lightning);
+	b3.OnInit();
+
 	timer_express.LoadBitmapByString({ "Resources/t1.bmp" }, RGB(255, 255, 255));
 	timer_express.SetTopLeft(1065 - timer_express.GetWidth() - 70, 1065 - timer_express.GetHeight() - 60);
 
@@ -315,6 +329,9 @@ void CGameStateRun::OnShow()
 		else if (boss_level == 1) {
 			b2.OnShow();
 		}
+		else if (boss_level == 2) {
+			b3.OnShow();
+		}
 	}
 	else {
 
@@ -328,7 +345,7 @@ void CGameStateRun::OnShow()
 			current_stage = 1;
 			select_stage.show = t1.select;
 		}
-		else if (boss_level == 1 && b2.run == 0) {
+		else if (boss_level == 2 && b2.run == 0) {
 			t2.OnShow();
 			current_stage = 2;
 			select_stage.show = t2.select;

@@ -141,14 +141,15 @@ namespace game_framework {
 		void OnMove();									// 移動遊戲元素
 		void OnShow();		// 顯示這個狀態的遊戲畫面
 	private:
+		CGamestage0 t0;
 		CGamestage1 t1;
 		CGamestage2 t2;
-		CGamestage0 t0;
 
 
 		CGamestageSelect select_stage; 
 		CGamestageBoss1 b1;
 		CGamestageBoss2 b2;
+		CGamestageBoss3 b3;
 
 		CMovingBitmap character;
 		CMovingBitmap background;
