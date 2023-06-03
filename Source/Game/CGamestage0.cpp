@@ -180,6 +180,18 @@ void CGamestage0::OnMove() {
 			item_move(energy[i]);
 	}
 	character.item_hit_energy(character, energy, energy_bar);
+	if ((int)energy.size() < 10) {
+		for (int i = 0; i < 100; i++) {
+			random_born_item(energy, { "Resources/gem/gem1.bmp", "Resources/gem/gem2.bmp",
+								   "Resources/gem/gem3.bmp","Resources/gem/gem4.bmp","Resources/gem/gem5.bmp" }, { 200, 191, 231 });
+
+			energy[i].SetAnimation(100, false);
+		}
+		//int tail = (int)energy.size();
+		/*for (int i = 0; i < (int)energy_save.size(); i++) {
+			energy.push_back(energy_save[i]);
+		}*/
+	}
 
 	item_move(magnet[0]);
 	if (character.IsOverlap(character, magnet[0])) {
@@ -368,7 +380,7 @@ void CGamestage0::background_move() {
 
 void CGamestage0::blood_bar_progress(CMovingBitmap &blood_bar, CMovingBitmap &item_blood) {
 
-	if (item_blood.get_hp() == item_blood.get_hp_max()) {
+	if (item_blood.get_hp() >= item_blood.get_hp_max()) {
 		blood_bar.SetFrameIndexOfBitmap(blood_bar.GetFrameSizeOfBitmap() - 1);
 	}
 	else if (item_blood.get_hp() > 0) {

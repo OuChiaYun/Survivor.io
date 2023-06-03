@@ -23,7 +23,7 @@ void CGamestageBoss3::OnBeginState() {
 
 void CGamestageBoss3::OnInit() {
 
-	boss3.LoadBitmapByString({ "Resources/boss2/boss2_f0.bmp", "Resources/boss2/boss2_f1.bmp", "Resources/boss2/boss2_f2.bmp", "Resources/boss2/boss2_f3.bmp" }, RGB(255, 255, 255));
+	boss3.LoadBitmapByString({ "Resources/boss3/f0.bmp", "Resources/boss3/f1.bmp", "Resources/boss3/f2.bmp", "Resources/boss3/f3.bmp" }, RGB(255, 255, 255));
 	boss3.SetAnimation(150, false);
 	boss3.set_hp(5000);
 	boss3.set_hp_max(5000);
@@ -43,11 +43,12 @@ void CGamestageBoss3::OnInit() {
 								 "Resources/blood/bloodfx001_04.bmp", "Resources/blood/bloodfx001_05.bmp",
 								 "Resources/ignore.bmp" }, RGB(255, 255, 255));
 
-	vector<string> boss3_bullet_bmp = { "Resources/boss2/boss2_b1.bmp ","Resources/boss2/boss2_b2.bmp " ,"Resources/boss2/boss2_b3.bmp" ,"Resources/boss2/boss2_b4.bmp" ,"Resources/boss2/boss2_b5.bmp" ,"Resources/boss2/boss2_b6.bmp " ,"Resources/boss2/boss2_b7.bmp " ,"Resources/boss2/boss2_b8.bmp " };
+	vector<string> boss3_bullet_bmp = { "Resources/boss3/boss3_bullet/00.bmp", "Resources/boss3/boss3_bullet/10.bmp" , "Resources/boss3/boss3_bullet/20.bmp" , "Resources/boss3/boss3_bullet/30.bmp" , "Resources/boss3/boss3_bullet/40.bmp" ,
+		"Resources/boss3/boss3_bullet/50.bmp" , "Resources/boss3/boss3_bullet/60.bmp " , "Resources/boss3/boss3_bullet/70.bmp", "Resources/boss3/boss3_bullet/80.bmp", "Resources/boss3/boss3_bullet/90.bmp" };
 
 	for (int i = 0; i < 8; i++) {
 		boss3_bullet.push_back(CMovingBitmap());
-		boss3_bullet[i].LoadBitmapByString(boss3_bullet_bmp, RGB(140, 133, 90));
+		boss3_bullet[i].LoadBitmapByString(boss3_bullet_bmp, RGB(255, 255, 255));
 		boss3_bullet[i].SetTopLeft(boss3.get_center_x() - 20, boss3.get_center_y() - 20);
 		boss3_bullet[i].SetAnimation(5, false);
 	}
@@ -78,14 +79,15 @@ void CGamestageBoss3::OnInit() {
 	int a = boss3.boss3_hit_x.size();
 	int b = boss3.boss3_hit_y.size();
 
+
+	vector<string> ball_name = { "Resources/boss3/orange_ball.bmp", "Resources/boss3/purple_ball.bmp" , "Resources/boss3/brown_ball.bmp" };
 	for (int i = 0; i < 3; i++) {
 		boss3_rocket.push_back(CMovingBitmap());
-		boss3_rocket[i].LoadBitmapByString({ "Resources/boss1/Rock.bmp" }, RGB(255, 255, 255));
+		boss3_rocket[i].LoadBitmapByString({ ball_name[i] }, RGB(200, 191, 231));
 		boss3_rocket[i].SetTopLeft(boss3.GetLeft() + boss3.GetWidth() / 2, boss3.GetTop());
 		boss3.set_hit_x(x[i], i);
 		boss3.set_hit_y(y[i], i);
 	}
-
 }
 
 void CGamestageBoss3::OnKeyDown(UINT, UINT, UINT) {};
@@ -145,7 +147,6 @@ void CGamestageBoss3::OnRButtonUp(UINT nFlags, CPoint point) {};
 void CGamestageBoss3::OnMove() {
 	get_data();
 	timmer++;
-	isVector();
 
 
 	if (timmer > 150) {
@@ -161,6 +162,7 @@ void CGamestageBoss3::OnMove() {
 		if (timmer > 10000) {
 			timmer = 151;
 		}
+		isVector();
 	}
 	else {
 		boss3.SetTopLeft(420, 500);
@@ -350,7 +352,7 @@ void CGamestageBoss3::dart_move(CMovingBitmap &item, int i, int setR) {
 }
 
 void CGamestageBoss3::blood_bar_progress(CMovingBitmap &blood_bar, CMovingBitmap &item_blood) {
-	if (item_blood.get_hp() == item_blood.get_hp_max()) {
+	if (item_blood.get_hp() >= item_blood.get_hp_max()) {
 		blood_bar.SetFrameIndexOfBitmap(blood_bar.GetFrameSizeOfBitmap() - 1);
 	}
 	else if (item_blood.get_hp() > 0) {
@@ -538,7 +540,7 @@ void CGamestageBoss3::boss3_rocket_move() {
 		else if (boss3_rocket[i].GetTop() < boss3_range.GetTop()) {
 			boss3.set_hit_y(abs(y), i);
 		}
-		else if (boss3_rocket[i].GetTop() + 26 > boss3_range.GetTop() + 430) {
+		else if (boss3_rocket[i].GetTop() + 50 > boss3_range.GetTop() + 1040) {
 			boss3.set_hit_y(-abs(y), i);
 		}
 

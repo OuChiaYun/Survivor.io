@@ -177,7 +177,7 @@ namespace game_framework {
 
 
 
-		int weapon_list[3] = { 0,0,0 };//s
+		int weapon_list[4] = { 0,0,0,0 };//s
 		string weapon_name[3] = { "Bricks","Guardian","Lightning" };//
 
 	};

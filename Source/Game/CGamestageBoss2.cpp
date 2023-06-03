@@ -345,7 +345,7 @@ void CGamestageBoss2::dart_move(CMovingBitmap &item, int i, int setR) {
 }
 
 void CGamestageBoss2::blood_bar_progress(CMovingBitmap &blood_bar, CMovingBitmap &item_blood) {
-	if (item_blood.get_hp() == item_blood.get_hp_max()) {
+	if (item_blood.get_hp() >= item_blood.get_hp_max()) {
 		blood_bar.SetFrameIndexOfBitmap(blood_bar.GetFrameSizeOfBitmap() - 1);
 	}
 	else if (item_blood.get_hp() > 0) {

@@ -17,6 +17,7 @@
 #define BRICKS 0
 #define DART 1
 #define LIGHTNING 2
+#define BLOOD_ADD 3
 
 
 using namespace game_framework;
@@ -189,9 +190,9 @@ void CGameStateRun::OnInit()  								// 遊戲的初值及圖形設定
 	opera.SetTopLeft(437, 682);
 	opera.set_center(437 + 54, 682 + 54);//491 , 736
 
-	blood_bar.LoadBitmapByString({ "Resources/health_ui/health_ui_0.bmp", "Resources/health_ui/health_ui_1.bmp",
-							   "Resources/health_ui/health_ui_2.bmp", "Resources/health_ui/health_ui_3.bmp",
-							   "Resources/health_ui/health_ui_4.bmp" }, RGB(255, 255, 255));
+	blood_bar.LoadBitmapByString({ "Resources/health_ui/health_ui_4.bmp", "Resources/health_ui/health_ui_3.bmp",
+							   "Resources/health_ui/health_ui_2.bmp", "Resources/health_ui/health_ui_1.bmp",
+							   "Resources/health_ui/health_ui_0.bmp" }, RGB(255, 255, 255));
 	blood_bar.SetFrameIndexOfBitmap(blood_bar.GetFrameSizeOfBitmap() - 1);
 
 	blood_bar.SetTopLeft(10, 15);
@@ -440,10 +441,18 @@ void CGameStateRun::select_temp(T &t) {
 		weapon_list[select_stage.weapon_selected] += 1;
 		select_stage.show = 0;
 	}
+
+	if (select_stage.weapon_selected == BLOOD_ADD) {
+		t.share_data();
+		character.set_hp(character.get_hp()+3000);
+		t.get_data();
+		select_stage.show = 0;
+	}
 	t.select = select_stage.show;
 
 	energy_bar.set_energy(0);
 	energy_bar.SetFrameIndexOfBitmap(0);
+	select_stage.rand_option();
 
 };
 //////////////////////////////////////////////////////////////////////////////////////////////

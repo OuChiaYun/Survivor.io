@@ -43,7 +43,8 @@ void CGamestageBoss1::OnInit() {
 	boss1.set_hp(5000);
 	boss1.set_hp_max(5000);
 
-	boss1_range.LoadBitmapByString({ "Resources/boss1/boss1_range.bmp" }, RGB(255, 255, 255));
+	boss1_range.LoadBitmapByString({ "Resources/boss1/boss1_range.bmp", "Resources/boss1/boss1_range_1.bmp", "Resources/boss1/boss1_range_2.bmp", "Resources/boss1/boss1_range_3.bmp" }, RGB(255, 255, 255));
+	boss1_range.SetAnimation(300, false);
 	boss1_range.SetTopLeft(200,65 + 125 + 10);
 	boss1.SetTopLeft(boss1_range.GetLeft() + 243, boss1_range.GetTop() + 130);
 
@@ -256,16 +257,16 @@ void CGamestageBoss1::boss1_bullet_move() {
 		int x = boss1.get_hit_x(i);
 		int y = boss1.get_hit_y(i);
 		boss1_bullet[i].SetTopLeft(boss1_bullet[i].GetLeft() + x, boss1_bullet[i].GetTop() + y);
-		if (boss1_bullet[i].GetLeft() < boss1_range.GetLeft()) {
+		if (boss1_bullet[i].GetLeft() < boss1_range.GetLeft() + 30) {
 			boss1.set_hit_x(abs(x), i);
 		}
-		else if (boss1_bullet[i].GetLeft() + boss1_bullet[i].GetWidth() > boss1_range.GetLeft() + boss1_range.GetWidth()) {
+		else if (boss1_bullet[i].GetLeft() + boss1_bullet[i].GetWidth() > boss1_range.GetLeft() + boss1_range.GetWidth() - 30) {
 			boss1.set_hit_x(-abs(x), i);
 		}
-		else if (boss1_bullet[i].GetTop() < boss1_range.GetTop()) {
+		else if (boss1_bullet[i].GetTop() < boss1_range.GetTop() + 30) {
 			boss1.set_hit_y(abs(y), i);
 		}
-		else if (boss1_bullet[i].GetTop() + 26 > boss1_range.GetTop() + 430) {
+		else if (boss1_bullet[i].GetTop() + 26 > boss1_range.GetTop() + 419 - 30) {
 			boss1.set_hit_y(-abs(y), i);
 		}
 
@@ -313,8 +314,8 @@ void CGamestageBoss1::boss1_background() {
 	if (character.GetLeft() + character.GetWidth() > boss1_range.GetLeft() + boss1_range.GetWidth()) { //right
 		character.SetTopLeft(boss1_range.GetLeft() + boss1_range.GetWidth() - character.GetWidth(), character.GetTop());
 	}
-	if (character.GetTop() + 60 > boss1_range.GetTop() + 430) { //bottom
-		character.SetTopLeft(character.GetLeft(), boss1_range.GetTop() + 430 - 60);
+	if (character.GetTop() + 130 > boss1_range.GetTop() + 419) { //bottom
+		character.SetTopLeft(character.GetLeft(), boss1_range.GetTop() + 419 - 130);
 	}
 
 	character.set_center((character.GetLeft() + 10), (character.GetTop() + 10));
@@ -388,7 +389,7 @@ void CGamestageBoss1::dart_move(CMovingBitmap &item, int i, int setR) {
 }
 
 void CGamestageBoss1::blood_bar_progress(CMovingBitmap &blood_bar, CMovingBitmap &item_blood) {
-	if (item_blood.get_hp() == item_blood.get_hp_max()) {
+	if (item_blood.get_hp() >= item_blood.get_hp_max()) {
 		blood_bar.SetFrameIndexOfBitmap(blood_bar.GetFrameSizeOfBitmap() - 1);
 	}
 	else if (item_blood.get_hp() > 0) {
