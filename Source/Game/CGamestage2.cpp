@@ -646,7 +646,6 @@ void CGamestage2::monster_all() {
 			blood.ShowBitmap();
 		}
 
-
 	}
 
 	for (int i = 0; i < (int)(big_monster.size()); i++) {
@@ -712,7 +711,7 @@ void CGamestage2::monster_all() {
 		big_monster[tail].set_center(x + 45, y + 57);
 		big_monster_vanish.erase(big_monster_vanish.begin());
 	}
-	/*
+	
 	if (int(fast_monster_vanish.size() > 2)) {
 
 		fast_monster.push_back(fast_monster_vanish[0]);
@@ -729,14 +728,14 @@ void CGamestage2::monster_all() {
 		fast_monster[tail].set_center(x + 45, y + 57);
 		fast_monster_vanish.erase(fast_monster_vanish.begin());
 
-		fast_monster[i].set_limit_start_end(0, 5);
-		fast_monster[i].set_hp(10);
-		fast_monster[i].set_end = 11;
-		fast_monster[i].SetFrameIndexOfBitmap(0);
-		fast_monster[i].SetAnimation(100, false);
-		fast_monster[i].ay = 12;
-		fast_monster[i].ax = 12;
-	}*/
+		fast_monster[fast_monster.size() - 1].set_limit_start_end(0, 5);
+		fast_monster[fast_monster.size() - 1].set_hp(10);
+		fast_monster[fast_monster.size() - 1].set_end = 11;
+		fast_monster[fast_monster.size() - 1].SetFrameIndexOfBitmap(0);
+		fast_monster[fast_monster.size() - 1].SetAnimation(100, false);
+		fast_monster[fast_monster.size() - 1].ay = 12;
+		fast_monster[fast_monster.size() - 1].ax = 12;
+	}
 
 	if (timer == 10000) {
 		timer = 0;
