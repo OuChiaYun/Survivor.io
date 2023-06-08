@@ -38,7 +38,26 @@ void CGamestage1::OnBeginState() {
 		monster[i].SetTopLeft(x, y);
 		monster[i].set_center(x + 45, y + 57);
 	}
+	
+	for (int i = int(big_monster.size()); i < 6; i++) {
 
+		big_monster.push_back(big_monster_vanish[0]);
+		big_monster[big_monster.size() - 1].SetFrameIndexOfBitmap(0);
+		big_monster[big_monster.size() - 1].SetAnimation(95, false);
+		big_monster[big_monster.size() - 1].set_hp(40);
+		big_monster[big_monster.size() - 1].set_limit_start_end(0, 3);
+		big_monster_vanish.erase(big_monster_vanish.begin());
+	}
+
+	for (int i = 0; i<int(big_monster.size()); i++) {
+
+		int x = rand() % (max - min + 1) + min;
+		int y = rand() % (max - min + 1) + min;
+		big_monster[i].SetTopLeft(x, y);
+		big_monster[i].set_center(x + 45, y + 57);
+	}
+	
+	
 	vector<CMovingBitmap>().swap(energy);
 	max = 2000;
 	for (int i = 0; i < 100; i++) {
@@ -631,7 +650,7 @@ void CGamestage1::monster_all() {
 		monster_vanish.erase(monster_vanish.begin());
 	}
 
-	if (int(big_monster_vanish.size() > 2 && open_stat2 == 1)) {
+	if (int(big_monster_vanish.size() > 2)) {
 
 		big_monster.push_back(big_monster_vanish[0]);
 		big_monster[big_monster.size() - 1].SetFrameIndexOfBitmap(0);

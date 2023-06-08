@@ -18,6 +18,8 @@
 using namespace game_framework;
 
 void CGamestageBoss3::OnBeginState() {
+	run = 1;
+	boss3.set_hp(5000);
 
 };
 
@@ -500,10 +502,10 @@ void CGamestageBoss3::boss3_bullet_move() {
 		if (boss3_bullet[i].GetTop() < 0) { //up
 			flag++;
 		}
-		else if (boss3_bullet[i].GetLeft() > 1065) { //right
+		else if (boss3_bullet[i].GetLeft() > 4000) { //right
 			flag++;
 		}
-		else if (boss3_bullet[i].GetTop() > 1065) { //down
+		else if (boss3_bullet[i].GetTop() > 4000) { //down
 			flag++;
 		}
 		else if (boss3_bullet[i].GetLeft() < 0) { //left

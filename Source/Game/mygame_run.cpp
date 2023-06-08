@@ -76,71 +76,73 @@ void CGameStateRun::OnBeginState()
 
 void CGameStateRun::OnMove()							// 移動遊戲元素
 {
-	b = clock();
-	current_t = (int)(b - a) / CLOCKS_PER_SEC;
+	if (suspend == 0) {
+		b = clock();
+		current_t = (int)(b - a) / CLOCKS_PER_SEC;
 
-	if (current_t- pre_boss_t > 40) {
-		t0.run = 0;
-		t1.run = 0;
-		t2.run = 0;
+		if (current_t - pre_boss_t > 40) {
+			t0.run = 0;
+			t1.run = 0;
+			t2.run = 0;
 
-		if (boss_level == 0) {
-			b1.OnMove(); 
-			if (b1.run == 0) {
-				boss_level++;
-				t1.run = 1;
-				energy_bar.set_energy(0);
-				energy_bar.SetFrameIndexOfBitmap(0);
-				character.SetTopLeft(461, 252);
-				character.set_center(470, 270);
-				pre_boss_t = (int)(b - a) / CLOCKS_PER_SEC;
-				CAudio::Instance()->Stop(AUDIO_GameBoss);
-				CAudio::Instance()->Play(AUDIO_GameStage, true);
+			if (boss_level == 0) {
+				b1.OnMove();
+				if (b1.run == 0) {
+					boss_level++;
+					t1.run = 1;
+					energy_bar.set_energy(0);
+					energy_bar.SetFrameIndexOfBitmap(0);
+					character.SetTopLeft(461, 252);
+					character.set_center(470, 270);
+					pre_boss_t = (int)(b - a) / CLOCKS_PER_SEC;
+					CAudio::Instance()->Stop(AUDIO_GameBoss);
+					CAudio::Instance()->Play(AUDIO_GameStage, true);
+				}
 			}
-		}
 
 
-		else if (boss_level == 1) {
-			b2.OnMove();
-			if (b2.run == 0) {
-				boss_level++;
-				t2.run = 1;
-				energy_bar.set_energy(0);
-				energy_bar.SetFrameIndexOfBitmap(0);
-				character.SetTopLeft(461, 252);
-				character.set_center(470, 270);
-				pre_boss_t = (int)(b - a) / CLOCKS_PER_SEC;
-				CAudio::Instance()->Stop(AUDIO_GameBoss);
-				CAudio::Instance()->Play(AUDIO_GameStage, true);
+			else if (boss_level == 1) {
+				b2.OnMove();
+				if (b2.run == 0) {
+					boss_level++;
+					t2.run = 1;
+					energy_bar.set_energy(0);
+					energy_bar.SetFrameIndexOfBitmap(0);
+					character.SetTopLeft(461, 252);
+					character.set_center(470, 270);
+					pre_boss_t = (int)(b - a) / CLOCKS_PER_SEC;
+					CAudio::Instance()->Stop(AUDIO_GameBoss);
+					CAudio::Instance()->Play(AUDIO_GameStage, true);
+				}
 			}
-		}
-		else if (boss_level == 2) {
-			b3.OnMove();
-			if (b3.run == 0) {
-				set_victory_value(1);
-				set_over_data();
-				GotoGameState(GAME_STATE_OVER);
+			else if (boss_level == 2) {
+				b3.OnMove();
+				if (b3.run == 0) {
+					set_victory_value(1);
+					set_over_data();
+					GotoGameState(GAME_STATE_OVER);
+				}
 			}
-		}
-		
-	}
 
-	else {
-		if (select_stage.show == 1) {
-			select_stage.OnMove();
-		}
-		else if (t0.run == 1)
-		{
-			t0.OnMove(); //stage1
 		}
 
-		else if (t1.run == 1)
-		{
-			t1.OnMove(); //stage1
-		}
-		else if (t2.run == 1)
-		{
-			t2.OnMove(); //stage1
+		else {
+			if (select_stage.show == 1) {
+				select_stage.OnMove();
+			}
+			else if (t0.run == 1)
+			{
+				t0.OnMove(); //stage1
+			}
+
+			else if (t1.run == 1)
+			{
+				t1.OnMove(); //stage1
+			}
+			else if (t2.run == 1)
+			{
+				t2.OnMove(); //stage1
+			}
 		}
 	}
 
@@ -151,13 +153,13 @@ void CGameStateRun::OnMove()							// 移動遊戲元素
 	b2.run = 1;
 	b2.OnMove();  //boss2*/
 
-	/*
+	
 	if (character.get_hp() <= 0) {
 		set_victory_value(0);
 		set_over_data();
 		GotoGameState(GAME_STATE_OVER);
 	}
-	*/
+	
 	
 	
 	
@@ -218,6 +220,11 @@ void CGameStateRun::OnInit()  								// 遊戲的初值及圖形設定
 	dead_logo.LoadBitmapByString({ "Resources/UI/skull.bmp" }, RGB(255, 255, 255));
 	dead_logo.SetTopLeft(15, 930);
 
+
+	suspend_logo.LoadBitmapByString({ "Resources/UI/suspend.bmp","Resources/UI/suspend_2.bmp","Resources/UI/suspend_3.bmp" }, RGB(255, 255, 255));
+	suspend_logo.SetTopLeft(1065-suspend_logo.GetWidth()-30,10);
+	suspend_logo.SetFrameIndexOfBitmap(0);
+
 	/*
 	CMovingBitmap background;
 	CMovingBitmap character;
@@ -266,8 +273,19 @@ void CGameStateRun::OnKeyUp(UINT nChar, UINT nRepCnt, UINT nFlags)
 
 void CGameStateRun::OnLButtonDown(UINT nFlags, CPoint point)  // 處理滑鼠的動作
 {
-	
-	if (select_stage.show == 1) {
+	if (isSelect(nFlags, point, suspend_logo)) {
+		suspend = !suspend;
+
+		if (suspend == 1) {
+			suspend_logo.SetFrameIndexOfBitmap(1);
+		}
+		else {
+			suspend_logo.SetFrameIndexOfBitmap(0);
+		}
+
+	}
+
+	if (select_stage.show == 1 && suspend == 0) {
 		select_stage.OnLButtonDown(nFlags, point);
 		if (select_stage.show == 2) {
 
@@ -294,17 +312,30 @@ void CGameStateRun::OnLButtonUp(UINT nFlags, CPoint point)	// 處理滑鼠的動
 void CGameStateRun::OnMouseMove(UINT nFlags, CPoint point)	// 處理滑鼠的動作
 {
 
-	
-	if (select_stage.show == 1) {
-		t1.OnMouseMove(false, point);
-		select_stage.OnMouseMove(nFlags, point);
+
+
+	if (isSelect(true, point, suspend_logo)) {
+		
+		suspend_logo.SetFrameIndexOfBitmap(2);
 	}
-	else if (energy_bar.get_energy() == 25) {
-		b2.OnMouseMove(nFlags, point);
+	else if (!isSelect(true, point, suspend_logo) && suspend == 1) {
+		suspend_logo.SetFrameIndexOfBitmap(1);
 	}
-	else{
-		t1.OnMouseMove(nFlags, point);
+	else if(suspend == 0){
+		suspend_logo.SetFrameIndexOfBitmap(0);
+
+		if (select_stage.show == 1) {
+			t1.OnMouseMove(false, point);
+			select_stage.OnMouseMove(nFlags, point);
+		}
+		else if (energy_bar.get_energy() == 25) {
+			b2.OnMouseMove(nFlags, point);
+		}
+		else {
+			t1.OnMouseMove(nFlags, point);
+		}
 	}
+
 	
 }
 
@@ -368,6 +399,7 @@ void CGameStateRun::OnShow()
 	}
 	dead_logo.ShowBitmap();
 	timer_express.ShowBitmap();
+	suspend_logo.ShowBitmap();
 	show_text();
 }
 
@@ -381,7 +413,7 @@ void CGameStateRun::show_text() {
 	CTextDraw::Print(pdc, 825, 925, to_string((t / 600)) + to_string((t / 60) % 10) + " : " + to_string((t / 10) % 6) + to_string(t % 10));
 
 	CTextDraw::ChangeFontLog(pdc, 40, "Modern No. 20", RGB(255, 255, 255), 60);
-	CTextDraw::Print(pdc, 120, 950,to_string(t1.get_dead_monster()));
+	CTextDraw::Print(pdc, 120, 950,to_string(t0.get_dead_monster() + t1.get_dead_monster() + t2.get_dead_monster()));
 
 
 
@@ -412,9 +444,22 @@ void CGameStateRun::set_over_data() {
 		}
 	}
 	set_data(to_string((t / 600)) + to_string((t / 60) % 10) + " : " + to_string((t / 10) % 6) + to_string(t % 10),
-		to_string(t1.get_dead_monster()), cout);
+		to_string(t0.get_dead_monster()+t1.get_dead_monster()+ t2.get_dead_monster()), cout);
 }
 
+bool CGameStateRun::isSelect(UINT nFlags, CPoint point, CMovingBitmap &item) {
+	if (nFlags == TRUE) {
+		if (item.GetLeft() <= point.x && point.x <= (item.GetLeft() + item.GetWidth())
+			&& item.GetTop() <= point.y && point.y <= (item.GetTop() + item.GetHeight())) {
+
+			return true;
+		}
+		else {
+			return false;
+		}
+	}
+	return false;
+}
 
 template<typename T>
 void CGameStateRun::select_temp(T &t) {
@@ -455,6 +500,7 @@ void CGameStateRun::select_temp(T &t) {
 	select_stage.rand_option();
 
 };
+
 //////////////////////////////////////////////////////////////////////////////////////////////
 void CMovingBitmap::dart_hit_monster(vector<CMovingBitmap> &dart, vector<CMovingBitmap> &monster, vector<CMovingBitmap> &monster_vanish) {
 

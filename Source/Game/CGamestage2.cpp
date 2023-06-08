@@ -40,6 +40,66 @@ void CGamestage2::OnBeginState() {
 		monster[i].set_center(x + 45, y + 57);
 	}
 
+	for (int i = int(big_monster.size()); i < 6; i++) {
+
+		big_monster.push_back(big_monster_vanish[0]);
+		big_monster[big_monster.size() - 1].SetFrameIndexOfBitmap(0);
+		big_monster[big_monster.size() - 1].SetAnimation(95, false);
+		big_monster[big_monster.size() - 1].set_hp(40);
+		big_monster[big_monster.size() - 1].set_limit_start_end(0, 3);
+		big_monster_vanish.erase(big_monster_vanish.begin());
+	}
+
+	for (int i = 0; i<int(big_monster.size()); i++) {
+
+		int x = rand() % (max - min + 1) + min;
+		int y = rand() % (max - min + 1) + min;
+		big_monster[i].SetTopLeft(x, y);
+		big_monster[i].set_center(x + 45, y + 57);
+	}
+
+
+	for (int i = int(big_monster.size()); i < 6; i++) {
+
+		big_monster.push_back(big_monster_vanish[0]);
+		big_monster[big_monster.size() - 1].SetFrameIndexOfBitmap(0);
+		big_monster[big_monster.size() - 1].SetAnimation(95, false);
+		big_monster[big_monster.size() - 1].set_hp(40);
+		big_monster[big_monster.size() - 1].set_limit_start_end(0, 3);
+		big_monster_vanish.erase(big_monster_vanish.begin());
+	}
+
+	for (int i = 0; i<int(big_monster.size()); i++) {
+
+		int x = rand() % (max - min + 1) + min;
+		int y = rand() % (max - min + 1) + min;
+		big_monster[i].SetTopLeft(x, y);
+		big_monster[i].set_center(x + 45, y + 57);
+	}
+
+	for (int i = int(fast_monster.size()); i < 6; i++) {
+		fast_monster.push_back(fast_monster_vanish[0]);
+		fast_monster[fast_monster.size() - 1].SetFrameIndexOfBitmap(0);
+		fast_monster[fast_monster.size() - 1].SetAnimation(95, false);
+		fast_monster[fast_monster.size() - 1].set_hp(8);
+		fast_monster[fast_monster.size() - 1].set_limit_start_end(0, 5);
+		fast_monster[fast_monster.size() - 1].ay = 12;
+		fast_monster[fast_monster.size() - 1].ax = 12;
+		fast_monster[fast_monster.size() - 1].set_end = 11;
+		fast_monster_vanish.erase(fast_monster_vanish.begin());
+	}
+
+	for (int i = 0; i<int(fast_monster.size()); i++) {
+
+		int x = rand() % (max - min + 1) + min;
+		int y = rand() % (max - min + 1) + min;
+		fast_monster[i].SetTopLeft(x, y);
+		fast_monster[i].set_center(x + 45, y + 57);
+		fast_monster[i].set_center(x + 45, y + 57);
+	}
+
+
+
 	vector<CMovingBitmap>().swap(energy);
 	max = 2000;
 	for (int i = 0; i < 100; i++) {
@@ -717,7 +777,7 @@ void CGamestage2::monster_all() {
 		fast_monster.push_back(fast_monster_vanish[0]);
 		fast_monster[fast_monster.size() - 1].SetFrameIndexOfBitmap(0);
 		fast_monster[fast_monster.size() - 1].SetAnimation(95, false);
-		fast_monster[fast_monster.size() - 1].set_hp(8);
+		fast_monster[fast_monster.size() - 1].set_hp(10);
 		fast_monster[fast_monster.size() - 1].set_limit_start_end(0, 5);
 		int min = -1450;
 		int max = 1450;
@@ -726,8 +786,8 @@ void CGamestage2::monster_all() {
 		int y = rand() % (max - min + 1) + min;
 		fast_monster[tail].SetTopLeft(x, y);
 		fast_monster[tail].set_center(x + 45, y + 57);
-		fast_monster_vanish.erase(fast_monster_vanish.begin());
-
+		fast_monster_vanish.erase(fast_monster_vanish.begin());			
+		/*
 		fast_monster[fast_monster.size() - 1].set_limit_start_end(0, 5);
 		fast_monster[fast_monster.size() - 1].set_hp(10);
 		fast_monster[fast_monster.size() - 1].set_end = 11;
@@ -735,6 +795,7 @@ void CGamestage2::monster_all() {
 		fast_monster[fast_monster.size() - 1].SetAnimation(100, false);
 		fast_monster[fast_monster.size() - 1].ay = 12;
 		fast_monster[fast_monster.size() - 1].ax = 12;
+		*/
 	}
 
 	if (timer == 10000) {

@@ -137,6 +137,8 @@ namespace game_framework {
 
 		void set_over_data();
 
+		bool isSelect(UINT nFlags, CPoint point, CMovingBitmap &item);
+
 	protected:
 		void OnMove();									// 移動遊戲元素
 		void OnShow();		// 顯示這個狀態的遊戲畫面
@@ -163,6 +165,8 @@ namespace game_framework {
 
 		CMovingBitmap timer_express;
 		CMovingBitmap dead_logo;
+		CMovingBitmap suspend_logo;
+
 		clock_t a, b;
 		int boss_level = 0;
 		int level = 0;
@@ -175,7 +179,7 @@ namespace game_framework {
 		template<typename T>
 		void select_temp(T &t);
 
-
+		int suspend = 0;
 
 		int weapon_list[4] = { 0,0,0,0 };//s
 		string weapon_name[3] = { "Bricks","Guardian","Lightning" };//

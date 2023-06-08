@@ -19,6 +19,7 @@ using namespace game_framework;
 
 void CGamestageBoss2::OnBeginState() {
 	run = 1;
+	boss2.set_hp(5000);
 };
 
 void CGamestageBoss2::OnInit() {
