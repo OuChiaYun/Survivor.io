@@ -20,6 +20,18 @@ using namespace game_framework;
 void CGamestageBoss2::OnBeginState() {
 	run = 1;
 	boss2.set_hp(5000);
+	boss2.set_hp_max(5000);
+	boss2.SetTopLeft(420, 500);
+	boss2.set_center((boss2.GetLeft() + boss2.GetWidth() / 2), (boss2.GetTop() + boss2.GetHeight() / 2));
+	boss2.set_timer(1500);
+	boss2.ax = 0;
+	boss2.ay = 0;
+
+	for (int i = 0; i < 8; i++) {
+		boss2_bullet[i].SetTopLeft(boss2.get_center_x() - 20, boss2.get_center_y() - 20);
+		boss2_bullet[i].SetAnimation(5, false);
+	}
+
 };
 
 void CGamestageBoss2::OnInit() {

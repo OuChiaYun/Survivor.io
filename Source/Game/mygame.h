@@ -149,8 +149,8 @@ namespace game_framework {
 
 
 		CGamestageSelect select_stage; 
-		CGamestageBoss1 b1;
-		CGamestageBoss2 b2;
+		CGamestageBoss1 b2;
+		CGamestageBoss2 b1;
 		CGamestageBoss3 b3;
 
 		CMovingBitmap character;

@@ -19,7 +19,31 @@ using namespace game_framework;
 
 void CGamestageBoss3::OnBeginState() {
 	run = 1;
+	timmer = 0;
 	boss3.set_hp(5000);
+	boss3.SetTopLeft(420, 500);
+	boss3.set_center((boss3.GetLeft() + boss3.GetWidth() / 2), (boss3.GetTop() + boss3.GetHeight() / 2));
+	boss3.set_timer(1500);
+	boss3.ax = 0;
+	boss3.ay = 0;
+
+	for (int i = 0; i < 8; i++) {
+		boss3_bullet[i].SetTopLeft(boss3.get_center_x() - 20, boss3.get_center_y() - 20);
+		boss3_bullet[i].SetAnimation(5, false);
+	}
+
+	vector<int> x = { 5, 10, -2 };
+	vector<int> y = { 3,  -2,   8 };
+
+	int a = boss3.boss3_hit_x.size();
+	int b = boss3.boss3_hit_y.size();
+
+	for (int i = 0; i < 3; i++) {
+
+		boss3_rocket[i].SetTopLeft(boss3.GetLeft() + boss3.GetWidth() / 2, boss3.GetTop());
+		boss3.set_hit_x(x[i], i);
+		boss3.set_hit_y(y[i], i);
+	}
 
 };
 
