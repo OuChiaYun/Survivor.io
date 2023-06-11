@@ -111,7 +111,16 @@ namespace game_framework {
 		CMovingBitmap select_scene2;
 		CMovingBitmap play;
 		CMovingBitmap play_bg;
+		CMovingBitmap character_logo;
+		CMovingBitmap comunicate_logo;
+		CMovingBitmap com_bg;		
+		CMovingBitmap com_text;
+		CMovingBitmap com_no;
+
+		int show_text = 0;
+
 	};
+
 
 	/////////////////////////////////////////////////////////////////////////////
 	// 這個class為遊戲的遊戲執行物件，主要的遊戲程式都在這裡
@@ -149,8 +158,8 @@ namespace game_framework {
 
 
 		CGamestageSelect select_stage; 
-		CGamestageBoss1 b2;
-		CGamestageBoss2 b1;
+		CGamestageBoss1 b1;
+		CGamestageBoss2 b2;
 		CGamestageBoss3 b3;
 
 		CMovingBitmap character;
@@ -166,13 +175,16 @@ namespace game_framework {
 		CMovingBitmap timer_express;
 		CMovingBitmap dead_logo;
 		CMovingBitmap suspend_logo;
+		CMovingBitmap not_dead_logo;
 
 		clock_t a, b;
+		clock_t suspend_start  = 0, suspend_end = 0;
 		int boss_level = 0;
 		int level = 0;
 		int current_t = 0;
 		int pre_boss_t = 0;
 		int current_stage = 0;
+		int not_dead = 0;
 
 		CMovingBitmap weapon_logo[3] ;
 

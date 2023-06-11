@@ -253,12 +253,12 @@ void CGamestageBoss2::show_text() {
 
 	CDC *pdc = CDDraw::GetBackCDC();
 
-	CTextDraw::ChangeFontLog(pdc, 15, "Modern No. 20", RGB(255, 255, 255), 80);
+	CTextDraw::ChangeFontLog(pdc, 15, "monogram", RGB(255, 255, 255), 80);
 	CTextDraw::Print(pdc, blood_bar_boss2.GetLeft() + 30, blood_bar_boss2.GetTop() + 10 + 20, to_string(boss2.get_hp()));
 
 	if (timmer < 100) {
-		CTextDraw::ChangeFontLog(pdc, 25, "Modern No. 20", RGB(255, 255, 255), 80);
-		CTextDraw::Print(pdc, 400, 200, "Boss2 Assault!!");
+		CTextDraw::ChangeFontLog(pdc, 60, "monogram", RGB(255, 255, 255), 80);
+		CTextDraw::Print(pdc, 300, 210, "Boss2 Assault!!");
 	}
 
 	CDDraw::ReleaseBackCDC();

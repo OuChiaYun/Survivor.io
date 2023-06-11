@@ -248,6 +248,10 @@ void CGamestageBoss3::OnShow() {
 		lightning[i].ShowBitmap();
 	}
 
+	if (character.GetFrameIndexOfBitmap() >= character.limit_frame_end) {
+		character.SetFrameIndexOfBitmap(character.limit_frame_start);
+	}
+
 	character.ShowBitmap();
 
 	blood.SetTopLeft((character.GetLeft() + character.GetWidth() / 2), character.GetTop());
@@ -273,12 +277,12 @@ void CGamestageBoss3::show_text() {
 
 	CDC *pdc = CDDraw::GetBackCDC();
 
-	CTextDraw::ChangeFontLog(pdc, 15, "Modern No. 20", RGB(255, 255, 255), 80);
+	CTextDraw::ChangeFontLog(pdc, 15, "monogram", RGB(255, 255, 255), 80);
 	CTextDraw::Print(pdc, blood_bar_boss3.GetLeft() + 30, blood_bar_boss3.GetTop() + 10 + 20, to_string(boss3.get_hp()));
 
 	if (timmer < 100) {
-		CTextDraw::ChangeFontLog(pdc, 25, "Modern No. 20", RGB(255, 255, 255), 80);
-		CTextDraw::Print(pdc, 400, 200, "Boss3 Assault!!");
+		CTextDraw::ChangeFontLog(pdc, 65, "monogram", RGB(255, 255, 255), 80);
+		CTextDraw::Print(pdc, 290, 200, "Boss3 Assault!!");
 	}
 
 	CDDraw::ReleaseBackCDC();

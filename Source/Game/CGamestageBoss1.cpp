@@ -20,7 +20,8 @@ using namespace game_framework;
 void CGamestageBoss1::OnBeginState() {
 	run = 1;
 	boss1.set_hp(5000);
-	blood_bar_boss1.SetFrameIndexOfBitmap(0);
+	blood_bar_boss1.SetFrameIndexOfBitmap(blood_bar_boss1.GetFrameSizeOfBitmap()-1);
+	timmer = 0;
 
 	int x[5] = { 5, 10, -2 };
 	int y[5] = { 3,  -2,   8 };
@@ -45,8 +46,8 @@ void CGamestageBoss1::OnInit() {
 
 	boss1_range.LoadBitmapByString({ "Resources/boss1/boss1_range.bmp", "Resources/boss1/boss1_range_1.bmp", "Resources/boss1/boss1_range_2.bmp", "Resources/boss1/boss1_range_3.bmp" }, RGB(255, 255, 255));
 	boss1_range.SetAnimation(300, false);
-	boss1_range.SetTopLeft(200,65 + 125 + 10);
-	boss1.SetTopLeft(boss1_range.GetLeft() + 243, boss1_range.GetTop() + 130);
+	boss1_range.SetTopLeft(120,65 + 125 + 10);
+	boss1.SetTopLeft(boss1_range.GetLeft() + 365 - 60, boss1_range.GetTop() + 130);
 
 	
 	blood.LoadBitmapByString({ "Resources/ignore.bmp", "Resources/blood/bloodfx001_01.bmp",
@@ -177,7 +178,6 @@ void CGamestageBoss1::OnMove() {
 	if(timmer > 150){
 		boss1_bullet_move();
 		boss1_character_attack();
-
 		blood_bar_progress(blood_bar_boss1, boss1);
 		if (boss1.get_hp() <= 0) {
 			run = 0;
@@ -233,19 +233,13 @@ void CGamestageBoss1::OnShow() {
 void CGamestageBoss1::show_text() {
 
 	CDC *pdc = CDDraw::GetBackCDC();
-	/*
-	CTextDraw::ChangeFontLog(pdc, 25, "Modern No. 20", RGB(255, 255, 255), 80);
-	CTextDraw::Print(pdc, 305, 10, to_string(character.get_hp()));
-	
-	CTextDraw::ChangeFontLog(pdc, 25, "Modern No. 20", RGB(255, 255, 255), 80);
-	CTextDraw::Print(pdc, 305, energy_bar.GetTop() + 20 + 25, to_string(energy_bar.get_energy()) + "/ 25");
-	*/
-	CTextDraw::ChangeFontLog(pdc, 15, "Modern No. 20", RGB(255, 255, 255), 80);
+
+	CTextDraw::ChangeFontLog(pdc, 15, "monogram", RGB(255, 255, 255), 80);
 	CTextDraw::Print(pdc, blood_bar_boss1.GetLeft() + 30, blood_bar_boss1.GetTop() + 10 + 20, to_string(boss1.get_hp()));
 
 	if (timmer < 100) {
-		CTextDraw::ChangeFontLog(pdc, 30, "Modern No. 20", RGB(255, 255, 255), 80);
-		CTextDraw::Print(pdc, 360, 250, "Boss1 Assault!!");
+		CTextDraw::ChangeFontLog(pdc, 40, "monogram", RGB(255, 255, 255), 80);
+		CTextDraw::Print(pdc, 325, 500, "Boss1 Assault!!");
 	}
 
 	CDDraw::ReleaseBackCDC();
@@ -266,7 +260,7 @@ void CGamestageBoss1::boss1_bullet_move() {
 		else if (boss1_bullet[i].GetTop() < boss1_range.GetTop() + 30) {
 			boss1.set_hit_y(abs(y), i);
 		}
-		else if (boss1_bullet[i].GetTop() + 26 > boss1_range.GetTop() + 419 - 30) {
+		else if (boss1_bullet[i].GetTop() + 26 > boss1_range.GetTop() + 630 - 30) {
 			boss1.set_hit_y(-abs(y), i);
 		}
 
@@ -314,8 +308,8 @@ void CGamestageBoss1::boss1_background() {
 	if (character.GetLeft() + character.GetWidth() > boss1_range.GetLeft() + boss1_range.GetWidth()) { //right
 		character.SetTopLeft(boss1_range.GetLeft() + boss1_range.GetWidth() - character.GetWidth(), character.GetTop());
 	}
-	if (character.GetTop() + 130 > boss1_range.GetTop() + 419) { //bottom
-		character.SetTopLeft(character.GetLeft(), boss1_range.GetTop() + 419 - 130);
+	if (character.GetTop() + 130 > boss1_range.GetTop() + 630) { //bottom
+		character.SetTopLeft(character.GetLeft(), boss1_range.GetTop() + 630 - 130);
 	}
 
 	character.set_center((character.GetLeft() + 10), (character.GetTop() + 10));

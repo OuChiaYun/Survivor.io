@@ -18,8 +18,16 @@ using namespace game_framework;
 
 void CGamestage1::OnBeginState() {
 	run = 1;
+	select = 0;
+
 	int min = -1450;
 	int max = 1450;
+
+	dead_monster = 0;
+
+	magnet_once = 0;
+	magnet_trigger = 0;
+	magnet[0].SetFrameIndexOfBitmap(0);
 
 	for (int i = int(monster.size()); i < 35; i++) {
 
@@ -104,9 +112,19 @@ void CGamestage1::OnInit() {
 		big_monster[i].set_hp(40);
 		big_monster[i].SetAnimation(100, false);
 		big_monster[i].set_end = 8;
+
+		big_monster_blood.push_back(CMovingBitmap());
+		big_monster_blood[i].LoadBitmapByString({ "Resources/ignore.bmp", "Resources/blood/B001.bmp",
+			"Resources/blood/B002.bmp", "Resources/blood/B003.bmp","Resources/blood/B004.bmp", "Resources/blood/B005.bmp",
+			"Resources/blood/B006.bmp", "Resources/blood/B007.bmp","Resources/blood/B008.bmp", "Resources/blood/B009.bmp",
+			"Resources/ignore.bmp" }, RGB(255, 255, 255));
+		big_monster_blood[i].SetTopLeft(big_monster[i].GetLeft() + big_monster[i].GetWidth(), big_monster[i].GetTop() + 20);
+		big_monster_blood[i].SetAnimation(60, true);
 	}
 	
-	
+
+
+
 	blood.LoadBitmapByString({ "Resources/ignore.bmp", "Resources/blood/bloodfx001_01.bmp",
 							"Resources/blood/bloodfx001_02.bmp", "Resources/blood/bloodfx001_03.bmp",
 							"Resources/blood/bloodfx001_04.bmp", "Resources/blood/bloodfx001_05.bmp",
@@ -316,19 +334,20 @@ void CGamestage1::show_img() {
 		}
 		if (big_monster[i].IsOverlap(background, big_monster[i])) {
 			big_monster[i].ShowBitmap();
-			
-
-			/*
-			if (big_monster[i].ishurted() == 1) {
-				blood.SetAnimation(100, false);
-			}
-			else {
-				blood.SetAnimation(100, true);
-			}
-			*/
-			
 		}
+		big_monster_blood[i].SetTopLeft(big_monster[i].GetLeft(), big_monster[i].GetTop()+50);
+		if (big_monster[i].ishurted() == 1 && big_monster_blood[i].IsAnimationDone() && !big_monster_blood[i].IsAnimation()) {
+			big_monster_blood[i].ToggleAnimation();
+			big_monster[i].set_hurted(0);
+		}
+
+
+	}
+
+	for (int i = 0; i < (int)big_monster_blood.size(); i++) {
+
 		
+		big_monster_blood[i].ShowBitmap();
 	}
 
 	for (int i = 0; i < (int)(big_monster_vanish.size()); i++) {

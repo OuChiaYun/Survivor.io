@@ -73,7 +73,7 @@ void CGameStateOver::OnInit()
 
 	victory.LoadBitmapByString({ "Resources/UI/victory.bmp" }, RGB(255, 255, 255));
 	victory.SetTopLeft(110, 290);
-	die.LoadBitmapByString({ "Resources/UI/died.bmp" }, RGB(255, 247, 248));
+	die.LoadBitmapByString({ "Resources/UI/died.bmp" }, RGB(255, 255, 255));//255,247,248
 	die.SetTopLeft(100, 300);
 
 	again.LoadBitmapByString({ "Resources/UI/again.bmp","Resources/UI/again2.bmp" }, RGB(255, 255, 255));
@@ -84,12 +84,6 @@ void CGameStateOver::OnInit()
 void CGameStateOver::OnShow()
 {
 	again.ShowBitmap();
-
-
-
-
-
-
 
 
 	if (get_victory_value() == 1) {

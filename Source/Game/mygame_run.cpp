@@ -36,7 +36,7 @@ CGameStateRun::~CGameStateRun()
 
 void CGameStateRun::OnBeginState()
 {
-
+	not_dead = 0;
 	character.set_hp(5000);
 	character.SetTopLeft(461, 252);
 	character.set_center(470, 270);
@@ -59,6 +59,8 @@ void CGameStateRun::OnBeginState()
 	current_t = 0;
 	pre_boss_t = 0;
 	current_stage = 0;
+	suspend_start = 0;
+	suspend_end = 0;
 
 	t0.OnBeginState();
 	t1.OnBeginState();
@@ -145,6 +147,9 @@ void CGameStateRun::OnMove()							// 移動遊戲元素
 			}
 		}
 	}
+	else {
+		suspend_end = clock();
+	}
 
 
 	/*t1.run = 0;
@@ -154,7 +159,7 @@ void CGameStateRun::OnMove()							// 移動遊戲元素
 	b2.OnMove();  //boss2*/
 
 	
-	if (character.get_hp() <= 0) {
+	if (character.get_hp() <= 0 && not_dead == 0) {
 		set_victory_value(0);
 		set_over_data();
 		GotoGameState(GAME_STATE_OVER);
@@ -225,6 +230,11 @@ void CGameStateRun::OnInit()  								// 遊戲的初值及圖形設定
 	suspend_logo.SetTopLeft(1065-suspend_logo.GetWidth()-30,10);
 	suspend_logo.SetFrameIndexOfBitmap(0);
 
+
+	not_dead_logo.LoadBitmapByString({ "Resources/UI/not_dead.bmp","Resources/UI/not_dead_2.bmp","Resources/UI/not_dead_3.bmp" }, RGB(255, 255, 255));
+	not_dead_logo.SetTopLeft(1065 - suspend_logo.GetWidth() - not_dead_logo.GetWidth()-30, 10);
+	not_dead_logo.SetFrameIndexOfBitmap(0);
+
 	/*
 	CMovingBitmap background;
 	CMovingBitmap character;
@@ -273,11 +283,26 @@ void CGameStateRun::OnKeyUp(UINT nChar, UINT nRepCnt, UINT nFlags)
 
 void CGameStateRun::OnLButtonDown(UINT nFlags, CPoint point)  // 處理滑鼠的動作
 {
+	if (isSelect(nFlags, point, not_dead_logo)) {
+
+		not_dead = !not_dead;
+
+		if (not_dead == 1) {
+			not_dead_logo.SetFrameIndexOfBitmap(1);
+		}
+		else {
+			not_dead_logo.SetFrameIndexOfBitmap(0);
+		}
+
+	}
+
 	if (isSelect(nFlags, point, suspend_logo)) {
 		suspend = !suspend;
 
 		if (suspend == 1) {
 			suspend_logo.SetFrameIndexOfBitmap(1);
+			suspend_start = clock();
+
 		}
 		else {
 			suspend_logo.SetFrameIndexOfBitmap(0);
@@ -285,7 +310,7 @@ void CGameStateRun::OnLButtonDown(UINT nFlags, CPoint point)  // 處理滑鼠的
 
 	}
 
-	if (select_stage.show == 1 && suspend == 0) {
+	if (select_stage.show == 1 && suspend == 0 && current_t - pre_boss_t < 40){
 		select_stage.OnLButtonDown(nFlags, point);
 		if (select_stage.show == 2) {
 
@@ -311,6 +336,16 @@ void CGameStateRun::OnLButtonUp(UINT nFlags, CPoint point)	// 處理滑鼠的動
 
 void CGameStateRun::OnMouseMove(UINT nFlags, CPoint point)	// 處理滑鼠的動作
 {
+	if (isSelect(true, point, not_dead_logo)) {
+
+		not_dead_logo.SetFrameIndexOfBitmap(2);
+	}
+	else if(!isSelect(true, point, not_dead_logo) && not_dead == 1){
+		not_dead_logo.SetFrameIndexOfBitmap(1);
+	}
+	else {
+		not_dead_logo.SetFrameIndexOfBitmap(0);
+	}
 
 
 
@@ -324,7 +359,7 @@ void CGameStateRun::OnMouseMove(UINT nFlags, CPoint point)	// 處理滑鼠的動
 	else if(suspend == 0){
 		suspend_logo.SetFrameIndexOfBitmap(0);
 
-		if (select_stage.show == 1) {
+		if (select_stage.show == 1 && current_t - pre_boss_t < 40) {
 			t1.OnMouseMove(false, point);
 			select_stage.OnMouseMove(nFlags, point);
 		}
@@ -400,6 +435,7 @@ void CGameStateRun::OnShow()
 	dead_logo.ShowBitmap();
 	timer_express.ShowBitmap();
 	suspend_logo.ShowBitmap();
+	not_dead_logo.ShowBitmap();
 	show_text();
 }
 
@@ -408,19 +444,25 @@ void CGameStateRun::show_text() {
 	CDC *pdc = CDDraw::GetBackCDC();
 	b = clock();
 
-	int t = (int)(b - a) / CLOCKS_PER_SEC;
-	CTextDraw::ChangeFontLog(pdc, 40, "Modern No. 20", RGB(255, 174, 201), 80);
-	CTextDraw::Print(pdc, 825, 925, to_string((t / 600)) + to_string((t / 60) % 10) + " : " + to_string((t / 10) % 6) + to_string(t % 10));
+	int t = (int)(b - a - (suspend_end - suspend_start) ) / CLOCKS_PER_SEC;
 
-	CTextDraw::ChangeFontLog(pdc, 40, "Modern No. 20", RGB(255, 255, 255), 60);
+	if ((40 - (current_t - pre_boss_t) <= 5) && (40 - (current_t - pre_boss_t )>= 0)) {
+		CTextDraw::ChangeFontLog(pdc, 35, "monogram", RGB(255, 255, 255), 80);
+		CTextDraw::Print(pdc, 330, 900, "Boss In! " + to_string(40 - (current_t - pre_boss_t)) + "s left.");
+	}
+
+	CTextDraw::ChangeFontLog(pdc, 40, "monogram", RGB(255, 174, 201), 80);
+	CTextDraw::Print(pdc, 823, 925, to_string((t / 600)) + to_string((t / 60) % 10) + " : " + to_string((t / 10) % 6) + to_string(t % 10));
+
+	CTextDraw::ChangeFontLog(pdc, 40, "monogram", RGB(255, 255, 255), 60);
 	CTextDraw::Print(pdc, 120, 950,to_string(t0.get_dead_monster() + t1.get_dead_monster() + t2.get_dead_monster()));
 
 
 
-	CTextDraw::ChangeFontLog(pdc, 25, "Modern No. 20", RGB(255, 255, 255), 80);
+	CTextDraw::ChangeFontLog(pdc, 25, "monogram", RGB(255, 255, 255), 80);
 	CTextDraw::Print(pdc, 305, blood_bar.GetTop() + 2, to_string(character.get_hp()));
 
-	CTextDraw::ChangeFontLog(pdc, 25, "Modern No. 20", RGB(255, 255, 255), 80);
+	CTextDraw::ChangeFontLog(pdc, 25, "monogram", RGB(255, 255, 255), 80);
 	CTextDraw::Print(pdc, 305, energy_bar.GetTop() +2, to_string(energy_bar.get_energy()) + "/ 25");
 
 
@@ -436,7 +478,7 @@ void CGameStateRun::show_baclground_selected() {
 
 void CGameStateRun::set_over_data() {
 	b = clock();
-	int t = (int)(b - a) / CLOCKS_PER_SEC;
+	int t = (int)(b - a - (suspend_end - suspend_start)) / CLOCKS_PER_SEC;
 	string cout = "";
 	for (int i = 0; i < 3; i++) {
 		if (weapon_list[i] != 0) {
@@ -511,7 +553,6 @@ void CMovingBitmap::dart_hit_monster(vector<CMovingBitmap> &dart, vector<CMoving
 
 				monster[i].add_sub_hp(-1);
 				CAudio::Instance()->Play(AUDIO_Attack, false);
-				monster[i].set_hurted(1);
 				if (monster[i].get_hp() <= 0) {
 					monster_vanish.push_back(monster[i]);
 					monster_vanish[monster_vanish.size() - 1].SetAnimation(80, true);
@@ -519,13 +560,14 @@ void CMovingBitmap::dart_hit_monster(vector<CMovingBitmap> &dart, vector<CMoving
 					monster_vanish[monster_vanish.size() - 1].ToggleAnimation();
 					monster_vanish[monster_vanish.size() - 1].SetFrameIndexOfBitmap(monster[i].set_end);
 					monster.erase(monster.begin() + i);
-					monster[i].set_hurted(1);
+//					monster[i].set_hurted(1);
 
 				}
+				else {
+					monster[i].set_hurted(1);
+				}
 			}
-			else {
-				monster[i].set_hurted(0);
-			}
+
 		}
 	}
 }
@@ -539,22 +581,21 @@ void CMovingBitmap::dart_hit_monster(CMovingBitmap &dart, vector<CMovingBitmap> 
 
 				monster[i].add_sub_hp(-1);
 				CAudio::Instance()->Play(AUDIO_Attack, false);
-				monster[i].set_hurted(1);
+				//monster[i].set_hurted(1);
 				if (monster[i].get_hp() <= 0) {
 					monster_vanish.push_back(monster[i]);
+					monster[i].set_hurted(0);
 					monster_vanish[monster_vanish.size() - 1].SetAnimation(80, true);
 					monster_vanish[monster_vanish.size() - 1].ShowBitmap();
 					monster_vanish[monster_vanish.size() - 1].ToggleAnimation();
 					monster_vanish[monster_vanish.size() - 1].SetFrameIndexOfBitmap(monster[i].set_end);
 					monster.erase(monster.begin() + i);
-
+				}
+				else {
+					monster[i].set_hurted(1);
 				}
 
 			}
-			else {
-				monster[i].set_hurted(0);
-			}
-
 		
 	}
 }

@@ -18,6 +18,14 @@ using namespace game_framework;
 
 void CGamestage0::OnBeginState() {
 	run = 1;
+	select = 0;
+	
+	magnet_once = 0;
+	magnet_trigger = 0;
+	magnet[0].SetFrameIndexOfBitmap(0);
+
+	dead_monster = 0;
+
 	int min = -1450;
 	int max = 1450;
 

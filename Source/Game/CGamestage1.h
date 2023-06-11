@@ -113,6 +113,7 @@ namespace game_framework {
 		
 		vector<CMovingBitmap> big_monster;
 		vector<CMovingBitmap> big_monster_vanish;
+		vector<CMovingBitmap> big_monster_blood;
 
 		vector<CMovingBitmap> heart;
 

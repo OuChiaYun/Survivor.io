@@ -19,6 +19,24 @@ CGameStateInit::CGameStateInit(CGame *g) : CGameState(g)
 
 void CGameStateInit::OnInit()
 {
+
+	character_logo.LoadBitmapByString({ "Resources/character/d1.bmp", "Resources/character/d2.bmp", "Resources/character/d3.bmp",
+										"Resources/character/d4.bmp", "Resources/character/d5.bmp", "Resources/character/d6.bmp" }, RGB(255, 255, 255));
+	character_logo.SetTopLeft(30, 880);
+	character_logo.SetAnimation(100, false);
+
+	comunicate_logo.LoadBitmapByString({ "Resources/character/comunicate.bmp","Resources/character/comunicate_2.bmp" }, RGB(255, 255, 255));
+	comunicate_logo.SetTopLeft(80, 800);
+
+	com_bg.LoadBitmapByString({ "Resources/UI/com_bg.bmp" },RGB(255,255,255));
+	com_bg.SetTopLeft(70, 305);
+
+	com_text.LoadBitmapByString({ "Resources/character/text.bmp" },RGB(0,0,0));
+	com_text.SetTopLeft(180, 310);
+
+	com_no.LoadBitmapByString({ "Resources/UI/no.bmp" ,"Resources/UI/no_2.bmp" }, RGB(255, 255, 255));
+	com_no.SetTopLeft(860, 320);
+
 	CAudio::Instance()->Load(AUDIO_MenuSelect, "Resources/Audio/Select.wav");
 	CAudio::Instance()->Load(AUDIO_GameStage, "Resources/Audio/Goblins_Dance_(Battle).wav");
 	CAudio::Instance()->Load(AUDIO_GameBoss, "Resources/Audio/battle.wav");
@@ -86,11 +104,33 @@ void CGameStateInit::OnMouseMove(UINT nFlags, CPoint point)
 	
 	if (play.GetFrameSizeOfBitmap() == 2 ) {
 
-		if (isSelect(TRUE, point, play)) {
+		if (isSelect(true, point, play) || isSelect(true, point, play_bg)) {
 			play.SetFrameIndexOfBitmap(1);
 		}
 		else {
 			play.SetFrameIndexOfBitmap(0);
+		}
+
+	}
+
+	if (comunicate_logo.GetFrameSizeOfBitmap() == 2) {
+
+		if (isSelect(true, point, comunicate_logo)) {
+			comunicate_logo.SetFrameIndexOfBitmap(1);
+		}
+		else {
+			comunicate_logo.SetFrameIndexOfBitmap(0);
+		}
+
+	}
+
+	if (show_text == 1 && com_no.GetFrameSizeOfBitmap() == 2) {
+
+		if (isSelect(true, point, com_no)) {
+			com_no.SetFrameIndexOfBitmap(1);
+		}
+		else {
+			com_no.SetFrameIndexOfBitmap(0);
 		}
 
 	}
@@ -100,7 +140,7 @@ void CGameStateInit::OnMouseMove(UINT nFlags, CPoint point)
 
 void CGameStateInit::OnLButtonDown(UINT nFlags, CPoint point)
 {
-	if (nFlags == TRUE) {
+	if (nFlags == TRUE && show_text == 0) {
 		if (select1.GetLeft() <= point.x && point.x <= select1.GetLeft() + select1.GetWidth()
 			&& select1.GetTop() <= point.y && point.y <= select1.GetTop() + 300) {
 			check1.SetFrameIndexOfBitmap(1);
@@ -123,19 +163,34 @@ void CGameStateInit::OnLButtonDown(UINT nFlags, CPoint point)
 			}
 		}
 	}
+
+	if (comunicate_logo.GetFrameSizeOfBitmap() == 2) {
+
+		if (isSelect(nFlags, point, comunicate_logo)) {
+			show_text = 1;
+		}
+
+	}
+	if (com_no.GetFrameSizeOfBitmap() == 2) {
+
+		if (show_text == 1 && isSelect(nFlags, point, com_no)) {
+			show_text = 0;
+		}
+	}
 }
 
 void CGameStateInit::OnShow()
 {
 	CDC *pdc = CDDraw::GetBackCDC();
 
-	CTextDraw::ChangeFontLog(pdc, 105, "Vivaldi", RGB(255, 255, 255), 1000);
-	CTextDraw::Print(pdc, 165, 130, "Survivor.io");	//Magneto Modern No. 20
+	CTextDraw::ChangeFontLog(pdc, 145, "monogram", RGB(255, 255, 255), 1000);
+	CTextDraw::Print(pdc, 95, 130, "Survivor.io");	//Vivaldi 
 
-	CTextDraw::ChangeFontLog(pdc, 25, "Ink Free", RGB(255, 255, 255), 400);
-	CTextDraw::Print(pdc, 320, 300, "Made By - Turtle & Sunny");
+	CTextDraw::ChangeFontLog(pdc, 25, "monogram", RGB(255, 255, 255), 400);
+	CTextDraw::Print(pdc, 360, 300, "Made By - Turtle & Sunny");
 
 	CDDraw::ReleaseBackCDC();
+
 	
 	select1.ShowBitmap();
 	select2.ShowBitmap();
@@ -147,7 +202,50 @@ void CGameStateInit::OnShow()
 	select_scene2.ShowBitmap();
 	play_bg.ShowBitmap();
 	play.ShowBitmap();
+	comunicate_logo.ShowBitmap();
+	character_logo.ShowBitmap();
+
+	if (show_text == 1) {
+		com_bg.ShowBitmap();
+		com_no.ShowBitmap();
+		CDC *pdc2 = CDDraw::GetBackCDC();
+
+
+		CTextDraw::ChangeFontLog(pdc, 35, "monogram", RGB(255, 255, 255), 40);
+		CTextDraw::Print(pdc2, 260, 330, "Welcome to the survivor.io !");
+
+		CTextDraw::ChangeFontLog(pdc, 21, "monogram", RGB(255, 255, 255), 40);
+		CTextDraw::Print(pdc2, 120, 420, "Select your preferred background and click 'Play' to start the game");
+
+		CTextDraw::ChangeFontLog(pdc, 21, "monogram", RGB(255, 255, 255), 40);
+		CTextDraw::Print(pdc2, 120, 460, "Control the character's movement by dragging the  bubble with  your");
+
+		CTextDraw::ChangeFontLog(pdc, 21, "monogram", RGB(255, 255, 255), 40);
+		CTextDraw::Print(pdc2, 120, 480, "mouse.");
+
+		CTextDraw::ChangeFontLog(pdc, 21, "monogram", RGB(255, 255, 255), 40);
+		CTextDraw::Print(pdc2, 120, 530, "Collect gems to fill up the progress bar ,choose the desired weapon");
+
+		CTextDraw::ChangeFontLog(pdc, 21, "monogram", RGB(255, 255, 255), 40);
+		CTextDraw::Print(pdc2, 120, 570, "Face BOSS challenges every 40 seconds");
+
+		CTextDraw::ChangeFontLog(pdc, 21, "monogram", RGB(255, 255, 255), 40);
+		CTextDraw::Print(pdc2, 120, 630, "If you want to activate the developer's special invincibility mode, ");
+
+		CTextDraw::ChangeFontLog(pdc, 21, "monogram", RGB(255, 255, 255), 40);
+		CTextDraw::Print(pdc2, 120, 650, "click on the computer icon in the top right corner.  A blue screen ");
+
+
+		CTextDraw::ChangeFontLog(pdc, 21, "monogram", RGB(255, 255, 255), 40);
+		CTextDraw::Print(pdc2, 120, 670, "indicates the mode is enabled ");
+
+		CTextDraw::ChangeFontLog(pdc, 40, "monogram", RGB(255, 255, 255), 40);
+		CTextDraw::Print(pdc2, 180, 800, "Enjoy your gameplay experience!");
+
+		CDDraw::ReleaseBackCDC();
+	}
 	
+
 }
 
 bool CGameStateInit::isSelect(UINT nFlags, CPoint point, CMovingBitmap &item) {
