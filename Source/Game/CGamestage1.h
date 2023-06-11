@@ -68,7 +68,6 @@ namespace game_framework {
 
 		void move_share_obj_data(CMovingBitmap &tmp_background, CMovingBitmap &tmp_character,CMovingBitmap &tmp_opera, CMovingBitmap &tmp_blood_bar, CMovingBitmap &tmp_energy_bar, 
 			vector <CMovingBitmap> &tmp_dart, vector<CMovingBitmap> &tmp_bullet, vector<CMovingBitmap> &tmp_bricks, vector<CMovingBitmap> &tmp_lightning);
-		//move data = run
 
 		void get_data(); // move now data to run with pointer
 

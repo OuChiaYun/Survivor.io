@@ -59,13 +59,11 @@ void CGamestage0::OnBeginState() {
 
 void CGamestage0::OnInit() {
 
-
 	for (int i = 0; i < 100; i++) {
 		random_born_item(energy, { "Resources/gem/gem1.bmp", "Resources/gem/gem2.bmp",
 								   "Resources/gem/gem3.bmp","Resources/gem/gem4.bmp","Resources/gem/gem5.bmp" }, { 200, 191, 231 });
 		energy[i].SetAnimation(100, false);
 	}
-
 
 	for (int i = 0; i < 35; i++) {
 		int arr[] = { 1,2,3 };
@@ -111,7 +109,6 @@ void CGamestage0::OnMouseMove(UINT nFlags, CPoint point) {
 	if (nFlags == FALSE) {
 		opera.SetTopLeft(437, 682);
 		opera.set_center(491, 736);
-
 	}
 	else {
 
@@ -180,8 +177,8 @@ void CGamestage0::OnMove() {
 		select = 1;
 
 	}
-	dart_all(200);
 
+	dart_all(200);
 
 	for (int i = 0; i < (int)(energy.size()); i++) {
 		if (!energy[i].IsOverlap(character, energy[i]))
@@ -195,10 +192,6 @@ void CGamestage0::OnMove() {
 
 			energy[i].SetAnimation(100, false);
 		}
-		//int tail = (int)energy.size();
-		/*for (int i = 0; i < (int)energy_save.size(); i++) {
-			energy.push_back(energy_save[i]);
-		}*/
 	}
 
 	item_move(magnet[0]);
@@ -247,7 +240,6 @@ void CGamestage0::OnMove() {
 
 		lightning[i].stdx += lightning[i].GetLeft() - ax;
 		lightning[i].stdy += lightning[i].GetTop() - ay;
-
 	}
 
 	share_data();
@@ -331,12 +323,9 @@ void CGamestage0::background_move() {
 
 	if (opera.center_x < 491) {
 		ax = 1;
-		//character.SetFrameIndexOfBitmap(0);
-		//character.set_limit_start_end(8, 15);
 	}
 	else if (opera.center_x > 491) {
 		ax = -1;
-		//character.set_limit_start_end(0,7 );
 	}
 
 	if (opera.center_y < 736) {
@@ -407,7 +396,6 @@ void CGamestage0::random_born_item(vector<CMovingBitmap>&item, vector<string> st
 	int y = rand() % (max - min + 1) + min;
 	item[tail].SetTopLeft(x, y);
 	item[tail].set_center(x + 45, y + 57);
-	//	item[tail].SetTopLeft(600, 600);
 };
 
 void CGamestage0::item_move(CMovingBitmap &item) {
@@ -736,8 +724,6 @@ void CGamestage0::show_baclground_selected(int s) {
 }
 
 void CGamestage0::lightning_move(vector<CMovingBitmap> &item) {
-
-
 	int flag = 0;
 	int f[100] = { 0,0,0,0, 0,0,0,0 };
 	for (int i = 0; i < (int)item.size(); i++) {
@@ -858,7 +844,7 @@ int CGamestage0::get_dead_monster() {
 	return dead_monster;
 }
 
-/////////////////////////////update data/////////////////
+/////////////////////////////update data///////////////////
 
 
 void CGamestage0::set_share_obj_data(CMovingBitmap &tmp_background, CMovingBitmap &tmp_character, CMovingBitmap &tmp_opera, CMovingBitmap &tmp_blood_bar, CMovingBitmap &tmp_energy_bar,

@@ -201,17 +201,7 @@ void CGamestageSelect::show_text() {
 
 
 	CDC *pdc = CDDraw::GetBackCDC();
-	/*
-	CTextDraw::ChangeFontLog(pdc, 25, "monogram", RGB(255, 255, 255), 80);
-	CTextDraw::Print(pdc, select_pic_bg[0].GetLeft() + 75 + 10, select_pic[0].GetTop() + 85, "Brick");
-	CTextDraw::ChangeFontLog(pdc, 12, "monogram", RGB(255, 255, 255), 80);
-	CTextDraw::Print(pdc, select_pic_bg[0].GetLeft() + 65 + 10, select_pic[0].GetTop() + 140, "Throws 1 brick");
-	*/
-	
-	//CTextDraw::ChangeFontLog(pdc, 25, "monogram", RGB(255, 255, 255), 80);
-	//CTextDraw::Print(pdc, select_pic_bg[0].GetLeft() + 75 + 10, select_pic[0].GetTop() + 85, text[0][0]);
 
-	//sizeof(text[0]) / sizeof(text[0][0])
 	for (int j = 0; j < 3; j++) {
 		CTextDraw::ChangeFontLog(pdc, 25, "monogram", RGB(255, 255, 255), 80);
 		CTextDraw::Print(pdc, select_pic_bg[j].GetLeft() + 40+ (10 - (text[rand_list[j]][0].length())/2)*5, select_pic[0].GetTop() + 110, text[rand_list[j]][0]);
@@ -221,25 +211,6 @@ void CGamestageSelect::show_text() {
 			CTextDraw::Print(pdc, select_pic_bg[j].GetLeft() + 65 + 10, select_pic[j].GetTop() + 145 + 25 * i, text[rand_list[j]][i]);
 		}
 	}
-	/*
-	CTextDraw::ChangeFontLog(pdc, 25, "monogram", RGB(255, 255, 255), 80);
-	CTextDraw::Print(pdc, select_pic_bg[1].GetLeft() + 45 + 10, select_pic[1].GetTop() + 100, "Guardian");
-
-	CTextDraw::ChangeFontLog(pdc, 12, "monogram", RGB(255, 255, 255), 80);
-	CTextDraw::Print(pdc, select_pic_bg[1].GetLeft() + 65 + 10, select_pic[1].GetTop() + 140, "Summoons 1 tops");
-	CTextDraw::ChangeFontLog(pdc, 12, "monogram", RGB(255, 255, 255), 80);
-	CTextDraw::Print(pdc, select_pic_bg[1].GetLeft() + 65 + 10, select_pic[1].GetTop() + 165, "that circle you");
-	CTextDraw::ChangeFontLog(pdc, 12, "monogram", RGB(255, 255, 255), 80);
-	CTextDraw::Print(pdc, select_pic_bg[1].GetLeft() + 65 + 10, select_pic[1].GetTop() + 190, "Stops bullets");
-
-
-	CTextDraw::ChangeFontLog(pdc, 25, "monogram", RGB(255, 255, 255), 80);
-	CTextDraw::Print(pdc, select_pic_bg[2].GetLeft() + 65 + 10, select_pic[2].GetTop() + 85, "Lightning");
-	CTextDraw::ChangeFontLog(pdc, 12, "monogram", RGB(255, 255, 255), 80);
-	CTextDraw::Print(pdc, select_pic_bg[2].GetLeft() + 65 + 10, select_pic[2].GetTop() + 140, "Lightning shower on");
-	CTextDraw::ChangeFontLog(pdc, 12, "monogram", RGB(255, 255, 255), 80);
-	CTextDraw::Print(pdc, select_pic_bg[2].GetLeft() + 40 + 12, select_pic[2].GetTop() + 165, "random target area");
-	*/
 	CDDraw::ReleaseBackCDC();
 }
 

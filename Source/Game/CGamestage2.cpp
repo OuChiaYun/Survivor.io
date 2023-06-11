@@ -63,7 +63,6 @@ void CGamestage2::OnBeginState() {
 		big_monster[i].set_center(x + 45, y + 57);
 	}
 
-
 	for (int i = int(big_monster.size()); i < 6; i++) {
 
 		big_monster.push_back(big_monster_vanish[0]);
@@ -139,7 +138,6 @@ void CGamestage2::OnInit() {
 		monster[i].SetAnimation(50, false);
 		monster[i].set_hp(6);
 		monster[i].set_end = 30;
-
 	}
 
 	for (int i = 0; i < 6; i++) {
@@ -151,8 +149,15 @@ void CGamestage2::OnInit() {
 		big_monster[i].SetAnimation(100, false);
 		big_monster[i].set_hp(40);
 		big_monster[i].set_end = 8;
-	}
 
+		big_monster_blood.push_back(CMovingBitmap());
+		big_monster_blood[i].LoadBitmapByString({ "Resources/ignore.bmp", "Resources/blood/B001.bmp",
+			"Resources/blood/B002.bmp", "Resources/blood/B003.bmp","Resources/blood/B004.bmp", "Resources/blood/B005.bmp",
+			"Resources/blood/B006.bmp", "Resources/blood/B007.bmp","Resources/blood/B008.bmp", "Resources/blood/B009.bmp",
+			"Resources/ignore.bmp" }, RGB(255, 255, 255));
+		big_monster_blood[i].SetTopLeft(big_monster[i].GetLeft() + big_monster[i].GetWidth(), big_monster[i].GetTop() + 20);
+		big_monster_blood[i].SetAnimation(60, true);
+	}
 
 	for (int i = 0; i < 6; i++) {
 		random_born_big_monster(fast_monster, {
@@ -170,8 +175,6 @@ void CGamestage2::OnInit() {
 		fast_monster[i].ay = 12;
 		fast_monster[i].ax = 12;
 	}
-
-
 
 	blood.LoadBitmapByString({ "Resources/ignore.bmp", "Resources/blood/bloodfx001_01.bmp",
 							"Resources/blood/bloodfx001_02.bmp", "Resources/blood/bloodfx001_03.bmp",
@@ -199,7 +202,6 @@ void CGamestage2::OnMouseMove(UINT nFlags, CPoint point) {
 	if (nFlags == FALSE) {
 		opera.SetTopLeft(437, 682);
 		opera.set_center(491, 736);
-
 	}
 	else {
 
@@ -218,7 +220,6 @@ void CGamestage2::OnMouseMove(UINT nFlags, CPoint point) {
 
 		if ((point.y < 736)) {
 			if (opera.get_center_y() > 686) {
-
 				opera.SetTopLeft(opera.GetLeft(), (opera.GetTop() - 6));
 				opera.set_center(opera.get_center_x(), opera.get_center_y() - 6);
 			}
@@ -264,9 +265,7 @@ void CGamestage2::OnMove() {
 
 
 	if (energy_bar.GetFrameIndexOfBitmap() == energy_bar.GetFrameSizeOfBitmap() - 1) {
-
-		select = 1;
-		
+		select = 1;	
 	}
 	dart_all(200);
 
@@ -371,8 +370,6 @@ void CGamestage2::show_img() {
 		}
 	}
 
-
-
 	for (int i = 0; i < (int)monster_vanish.size(); i++) {
 		monster_vanish[i].ShowBitmap();
 	}
@@ -384,20 +381,21 @@ void CGamestage2::show_img() {
 		if (big_monster[i].IsOverlap(background, big_monster[i])) {
 			big_monster[i].ShowBitmap();
 
-
-			/*
-			if (big_monster[i].ishurted() == 1) {
-				blood.SetAnimation(100, false);
-			}
-			else {
-				blood.SetAnimation(100, true);
-			}
-			*/
-
 		}
+		big_monster_blood[i].SetTopLeft(big_monster[i].GetLeft(), big_monster[i].GetTop() + 50);
+		if (big_monster[i].ishurted() == 1 && big_monster_blood[i].IsAnimationDone() && !big_monster_blood[i].IsAnimation()) {
+			big_monster_blood[i].ToggleAnimation();
+			big_monster[i].set_hurted(0);
+		}
+
 
 	}
 
+	for (int i = 0; i < (int)big_monster_blood.size(); i++) {
+
+
+		big_monster_blood[i].ShowBitmap();
+	}
 
 	for (int i = 0; i < (int)(fast_monster.size()); i++) {
 		if (fast_monster[i].GetFrameIndexOfBitmap() >= fast_monster[i].limit_frame_end) {
@@ -463,12 +461,9 @@ void CGamestage2::background_move() {
 
 	if (opera.center_x < 491) {
 		ax = 1;
-		//character.SetFrameIndexOfBitmap(0);
-		//character.set_limit_start_end(8, 15);
 	}
 	else if (opera.center_x > 491) {
 		ax = -1;
-		//character.set_limit_start_end(0,7 );
 	}
 
 	if (opera.center_y < 736) {
@@ -539,7 +534,6 @@ void CGamestage2::random_born_item(vector<CMovingBitmap>&item, vector<string> st
 	int y = rand() % (max - min + 1) + min;
 	item[tail].SetTopLeft(x, y);
 	item[tail].set_center(x + 45, y + 57);
-	//	item[tail].SetTopLeft(600, 600);
 };
 
 void CGamestage2::item_move(CMovingBitmap &item) {
@@ -792,15 +786,6 @@ void CGamestage2::monster_all() {
 		fast_monster[tail].SetTopLeft(x, y);
 		fast_monster[tail].set_center(x + 45, y + 57);
 		fast_monster_vanish.erase(fast_monster_vanish.begin());			
-		/*
-		fast_monster[fast_monster.size() - 1].set_limit_start_end(0, 5);
-		fast_monster[fast_monster.size() - 1].set_hp(10);
-		fast_monster[fast_monster.size() - 1].set_end = 11;
-		fast_monster[fast_monster.size() - 1].SetFrameIndexOfBitmap(0);
-		fast_monster[fast_monster.size() - 1].SetAnimation(100, false);
-		fast_monster[fast_monster.size() - 1].ay = 12;
-		fast_monster[fast_monster.size() - 1].ax = 12;
-		*/
 	}
 
 	if (timer == 10000) {

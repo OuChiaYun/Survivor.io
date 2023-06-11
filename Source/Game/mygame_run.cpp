@@ -122,6 +122,8 @@ void CGameStateRun::OnMove()							// 移動遊戲元素
 				if (b3.run == 0) {
 					set_victory_value(1);
 					set_over_data();
+					CAudio::Instance()->Stop(AUDIO_GameStage);
+					CAudio::Instance()->Play(AUDIO_MenuSelect, true);
 					GotoGameState(GAME_STATE_OVER);
 				}
 			}
@@ -151,26 +153,14 @@ void CGameStateRun::OnMove()							// 移動遊戲元素
 		suspend_end = clock();
 	}
 
-
-	/*t1.run = 0;
-	b1.run = 0;
-	boss_level = 2;
-	b2.run = 1;
-	b2.OnMove();  //boss2*/
-
-	
 	if (character.get_hp() <= 0 && not_dead == 0) {
 		set_victory_value(0);
 		set_over_data();
 		GotoGameState(GAME_STATE_OVER);
+		CAudio::Instance()->Stop(AUDIO_GameStage);
+		CAudio::Instance()->Play(AUDIO_MenuSelect, true);
 	}
 	
-	
-	
-	
-	
-	
-
 }
 
 void CGameStateRun::OnInit()  								// 遊戲的初值及圖形設定
@@ -209,8 +199,6 @@ void CGameStateRun::OnInit()  								// 遊戲的初值及圖形設定
 	energy_bar.SetTopLeft(18, 105);
 	energy_bar.set_energy(0);
 
-
-	
 	bullet.push_back(CMovingBitmap());
 	bullet[0].LoadBitmapByString({ "Resources/weapon/bullet.bmp" }, RGB(255, 255, 255));
 	bullet[0].SetTopLeft(character.GetLeft() + 10, character.GetTop());
@@ -230,7 +218,6 @@ void CGameStateRun::OnInit()  								// 遊戲的初值及圖形設定
 	suspend_logo.SetTopLeft(1065-suspend_logo.GetWidth()-30,10);
 	suspend_logo.SetFrameIndexOfBitmap(0);
 
-
 	not_dead_logo.LoadBitmapByString({ "Resources/UI/not_dead.bmp","Resources/UI/not_dead_2.bmp","Resources/UI/not_dead_3.bmp" }, RGB(255, 255, 255));
 	not_dead_logo.SetTopLeft(1065 - suspend_logo.GetWidth() - not_dead_logo.GetWidth()-30, 10);
 	not_dead_logo.SetFrameIndexOfBitmap(0);
@@ -243,6 +230,7 @@ void CGameStateRun::OnInit()  								// 遊戲的初值及圖形設定
 	CMovingBitmap energy_bar;
 	vector <CMovingBitmap> dart;
 	vector<CMovingBitmap> bullet;
+	share with other class
 	*/
 	lightning.size();
 
@@ -418,7 +406,6 @@ void CGameStateRun::OnShow()
 			select_stage.show = t2.select;
 		}
 
-
 		if (select_stage.show == 1) {
 			
 			select_stage.OnShow();
@@ -531,7 +518,7 @@ void CGameStateRun::select_temp(T &t) {
 
 	if (select_stage.weapon_selected == BLOOD_ADD) {
 		t.share_data();
-		character.set_hp(character.get_hp()+3000);
+		character.set_hp(character.get_hp()+3500);
 		t.get_data();
 		select_stage.show = 0;
 	}
@@ -543,7 +530,7 @@ void CGameStateRun::select_temp(T &t) {
 
 };
 
-//////////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////// CMovingBitmap class function  ////////////////////////////////////////////////////////////////////////////
 void CMovingBitmap::dart_hit_monster(vector<CMovingBitmap> &dart, vector<CMovingBitmap> &monster, vector<CMovingBitmap> &monster_vanish) {
 
 	for (int i = 0; i < (int)monster.size(); i++) {
@@ -560,7 +547,6 @@ void CMovingBitmap::dart_hit_monster(vector<CMovingBitmap> &dart, vector<CMoving
 					monster_vanish[monster_vanish.size() - 1].ToggleAnimation();
 					monster_vanish[monster_vanish.size() - 1].SetFrameIndexOfBitmap(monster[i].set_end);
 					monster.erase(monster.begin() + i);
-//					monster[i].set_hurted(1);
 
 				}
 				else {

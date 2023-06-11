@@ -110,7 +110,6 @@ void CGameStateInit::OnMouseMove(UINT nFlags, CPoint point)
 		else {
 			play.SetFrameIndexOfBitmap(0);
 		}
-
 	}
 
 	if (comunicate_logo.GetFrameSizeOfBitmap() == 2) {
@@ -121,7 +120,6 @@ void CGameStateInit::OnMouseMove(UINT nFlags, CPoint point)
 		else {
 			comunicate_logo.SetFrameIndexOfBitmap(0);
 		}
-
 	}
 
 	if (show_text == 1 && com_no.GetFrameSizeOfBitmap() == 2) {
@@ -132,9 +130,7 @@ void CGameStateInit::OnMouseMove(UINT nFlags, CPoint point)
 		else {
 			com_no.SetFrameIndexOfBitmap(0);
 		}
-
 	}
-
 }
 
 
@@ -191,7 +187,6 @@ void CGameStateInit::OnShow()
 
 	CDDraw::ReleaseBackCDC();
 
-	
 	select1.ShowBitmap();
 	select2.ShowBitmap();
 	check_blank1.ShowBitmap();
@@ -209,7 +204,6 @@ void CGameStateInit::OnShow()
 		com_bg.ShowBitmap();
 		com_no.ShowBitmap();
 		CDC *pdc2 = CDDraw::GetBackCDC();
-
 
 		CTextDraw::ChangeFontLog(pdc, 35, "monogram", RGB(255, 255, 255), 40);
 		CTextDraw::Print(pdc2, 260, 330, "Welcome to the survivor.io !");
@@ -252,7 +246,6 @@ bool CGameStateInit::isSelect(UINT nFlags, CPoint point, CMovingBitmap &item) {
 	if (nFlags == TRUE) {
 		if (item.GetLeft() <= point.x && point.x <= (item.GetLeft() + item.GetWidth())
 			&& item.GetTop() <= point.y && point.y <= (item.GetTop() + item.GetHeight())) {
-
 			return true;
 		}
 		else {

@@ -122,9 +122,6 @@ void CGamestage1::OnInit() {
 		big_monster_blood[i].SetAnimation(60, true);
 	}
 	
-
-
-
 	blood.LoadBitmapByString({ "Resources/ignore.bmp", "Resources/blood/bloodfx001_01.bmp",
 							"Resources/blood/bloodfx001_02.bmp", "Resources/blood/bloodfx001_03.bmp",
 							"Resources/blood/bloodfx001_04.bmp", "Resources/blood/bloodfx001_05.bmp",
@@ -234,10 +231,6 @@ void CGamestage1::OnMove() {
 
 			energy[i].SetAnimation(100, false);
 		}
-		//int tail = (int)energy.size();
-		/*for (int i = 0; i < (int)energy_save.size(); i++) {
-			energy.push_back(energy_save[i]);
-		}*/
 	}
 	
 	item_move(magnet[0]);
@@ -290,7 +283,6 @@ void CGamestage1::OnMove() {
 		lightning[i].stdy += lightning[i].GetTop()-ay;
 
 	}
-
 	share_data();
 };
 
@@ -372,7 +364,6 @@ void CGamestage1::show_img() {
 	}
 
 	magnet[0].ShowBitmap();
-	
 	blood.ShowBitmap();
 	blood_bar.ShowBitmap();
 	opera.ShowBitmap();
@@ -399,12 +390,9 @@ void CGamestage1::background_move() {
 
 	if (opera.center_x < 491) {
 		ax = 1;
-		//character.SetFrameIndexOfBitmap(0);
-		//character.set_limit_start_end(8, 15);
 	}
 	else if (opera.center_x > 491) {
 		ax = -1;
-		//character.set_limit_start_end(0,7 );
 	}
 
 	if (opera.center_y < 736) {
@@ -475,7 +463,6 @@ void CGamestage1::random_born_item(vector<CMovingBitmap>&item, vector<string> st
 	int y = rand() % (max - min + 1) + min;
 	item[tail].SetTopLeft(x, y);
 	item[tail].set_center(x + 45, y + 57);
-//	item[tail].SetTopLeft(600, 600);
 };
 
 void CGamestage1::item_move(CMovingBitmap &item) {
@@ -636,7 +623,6 @@ void CGamestage1::monster_all() {
 		if (!monster[i].IsOverlap(character, monster[i])) {
 			monster_move(monster[i]);
 			blood.SetAnimation(50, true);
-
 		}
 		else {
 			character.add_sub_hp(-5);
@@ -741,7 +727,6 @@ void CGamestage1::monster_move(CMovingBitmap &monster) {
 
 	if (isLeft(character, monster)) {
 		monster.set_limit_start_end(10, 19);
-
 	}
 	else {
 		monster.set_limit_start_end(0, 9);
@@ -839,7 +824,6 @@ void CGamestage1::born_bullet(vector<CMovingBitmap> &item, vector<string> str, v
 	}
 }
 
-
 void CGamestage1::bricks_erase(CMovingBitmap &item) {
 	if (item.GetTop() + 70 > 1065) {
 		//item.erase(item.begin());
@@ -881,11 +865,9 @@ void CGamestage1::show_baclground_selected(int s) {
 		background.SetFrameIndexOfBitmap(1);
 
 	}
-
 }
 
 void CGamestage1::lightning_move(vector<CMovingBitmap> &item) {
-
 
 	int flag = 0;
 	int f[100] = { 0,0,0,0, 0,0,0,0 };
@@ -920,9 +902,6 @@ void CGamestage1::lightning_move(vector<CMovingBitmap> &item) {
 	}
 };
 
-
-
-
 void CGamestage1::monster_reset(CMovingBitmap &item) {
 
 
@@ -952,7 +931,6 @@ void CGamestage1::monster_reset(CMovingBitmap &item) {
 	else {
 		item.SetFrameIndexOfBitmap(item.limit_frame_start);
 	}
-
 
 };
 
