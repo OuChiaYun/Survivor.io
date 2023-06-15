@@ -81,7 +81,8 @@ void CGamestageBoss1::OnInit() {
 								 "Resources/blood/bloodfx001_02.bmp", "Resources/blood/bloodfx001_03.bmp",
 								 "Resources/blood/bloodfx001_04.bmp", "Resources/blood/bloodfx001_05.bmp",
 								 "Resources/ignore.bmp" }, RGB(255, 255, 255));
-
+	jump.LoadBitmapByString({ "Resources/UI/jump.bmp" , "Resources/UI/jump_2.bmp" }, RGB(255, 255, 255));
+	jump.SetTopLeft(770, 15);
 
 }
 
@@ -89,13 +90,26 @@ void CGamestageBoss1::OnKeyDown(UINT, UINT, UINT) {};
 
 void CGamestageBoss1::OnKeyUp(UINT, UINT, UINT) {};
 
-void CGamestageBoss1::OnLButtonDown(UINT nFlags, CPoint point) {};
+void CGamestageBoss1::OnLButtonDown(UINT nFlags, CPoint point) {
+	if (isSelect(nFlags, point, jump)) {
+		boss1.set_hp(-1);
+		run = 0;
+	}
+};
 
 void CGamestageBoss1::OnLButtonUp(UINT nFlags, CPoint point) {};
 
 
 void CGamestageBoss1::OnMouseMove(UINT nFlags, CPoint point) {
+
 	get_data();
+	if (isSelect(true, point, jump)) {
+
+		jump.SetFrameIndexOfBitmap(1);
+	}else{
+		jump.SetFrameIndexOfBitmap(0);
+	}
+
 	if (nFlags == FALSE) {
 		opera.SetTopLeft(437, 682);
 		opera.set_center(491, 736);
@@ -131,14 +145,19 @@ void CGamestageBoss1::OnMouseMove(UINT nFlags, CPoint point) {
 		}
 	}
 
-
 	if (opera.center_x < 491) {
 
-		character.set_limit_start_end(8, 15);
+		character.set_limit_start_end(14, 21);
 	}
 	else if (opera.center_x > 491) {
 
-		character.set_limit_start_end(0, 7);
+		character.set_limit_start_end(6, 13);
+	}
+	else {
+		character.set_limit_start_end(0, 5);
+	}
+	if (character.GetFrameIndexOfBitmap() >= character.limit_frame_end || character.GetFrameIndexOfBitmap() <= character.limit_frame_start) {
+		character.SetFrameIndexOfBitmap(character.limit_frame_start);
 	}
 	share_data();
 
@@ -223,9 +242,10 @@ void CGamestageBoss1::OnShow() {
 	character.ShowBitmap();
 	opera.ShowBitmap();
 
+	jump.ShowBitmap();
+
 	show_text();
 	share_data();
-
 
 };
 
@@ -464,13 +484,20 @@ void CGamestageBoss1::bricks_erase(vector<CMovingBitmap> &item) {
 
 }
 
-
-
+bool CGamestageBoss1::isSelect(UINT nFlags, CPoint point, CMovingBitmap &item) {
+	if (nFlags == TRUE) {
+		if (item.GetLeft() <= point.x && point.x <= (item.GetLeft() + item.GetWidth())
+			&& item.GetTop() <= point.y && point.y <= (item.GetTop() + item.GetHeight())) {
+			return true;
+		}
+		else {
+			return false;
+		}
+	}
+	return false;
+};
 
 /////////////////////////////update data/////////////////
-
-
-
 
 void CGamestageBoss1::set_share_obj_data(CMovingBitmap &tmp_background, CMovingBitmap &tmp_character, CMovingBitmap &tmp_opera, CMovingBitmap &tmp_blood_bar, CMovingBitmap &tmp_energy_bar,
 	vector <CMovingBitmap> &tmp_dart, vector<CMovingBitmap> &tmp_bullet, vector<CMovingBitmap> &tmp_bricks, vector<CMovingBitmap> &tmp_lightning) {

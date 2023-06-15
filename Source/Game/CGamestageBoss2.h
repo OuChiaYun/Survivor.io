@@ -38,6 +38,8 @@ namespace game_framework {
 		void bricks_move(vector<CMovingBitmap> &item, int h, int k, int c, int x_move, int i);
 		void bricks_erase(vector<CMovingBitmap> &item);
 
+		bool isSelect(UINT nFlags, CPoint point, CMovingBitmap &item);
+
 		///////////////////boss2////////////////
 
 		void boss2_move();
@@ -89,6 +91,8 @@ namespace game_framework {
 		CMovingBitmap blood;
 		CMovingBitmap blood_bar_boss2;
 		CMovingBitmap blood_boss2;
+
+		CMovingBitmap jump;
 
 		double PI = 3.14159265358979323846;
 		double theta[8] = { 0.0, PI / 4, PI / 2, 3 * PI / 4, PI, 5 * PI / 4, 3 * PI / 2, 7 * PI / 4 };

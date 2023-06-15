@@ -19,6 +19,7 @@ using namespace game_framework;
 
 void CGamestageBoss2::OnBeginState() {
 	run = 1;
+	timmer = 0;
 	boss2.set_hp(5000);
 	boss2.set_hp_max(5000);
 	boss2.SetTopLeft(420, 500);
@@ -83,18 +84,40 @@ void CGamestageBoss2::OnInit() {
 								 "Resources/blood/bloodfx001_04.bmp", "Resources/blood/bloodfx001_05.bmp",
 								 "Resources/ignore.bmp" }, RGB(255, 255, 255));
 
+	jump.LoadBitmapByString({ "Resources/UI/jump.bmp" , "Resources/UI/jump_2.bmp" }, RGB(255, 255, 255));
+	jump.SetTopLeft(770, 15);
 }
 
 void CGamestageBoss2::OnKeyDown(UINT, UINT, UINT) {};
 
 void CGamestageBoss2::OnKeyUp(UINT, UINT, UINT) {};
 
-void CGamestageBoss2::OnLButtonDown(UINT nFlags, CPoint point) {};
+void CGamestageBoss2::OnLButtonDown(UINT nFlags, CPoint point) {
+	if (isSelect(nFlags, point, jump)) {
+		boss2.set_hp(-1);
+		run = 0;
+	}
+};
 
 void CGamestageBoss2::OnLButtonUp(UINT nFlags, CPoint point) {};
 
 void CGamestageBoss2::OnMouseMove(UINT nFlags, CPoint point) {
 	get_data();
+
+	if (isSelect(true, point, jump)) {
+
+		jump.SetFrameIndexOfBitmap(1);
+	}
+	else {
+		jump.SetFrameIndexOfBitmap(0);
+	}
+	if (isSelect(true, point, jump)) {
+
+		jump.SetFrameIndexOfBitmap(1);
+	}
+	else {
+		jump.SetFrameIndexOfBitmap(0);
+	}
 
 	if (nFlags == FALSE) {
 		opera.SetTopLeft(437, 682);
@@ -133,12 +156,19 @@ void CGamestageBoss2::OnMouseMove(UINT nFlags, CPoint point) {
 
 	if (opera.center_x < 491) {
 
-		character.set_limit_start_end(8, 15);
+		character.set_limit_start_end(14, 21);
 	}
 	else if (opera.center_x > 491) {
 
-		character.set_limit_start_end(0, 7);
+		character.set_limit_start_end(6, 13);
 	}
+	else {
+		character.set_limit_start_end(0, 5);
+	}
+	if (character.GetFrameIndexOfBitmap() >= character.limit_frame_end || character.GetFrameIndexOfBitmap() <= character.limit_frame_start) {
+		character.SetFrameIndexOfBitmap(character.limit_frame_start);
+	}
+	share_data();
 	share_data();
 
 };
@@ -242,8 +272,9 @@ void CGamestageBoss2::OnShow() {
 	blood_bar.ShowBitmap();
 	energy_bar.ShowBitmap();
 
-	show_text();
 
+	jump.ShowBitmap();
+	show_text();
 	share_data();
 
 
@@ -439,6 +470,18 @@ void CGamestageBoss2::bricks_erase(vector<CMovingBitmap> &item) {
 
 }
 
+bool CGamestageBoss2::isSelect(UINT nFlags, CPoint point, CMovingBitmap &item) {
+	if (nFlags == TRUE) {
+		if (item.GetLeft() <= point.x && point.x <= (item.GetLeft() + item.GetWidth())
+			&& item.GetTop() <= point.y && point.y <= (item.GetTop() + item.GetHeight())) {
+			return true;
+		}
+		else {
+			return false;
+		}
+	}
+	return false;
+};
 
 ///////////////////////////////////////////////////////
 

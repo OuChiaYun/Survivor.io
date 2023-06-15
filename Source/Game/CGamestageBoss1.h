@@ -40,6 +40,8 @@ namespace game_framework {
 		void bricks_move(vector<CMovingBitmap> &item, int h, int k, int c, int x_move, int i);
 		void bricks_erase(vector<CMovingBitmap> &item);
 
+		bool isSelect(UINT nFlags, CPoint point, CMovingBitmap &item);
+
 
 
 
@@ -86,6 +88,8 @@ namespace game_framework {
 		vector<CMovingBitmap> boss1_bullet;
 		CMovingBitmap blood_bar_boss1;
 		CMovingBitmap blood_boss1;
+
+		CMovingBitmap jump;
 
 		CMovingBitmap lighting;
 		int timmer = 0;

@@ -67,6 +67,7 @@ void CGameStateRun::OnBeginState()
 	t2.OnBeginState();
 	b1.OnBeginState();
 	b2.OnBeginState();
+	b3.OnBeginState();
 
 	select_stage.OnBeginState();
 	a = clock();
@@ -82,7 +83,7 @@ void CGameStateRun::OnMove()							// 移動遊戲元素
 		b = clock();
 		current_t = (int)(b - a) / CLOCKS_PER_SEC;
 
-		if (current_t - pre_boss_t > 40) {
+		if (current_t - pre_boss_t > 30) {
 			t0.run = 0;
 			t1.run = 0;
 			t2.run = 0;
@@ -156,9 +157,9 @@ void CGameStateRun::OnMove()							// 移動遊戲元素
 	if (character.get_hp() <= 0 && not_dead == 0) {
 		set_victory_value(0);
 		set_over_data();
-		GotoGameState(GAME_STATE_OVER);
 		CAudio::Instance()->Stop(AUDIO_GameStage);
 		CAudio::Instance()->Play(AUDIO_MenuSelect, true);
+		GotoGameState(GAME_STATE_OVER);
 	}
 	
 }
@@ -298,7 +299,7 @@ void CGameStateRun::OnLButtonDown(UINT nFlags, CPoint point)  // 處理滑鼠的
 
 	}
 
-	if (select_stage.show == 1 && suspend == 0 && current_t - pre_boss_t < 40){
+	if (select_stage.show == 1 && suspend == 0 && current_t - pre_boss_t < 30){
 		select_stage.OnLButtonDown(nFlags, point);
 		if (select_stage.show == 2) {
 
@@ -316,6 +317,17 @@ void CGameStateRun::OnLButtonDown(UINT nFlags, CPoint point)  // 處理滑鼠的
 		}
 	}
 
+	if (current_t - pre_boss_t > 30) {
+		if (boss_level == 0) {
+			b1.OnLButtonDown(nFlags, point);
+		}
+		else if (boss_level == 1) {
+			b2.OnLButtonDown(nFlags, point);
+		}
+		else if (boss_level == 2) {
+			b3.OnLButtonDown(nFlags, point);
+		}
+	}
 }
 
 void CGameStateRun::OnLButtonUp(UINT nFlags, CPoint point)	// 處理滑鼠的動作
@@ -335,8 +347,6 @@ void CGameStateRun::OnMouseMove(UINT nFlags, CPoint point)	// 處理滑鼠的動
 		not_dead_logo.SetFrameIndexOfBitmap(0);
 	}
 
-
-
 	if (isSelect(true, point, suspend_logo)) {
 		
 		suspend_logo.SetFrameIndexOfBitmap(2);
@@ -347,15 +357,29 @@ void CGameStateRun::OnMouseMove(UINT nFlags, CPoint point)	// 處理滑鼠的動
 	else if(suspend == 0){
 		suspend_logo.SetFrameIndexOfBitmap(0);
 
-		if (select_stage.show == 1 && current_t - pre_boss_t < 40) {
-			t1.OnMouseMove(false, point);
-			select_stage.OnMouseMove(nFlags, point);
-		}
-		else if (energy_bar.get_energy() == 25) {
-			b2.OnMouseMove(nFlags, point);
+		if (current_t - pre_boss_t > 30) {
+			if (boss_level == 0) {
+				b1.OnMouseMove(nFlags, point);
+			}
+
+			else if (boss_level == 1) {
+				b2.OnMouseMove(nFlags, point);
+			}
+			
+			else if (boss_level == 2) {
+				b3.OnMouseMove(nFlags, point);
+			}
+
+
 		}
 		else {
-			t1.OnMouseMove(nFlags, point);
+			if (select_stage.show == 1 && current_t - pre_boss_t < 30) {
+				t1.OnMouseMove(false, point);
+				select_stage.OnMouseMove(nFlags, point);
+			}
+			else {
+				t1.OnMouseMove(nFlags, point);
+			}
 		}
 	}
 
@@ -374,10 +398,9 @@ void CGameStateRun::OnRButtonUp(UINT nFlags, CPoint point)	// 處理滑鼠的動
 void CGameStateRun::OnShow()
 {
 
-
 	show_baclground_selected();
 
-	if (current_t - pre_boss_t > 40) {
+	if (current_t - pre_boss_t > 30) {
 		if (boss_level == 0) {
 			b1.OnShow();
 		}
@@ -412,8 +435,6 @@ void CGameStateRun::OnShow()
 		}
 	}
 
-
-
 	for (int i = 0; i < 3; i++) {
 		if(weapon_list[i] != 0){
 		weapon_logo[i].ShowBitmap();
@@ -433,9 +454,9 @@ void CGameStateRun::show_text() {
 
 	int t = (int)(b - a - (suspend_end - suspend_start) ) / CLOCKS_PER_SEC;
 
-	if ((40 - (current_t - pre_boss_t) <= 5) && (40 - (current_t - pre_boss_t )>= 0)) {
+	if ((30 - (current_t - pre_boss_t) <= 5) && ( 30 - (current_t - pre_boss_t )>= 0)) {
 		CTextDraw::ChangeFontLog(pdc, 35, "monogram", RGB(255, 255, 255), 80);
-		CTextDraw::Print(pdc, 330, 900, "Boss In! " + to_string(40 - (current_t - pre_boss_t)) + "s left.");
+		CTextDraw::Print(pdc, 330, 900, "Boss In! " + to_string(30 - (current_t - pre_boss_t)) + "s left.");
 	}
 
 	CTextDraw::ChangeFontLog(pdc, 40, "monogram", RGB(255, 174, 201), 80);
@@ -444,14 +465,11 @@ void CGameStateRun::show_text() {
 	CTextDraw::ChangeFontLog(pdc, 40, "monogram", RGB(255, 255, 255), 60);
 	CTextDraw::Print(pdc, 120, 950,to_string(t0.get_dead_monster() + t1.get_dead_monster() + t2.get_dead_monster()));
 
-
-
 	CTextDraw::ChangeFontLog(pdc, 25, "monogram", RGB(255, 255, 255), 80);
 	CTextDraw::Print(pdc, 305, blood_bar.GetTop() + 2, to_string(character.get_hp()));
 
 	CTextDraw::ChangeFontLog(pdc, 25, "monogram", RGB(255, 255, 255), 80);
 	CTextDraw::Print(pdc, 305, energy_bar.GetTop() +2, to_string(energy_bar.get_energy()) + "/ 25");
-
 
 	CDDraw::ReleaseBackCDC();
 

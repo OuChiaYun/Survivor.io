@@ -102,15 +102,12 @@ void CGamestage2::OnBeginState() {
 		fast_monster[i].set_center(x + 45, y + 57);
 	}
 
-
-
 	vector<CMovingBitmap>().swap(energy);
 	max = 2000;
 	for (int i = 0; i < 100; i++) {
 		random_born_item(energy, { "Resources/gem/gem1.bmp", "Resources/gem/gem2.bmp",
 								   "Resources/gem/gem3.bmp","Resources/gem/gem4.bmp","Resources/gem/gem5.bmp" }, { 200, 191, 231 });
 		energy[i].SetAnimation(100, false);
-
 	}
 };
 
@@ -122,7 +119,6 @@ void CGamestage2::OnInit() {
 								   "Resources/gem/gem3.bmp","Resources/gem/gem4.bmp","Resources/gem/gem5.bmp" }, { 200, 191, 231 });
 		energy[i].SetAnimation(100, false);
 	}
-
 
 	for (int i = 0; i < 35; i++) {
 		int arr[] = { 1,2,3 };
@@ -282,10 +278,6 @@ void CGamestage2::OnMove() {
 
 			energy[i].SetAnimation(100, false);
 		}
-		//int tail = (int)energy.size();
-		/*for (int i = 0; i < (int)energy_save.size(); i++) {
-			energy.push_back(energy_save[i]);
-		}*/
 	}
 
 	item_move(magnet[0]);
@@ -300,7 +292,6 @@ void CGamestage2::OnMove() {
 		if (magnet_timer % 3 == 0) {
 			magnet_animation();
 		}
-
 		if (magnet_timer > 100) {
 			magnet_trigger = 0;
 			magnet_timer = 0;
@@ -581,7 +572,6 @@ void CGamestage2::item_move(CMovingBitmap &item) {
 	else {
 
 		item.SetTopLeft(item.GetLeft() - int((opera.GetLeft() - 437)*rate), item.GetTop() - int((opera.GetTop() - 682)*rate));
-
 	}
 }
 
@@ -684,12 +674,7 @@ void CGamestage2::random_born_big_monster(vector<CMovingBitmap>&monster, vector<
 
 	monster[tail].SetFrameIndexOfBitmap(monster[tail].limit_frame_start);
 	monster[tail].set_limit_start_end(0, 3);
-
-
 }
-
-
-
 void CGamestage2::monster_all() {
 
 	for (int i = 0; i < (int)(monster.size()); i++) {
@@ -891,7 +876,6 @@ void CGamestage2::big_monster_move(CMovingBitmap &monster) {
 	}
 	else {
 		monster.set_limit_start_end(0, 3);
-
 	}
 };
 
@@ -1153,7 +1137,6 @@ void CGamestage2::move_share_obj_data(CMovingBitmap &tmp_background, CMovingBitm
 	tmp_lightning = lightning;
 };
 
-
 void CGamestage2::get_data() {
 
 	background = *p_background;
@@ -1166,7 +1149,6 @@ void CGamestage2::get_data() {
 	bricks = *p_bricks;
 	lightning = *p_lightning;
 };
-
 
 void CGamestage2::share_data() {
 

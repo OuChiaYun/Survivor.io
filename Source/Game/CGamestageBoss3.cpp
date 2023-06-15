@@ -14,7 +14,6 @@
 #include <string>
 #include <ctime>
 
-
 using namespace game_framework;
 
 void CGamestageBoss3::OnBeginState() {
@@ -44,7 +43,6 @@ void CGamestageBoss3::OnBeginState() {
 		boss3.set_hit_x(x[i], i);
 		boss3.set_hit_y(y[i], i);
 	}
-
 };
 
 void CGamestageBoss3::OnInit() {
@@ -97,14 +95,11 @@ void CGamestageBoss3::OnInit() {
 								 "Resources/blood/bloodfx001_04.bmp", "Resources/blood/bloodfx001_05.bmp",
 								 "Resources/ignore.bmp" }, RGB(255, 255, 255));
 
-	//boss1 rock
-
 	vector<int> x = { 5, 10, -2 };
 	vector<int> y = { 3,  -2,   8 };
 
 	int a = boss3.boss3_hit_x.size();
 	int b = boss3.boss3_hit_y.size();
-
 
 	vector<string> ball_name = { "Resources/boss3/orange_ball.bmp", "Resources/boss3/purple_ball.bmp" , "Resources/boss3/brown_ball.bmp" };
 	for (int i = 0; i < 3; i++) {
@@ -114,18 +109,40 @@ void CGamestageBoss3::OnInit() {
 		boss3.set_hit_x(x[i], i);
 		boss3.set_hit_y(y[i], i);
 	}
+
+	jump.LoadBitmapByString({ "Resources/UI/jump.bmp" , "Resources/UI/jump_2.bmp" }, RGB(255, 255, 255));
+	jump.SetTopLeft(770, 15);
 }
 
 void CGamestageBoss3::OnKeyDown(UINT, UINT, UINT) {};
 
 void CGamestageBoss3::OnKeyUp(UINT, UINT, UINT) {};
 
-void CGamestageBoss3::OnLButtonDown(UINT nFlags, CPoint point) {};
+void CGamestageBoss3::OnLButtonDown(UINT nFlags, CPoint point) {
+	if (isSelect(nFlags, point, jump)) {
+		boss3.set_hp(-1);
+		run = 0;
+	}
+};
 
 void CGamestageBoss3::OnLButtonUp(UINT nFlags, CPoint point) {};
 
 void CGamestageBoss3::OnMouseMove(UINT nFlags, CPoint point) {
 	get_data();
+	if (isSelect(true, point, jump)) {
+
+		jump.SetFrameIndexOfBitmap(1);
+	}
+	else {
+		jump.SetFrameIndexOfBitmap(0);
+	}
+	if (isSelect(true, point, jump)) {
+
+		jump.SetFrameIndexOfBitmap(1);
+	}
+	else {
+		jump.SetFrameIndexOfBitmap(0);
+	}
 
 	if (nFlags == FALSE) {
 		opera.SetTopLeft(437, 682);
@@ -161,6 +178,22 @@ void CGamestageBoss3::OnMouseMove(UINT nFlags, CPoint point) {
 			}
 		}
 	}
+
+	if (opera.center_x < 491) {
+
+		character.set_limit_start_end(14, 21);
+	}
+	else if (opera.center_x > 491) {
+
+		character.set_limit_start_end(6, 13);
+	}
+	else {
+		character.set_limit_start_end(0, 5);
+	}
+	if (character.GetFrameIndexOfBitmap() >= character.limit_frame_end || character.GetFrameIndexOfBitmap() <= character.limit_frame_start) {
+		character.SetFrameIndexOfBitmap(character.limit_frame_start);
+	}
+	share_data();
 	share_data();
 
 };
@@ -195,7 +228,6 @@ void CGamestageBoss3::OnMove() {
 
 	}
 
-
 	for (int i = 0; i < (int)bricks.size(); i++) {
 		int j = bricks[i].ram_n;
 		bricks_move(bricks, bricks[i].stdx + h[j], bricks[i].stdy + k[j], c[j], x_move[j], i);
@@ -210,7 +242,6 @@ void CGamestageBoss3::OnMove() {
 	background_move();
 	dart_all(200);
 	bullet_move(bullet);
-	//born_bullet(bullet, { "Resources/weapon/bullet.bmp" }, { 255, 255, 255 });
 	bullet_erase(bullet);
 
 
@@ -265,6 +296,8 @@ void CGamestageBoss3::OnShow() {
 
 	blood_bar.ShowBitmap();
 	energy_bar.ShowBitmap();
+
+	jump.ShowBitmap();
 
 	show_text();
 
@@ -464,6 +497,20 @@ void CGamestageBoss3::bricks_erase(vector<CMovingBitmap> &item) {
 }
 
 
+bool CGamestageBoss3::isSelect(UINT nFlags, CPoint point, CMovingBitmap &item) {
+	if (nFlags == TRUE) {
+		if (item.GetLeft() <= point.x && point.x <= (item.GetLeft() + item.GetWidth())
+			&& item.GetTop() <= point.y && point.y <= (item.GetTop() + item.GetHeight())) {
+			return true;
+		}
+		else {
+			return false;
+		}
+	}
+	return false;
+};
+
+
 ///////////////////////////////////////////////////////
 
 void CGamestageBoss3::boss3_move() {
@@ -549,8 +596,6 @@ void CGamestageBoss3::boss3_bullet_move() {
 			boss3_bullet[i].SetTopLeft(boss3.get_center_x(), boss3.get_center_y());
 
 		}
-
-
 	}
 
 }
@@ -598,11 +643,9 @@ int CGamestageBoss3::isVector() {
 
 /////////////////////////////update data/////////////////
 
-
-
-
 void CGamestageBoss3::set_share_obj_data(CMovingBitmap &tmp_background, CMovingBitmap &tmp_character, CMovingBitmap &tmp_opera, CMovingBitmap &tmp_blood_bar, CMovingBitmap &tmp_energy_bar,
 	vector <CMovingBitmap> &tmp_dart, vector<CMovingBitmap> &tmp_bullet, vector<CMovingBitmap> &tmp_bricks, vector<CMovingBitmap> &tmp_lightning) {
+	
 	p_background = &tmp_background;
 	p_character = &tmp_character;
 	p_opera = &tmp_opera;
@@ -612,7 +655,6 @@ void CGamestageBoss3::set_share_obj_data(CMovingBitmap &tmp_background, CMovingB
 	p_bullet = &tmp_bullet;
 	p_bricks = &tmp_bricks;
 	p_lightning = &tmp_lightning;
-
 
 	background = tmp_background;
 	character = tmp_character;
@@ -651,7 +693,6 @@ void CGamestageBoss3::get_data() {
 	bricks = *p_bricks;
 	lightning = *p_lightning;
 };
-
 
 void CGamestageBoss3::share_data() {
 
