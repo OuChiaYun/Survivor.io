@@ -57,10 +57,7 @@ namespace game_framework {
 		void get_data(); // move now data to run with pointer
 		void share_data(); // move now data to run with pointer
 
-
 		int run = 1;
-
-
 
 	private:
 

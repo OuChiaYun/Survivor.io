@@ -42,10 +42,6 @@ namespace game_framework {
 
 		bool isSelect(UINT nFlags, CPoint point, CMovingBitmap &item);
 
-
-
-
-
 		void set_share_obj_data(CMovingBitmap &tmp_background, CMovingBitmap &tmp_character, CMovingBitmap &tmp_opera, CMovingBitmap &tmp_blood_bar, CMovingBitmap &tmp_energy_bar,
 			vector <CMovingBitmap> &tmp_dart, vector<CMovingBitmap> &tmp_bullet, vector<CMovingBitmap> &tmp_bricks, vector<CMovingBitmap> &tmp_lightning);
 		//set data's pointer & data obj
@@ -56,7 +52,6 @@ namespace game_framework {
 		void share_data(); // move now data to run with pointer
 
 		int run = 1;
-	
 
 	private:
 
@@ -97,9 +92,7 @@ namespace game_framework {
 		int k[4] = { -70, -100, -70, -100 };
 		int c[4] = { 40, 60, 40, 60 };
 		int x_move[4] = { -5, -5, 5, 5 };
-
 	};
-
 };
 
 #endif;

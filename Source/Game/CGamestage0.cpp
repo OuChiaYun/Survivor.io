@@ -921,7 +921,6 @@ void CGamestage0::get_data() {
 	lightning = *p_lightning;
 };
 
-
 void CGamestage0::share_data() {
 
 	*p_background = background;

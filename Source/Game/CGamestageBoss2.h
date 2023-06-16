@@ -55,12 +55,7 @@ namespace game_framework {
 		//move data = run
 		void get_data(); // move now data to run with pointer
 		void share_data(); // move now data to run with pointer
-
-
 		int run = 1;
-
-
-
 	private:
 
 		CMovingBitmap *p_background;
@@ -104,7 +99,6 @@ namespace game_framework {
 
 		int timmer = 0;
 	};
-
 };
 
 #endif;

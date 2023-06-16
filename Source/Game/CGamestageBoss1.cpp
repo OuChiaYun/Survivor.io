@@ -7,13 +7,11 @@
 #include "../Game/CGamestage_all.h"
 #include "../Library/gamecore.h"
 #include "../Game/mygame.h"
-
 #include <stdio.h>
 #include <stdlib.h>
 #include <time.h>
 #include <string>
 #include <ctime>
-
 
 using namespace game_framework;
 
@@ -337,7 +335,6 @@ void CGamestageBoss1::boss1_background() {
 	character.set_center((character.GetLeft() + 10), (character.GetTop() + 10));
 }
 
-
 void CGamestageBoss1::boss1_character_attack() {
 	for (int i = 0; i<int(bullet.size()); i++) {
 		if (boss1.IsOverlap(bullet[i], boss1)) {
@@ -413,7 +410,6 @@ void CGamestageBoss1::blood_bar_progress(CMovingBitmap &blood_bar, CMovingBitmap
 	}
 }
 
-
 void CGamestageBoss1::lightning_move(vector<CMovingBitmap> &item) {
 
 
@@ -441,7 +437,6 @@ void CGamestageBoss1::lightning_move(vector<CMovingBitmap> &item) {
 		}
 	}
 
-
 	int axay[5][4] = { {-5,2},{5,2},{-5,-2},{5,-2} };
 	if (flag % 4 == 0 && flag != 0) {
 		for (int i = 0; i < (int)lightning.size(); i++) {
@@ -455,7 +450,6 @@ void CGamestageBoss1::lightning_move(vector<CMovingBitmap> &item) {
 		}
 	}
 };
-
 
 void CGamestageBoss1::bricks_move(vector<CMovingBitmap> &item, int h, int k, int c, int x_move, int i) {
 	int x = item[i].GetLeft() + x_move;
@@ -483,7 +477,6 @@ void CGamestageBoss1::bricks_erase(vector<CMovingBitmap> &item) {
 			item[i].ram_n = (rand() + timmer) % 4;
 		}
 	}
-
 }
 
 bool CGamestageBoss1::isSelect(UINT nFlags, CPoint point, CMovingBitmap &item) {
@@ -538,7 +531,6 @@ void CGamestageBoss1::move_share_obj_data(CMovingBitmap &tmp_background, CMoving
 	tmp_bricks = bricks;
 };
 
-
 void CGamestageBoss1::get_data() {
 
 	background = *p_background;
@@ -551,7 +543,6 @@ void CGamestageBoss1::get_data() {
 	bricks = *p_bricks;
 	lightning = *p_lightning;
 };
-
 
 void CGamestageBoss1::share_data() {
 

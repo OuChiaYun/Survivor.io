@@ -14,7 +14,6 @@
 #include <string>
 #include <ctime>
 
-
 using namespace game_framework;
 
 void CGamestageBoss2::OnBeginState() {
@@ -66,12 +65,9 @@ void CGamestageBoss2::OnInit() {
 		boss2_bullet[i].SetAnimation(5, false);
 	}
 
-
-
 	boss2_range.LoadBitmapByString({ "Resources/boss2/boss2_range.bmp" }, RGB(255, 255, 255));
 	boss2_range.SetTopLeft(0, 0);
 	boss2.SetTopLeft(boss2_range.GetLeft() + 243, boss2_range.GetTop() + 130);
-
 
 	blood.LoadBitmapByString({ "Resources/ignore.bmp", "Resources/blood/bloodfx001_01.bmp",
 					"Resources/blood/bloodfx001_02.bmp", "Resources/blood/bloodfx001_03.bmp",
@@ -559,18 +555,12 @@ void CGamestageBoss2::boss2_bullet_move() {
 		}
 	}
 
-
 	if (flag == boss2_bullet.size()) {
 
 		for (int i = 0; i < 8; i++) {
-
 			boss2_bullet[i].SetTopLeft(boss2.get_center_x(), boss2.get_center_y());
-
 		}
-
-
 	}
-
 }
 
 int CGamestageBoss2::isVector() {
@@ -584,9 +574,6 @@ int CGamestageBoss2::isVector() {
 
 
 /////////////////////////////update data/////////////////
-
-
-
 
 void CGamestageBoss2::set_share_obj_data(CMovingBitmap &tmp_background, CMovingBitmap &tmp_character, CMovingBitmap &tmp_opera, CMovingBitmap &tmp_blood_bar, CMovingBitmap &tmp_energy_bar,
 	vector <CMovingBitmap> &tmp_dart, vector<CMovingBitmap> &tmp_bullet, vector<CMovingBitmap> &tmp_bricks, vector<CMovingBitmap> &tmp_lightning) {

@@ -142,7 +142,6 @@ namespace game_framework {
 
 		int dead_monster = 0;
 	};
-
 };
 
 #endif;

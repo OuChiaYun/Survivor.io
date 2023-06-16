@@ -640,7 +640,6 @@ int CGamestageBoss3::isVector() {
 	}
 }
 
-
 /////////////////////////////update data/////////////////
 
 void CGamestageBoss3::set_share_obj_data(CMovingBitmap &tmp_background, CMovingBitmap &tmp_character, CMovingBitmap &tmp_opera, CMovingBitmap &tmp_blood_bar, CMovingBitmap &tmp_energy_bar,

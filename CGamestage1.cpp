@@ -278,6 +278,7 @@ void CGamestage1::OnMove() {
 
 		bomb_timer += 1;
 		bomb.dart_hit_monster(bomb, monster, monster_vanish);
+		bomb.dart_hit_monster(bomb, big_monster, big_monster_vanish);
 
 		if (bomb_timer > 110) {
 			bomb_trigger = 0;
