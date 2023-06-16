@@ -35,6 +35,9 @@
 #include <direct.h>
 #include <string.h>
 #include "../Library/gameutil.h"
+
+#include "../Game/CGamestage_all.h"
+
 #include "../Library/gamecore.h"
 #include "../Game/config.h"
 #include "../Game/mygame.h"

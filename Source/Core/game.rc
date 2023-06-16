@@ -165,7 +165,7 @@ CAPTION "About game"
 FONT 8, "MS Sans Serif", 0, 0, 0x0
 BEGIN
     ICON            IDR_MAINFRAME,IDC_STATIC,11,17,20,20
-    LTEXT           "Leistungsstarkes Game Framework by ntut-xuan",IDC_STATIC,39,10,300,8,SS_NOPREFIX
+    LTEXT           "Leistungsstarkes Game Framework by ntut-xuan,Survivor.io made by Turtle and Sunny",IDC_STATIC,39,10,300,8,SS_NOPREFIX
 	LTEXT           "It is a revised game framework, base on game framework made by woei-kae, Chen", IDC_STATIC, 39, 23, 300, 8
     LTEXT           "Copyright (C) 2022-2023",IDC_STATIC,39,36,119,8
 END

@@ -38,16 +38,29 @@
  *      3. Use ShowInitProgress(percent) to display loading progress.
 */
 
-
+#include <string>
 namespace game_framework {
 	/////////////////////////////////////////////////////////////////////////////
 	// Constants
 	/////////////////////////////////////////////////////////////////////////////
 
 	enum AUDIO_ID {				// 定義各種音效的編號
+		AUDIO_MenuSelect,
+		AUDIO_GameStage,
+		AUDIO_GameBoss,
+		AUDIO_GameOver,
+		AUDIO_Attack,
 		AUDIO_DING,				// 0
 		AUDIO_LAKE,				// 1
 		AUDIO_NTUT				// 2
+	};
+
+	class CGanestage {
+		public:
+			CGanestage() {};
+		private:
+			int a;
+
 	};
 
 	class CGameStateValueStorage {
@@ -58,9 +71,17 @@ namespace game_framework {
 
 		static void set_victory_value(int);
 		static int get_victory_value();
+		static void set_data(string tmp_t, string tmp_dead, string tmp_name);
+		static string get_show_time();
+		static string get_dead_number();
+		static string get_weapon_name();
 	private:
-		static int init_background_value;
+		static int init_background_value; //static => chaaracter 
 		static int victory;
+		static string show_time;
+		static string dead_number;
+		static string weapon_name;
+
 	};
 	/////////////////////////////////////////////////////////////////////////////
 	// 這個class為遊戲的遊戲開頭畫面物件
@@ -74,6 +95,8 @@ namespace game_framework {
 		void OnBeginState();							// 設定每次重玩所需的變數
 		void OnKeyUp(UINT, UINT, UINT); 				// 處理鍵盤Up的動作
 		void OnLButtonDown(UINT nFlags, CPoint point);  // 處理滑鼠的動作
+		void OnMouseMove(UINT nFlags, CPoint point);
+		bool isSelect(UINT nFlags, CPoint point, CMovingBitmap &item);
 	protected:
 		void OnShow();									// 顯示這個狀態的遊戲畫面
 	private:
@@ -88,7 +111,15 @@ namespace game_framework {
 		CMovingBitmap select_scene2;
 		CMovingBitmap play;
 		CMovingBitmap play_bg;
+		CMovingBitmap character_logo;
+		CMovingBitmap comunicate_logo;
+		CMovingBitmap com_bg;		
+		CMovingBitmap com_no;
+
+		int show_text = 0;
+
 	};
+
 
 	/////////////////////////////////////////////////////////////////////////////
 	// 這個class為遊戲的遊戲執行物件，主要的遊戲程式都在這裡
@@ -109,68 +140,61 @@ namespace game_framework {
 		void OnRButtonDown(UINT nFlags, CPoint point);  // 處理滑鼠的動作
 		void OnRButtonUp(UINT nFlags, CPoint point);	// 處理滑鼠的動作
 
+		void show_baclground_selected();
+		void show_text();
+
+		void set_over_data();
+
+		bool isSelect(UINT nFlags, CPoint point, CMovingBitmap &item);
+
 	protected:
 		void OnMove();									// 移動遊戲元素
 		void OnShow();		// 顯示這個狀態的遊戲畫面
 	private:
-		CMovingBitmap background;
-		CMovingBitmap background2;
+		CGamestage0 t0;
+		CGamestage1 t1;
+		CGamestage2 t2;
+
+
+		CGamestageSelect select_stage; 
+		CGamestageBoss1 b1;
+		CGamestageBoss2 b2;
+		CGamestageBoss3 b3;
+
 		CMovingBitmap character;
+		CMovingBitmap background;
 		CMovingBitmap opera;
-		CMovingBitmap goal;
 		CMovingBitmap blood_bar;
-		CMovingBitmap blood_bar_boss1;
 		CMovingBitmap energy_bar;
-		CMovingBitmap boss2;
-		CMovingBitmap blood;
-		CMovingBitmap blood_boss1;
-
-
-		//CMovingBitmap dart;
 		vector <CMovingBitmap> dart;
-		vector <CMovingBitmap> energy;
-		vector<CMovingBitmap> monster;
-		vector<CMovingBitmap> monster_vanish;
-		vector<CMovingBitmap> hiden;
-
-		void show_img();
-		void show_text();
-		
-		void show_baclground_selected();
-
-		void background_move();
-		void item_move(CMovingBitmap &item);
-		void monster_move(CMovingBitmap &monster);
-		void dart_move(CMovingBitmap &item, int i, int setR);
-		void boss2_move();
-
-		bool isLeft(CMovingBitmap &character, CMovingBitmap &item);
-		bool isDown(CMovingBitmap &character, CMovingBitmap &item);
-
-
-		void random_born_item(vector<CMovingBitmap>&item,vector<string> str, vector<int>rgb);
-		void random_born_monster(vector<CMovingBitmap>&monster, vector<string> str_monster, vector<CMovingBitmap>&monster_vanish, vector<string> str_monster_vanish, vector<int>rgb_monster, vector<int>rgb_monster_vanish);
-		int hit_count = 0;
-		int timer = 0;
-
-		void monster_all();
-		void dart_all(int);
-
-		void blood_bar_progress(CMovingBitmap &blood_bar, CMovingBitmap &item_blood);
-
 		vector<CMovingBitmap> bullet;
-		void bullet_move(vector<CMovingBitmap> &item);
-		void bullet_erase(vector<CMovingBitmap> &item);
-		void born_bullet(vector<CMovingBitmap> &item, vector<string> str, vector<int>rgb);
+		vector<CMovingBitmap> bricks;
+		vector<CMovingBitmap> lightning;
 
-		CMovingBitmap boss1;
-		CMovingBitmap boss1_range;
-		vector<CMovingBitmap> boss1_bullet;
-		void boss1_background();
-		void boss1_character_attack();
-		void boss1_bullet_move();
+		CMovingBitmap timer_express;
+		CMovingBitmap dead_logo;
+		CMovingBitmap suspend_logo;
+		CMovingBitmap not_dead_logo;
 
+		clock_t a, b;
+		clock_t suspend_start  = 0, suspend_end = 0;
+		int boss_level = 0;
 		int level = 0;
+		int current_t = 0;
+		int pre_boss_t = 0;
+		int current_stage = 0;
+		int not_dead = 0;
+
+		CMovingBitmap weapon_logo[3] ;
+
+		template<typename T>
+		void select_temp(T &t);
+
+		int suspend = 0;
+
+		int weapon_list[4] = { 0,0,0,0 };//s
+		string weapon_name[3] = { "Bricks","Guardian","Lightning" };//
+
 	};
 
 	/////////////////////////////////////////////////////////////////////////////
@@ -182,6 +206,9 @@ namespace game_framework {
 	public:
 		CGameStateOver(CGame *g);
 		void OnBeginState();							// 設定每次重玩所需的變數
+		void OnMouseMove(UINT nFlags, CPoint point);
+		void OnLButtonDown(UINT nFlags, CPoint point);  // 處理滑鼠的動作
+		bool isSelect(UINT nFlags, CPoint point, CMovingBitmap &item);
 		void OnInit();
 	protected:
 		void OnMove();									// 移動遊戲元素
@@ -191,6 +218,7 @@ namespace game_framework {
 
 		CMovingBitmap victory;
 		CMovingBitmap die;
+		CMovingBitmap again;
 	};
 
 }
