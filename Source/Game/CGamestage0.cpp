@@ -29,6 +29,12 @@ void CGamestage0::OnBeginState() {
 	int min = -1450;
 	int max = 1450;
 
+	bomb_trigger = 0;
+	bomb_timer = 0;
+	bomb.SetFrameIndexOfBitmap(0);
+	bomb.set_limit_start_end(0, 0);
+	bomb.SetTopLeft(1000,1000);
+
 	for (int i = int(monster.size()); i < 35; i++) {
 
 		monster.push_back(monster_vanish[0]);
@@ -82,7 +88,6 @@ void CGamestage0::OnInit() {
 
 	}
 
-
 	blood.LoadBitmapByString({ "Resources/ignore.bmp", "Resources/blood/bloodfx001_01.bmp",
 							"Resources/blood/bloodfx001_02.bmp", "Resources/blood/bloodfx001_03.bmp",
 							"Resources/blood/bloodfx001_04.bmp", "Resources/blood/bloodfx001_05.bmp",
@@ -93,6 +98,15 @@ void CGamestage0::OnInit() {
 	magnet[0].LoadBitmapByString({ "Resources/props/magnet.bmp" , "Resources/ignore.bmp" }, RGB(255, 255, 255));
 	magnet[0].SetTopLeft(character.GetLeft() - 300, character.GetTop() - 300);
 
+	bomb.LoadBitmapByString({ "Resources/weapon/bomb.bmp" }, RGB(255, 255, 255));
+	bomb.LoadBitmapByString({"Resources/weapon/flamethrower_1_1.bmp", "Resources/weapon/flamethrower_1_2.bmp", "Resources/weapon/flamethrower_1_3.bmp",
+		"Resources/weapon/flamethrower_1_4.bmp" }, RGB(255 ,255, 255));
+
+	bomb.LoadBitmapByString({ "Resources/ignore.bmp" }, RGB(255, 255, 255));
+	bomb.SetFrameIndexOfBitmap(0);
+	bomb.SetTopLeft(1000,1000);
+	bomb.set_limit_start_end(0, 0);
+	bomb.SetAnimation(100, false);
 }
 
 void CGamestage0::OnKeyDown(UINT, UINT, UINT) {};
@@ -163,6 +177,7 @@ void CGamestage0::OnRButtonDown(UINT nFlags, CPoint point) {};
 void CGamestage0::OnRButtonUp(UINT nFlags, CPoint point) {};
 
 void CGamestage0::OnMove() {
+
 	get_data();
 	timer += 1;
 
@@ -241,6 +256,26 @@ void CGamestage0::OnMove() {
 		lightning[i].stdx += lightning[i].GetLeft() - ax;
 		lightning[i].stdy += lightning[i].GetTop() - ay;
 	}
+	item_move(bomb);
+
+	if (character.IsOverlap(character,bomb) && bomb.GetFrameIndexOfBitmap() == 0) {
+		bomb_trigger = 1;
+		bomb.set_limit_start_end(1, 4);
+	}
+
+	if (bomb_trigger == 1 && bomb_once == 0) {
+
+		bomb_timer += 1;
+		bomb.dart_hit_monster(bomb, monster, monster_vanish);
+
+		if (bomb_timer >110) {
+			bomb_trigger = 0;
+			bomb_timer = 0;
+			bomb.SetFrameIndexOfBitmap(0);
+			bomb.set_limit_start_end(0, 0);
+			bomb.SetTopLeft(rand()%1000-1000, rand()%1000-1000);
+		}
+	}
 
 	share_data();
 };
@@ -273,7 +308,11 @@ void CGamestage0::show_img() {
 		}
 	}
 
+	if (bomb.GetFrameIndexOfBitmap() >= bomb.limit_frame_end) {
+		bomb.SetFrameIndexOfBitmap(bomb.limit_frame_start);
+	}
 
+	bomb.ShowBitmap();
 
 	for (int i = 0; i < (int)monster_vanish.size(); i++) {
 		monster_vanish[i].ShowBitmap();
@@ -542,14 +581,10 @@ void CGamestage0::random_born_big_monster(vector<CMovingBitmap>&monster, vector<
 	monster[tail].SetTopLeft(x, y);
 	monster[tail].set_center(x + 45, y + 57);
 
-
 	monster[tail].SetFrameIndexOfBitmap(monster[tail].limit_frame_start);
 	monster[tail].set_limit_start_end(0, 3);
 
-
 }
-
-
 
 void CGamestage0::monster_all() {
 
@@ -558,7 +593,6 @@ void CGamestage0::monster_all() {
 		if (!monster[i].IsOverlap(character, monster[i])) {
 			monster_move(monster[i]);
 			blood.SetAnimation(50, true);
-
 		}
 		else {
 			character.add_sub_hp(-5);
@@ -566,7 +600,6 @@ void CGamestage0::monster_all() {
 			blood.ShowBitmap();
 		}
 	}
-
 
 	if (int(monster.size()) < 30 && monster_vanish.size() != 0) {
 
@@ -637,8 +670,6 @@ void CGamestage0::monster_move(CMovingBitmap &monster) {
 	}
 	else {
 		monster.set_limit_start_end(0, 9);
-
-
 	}
 	if (isDown(character, monster) && (monster.GetLeft() > 365 && monster.GetLeft() < 580)) {
 		monster.set_limit_start_end(20, 28);
@@ -718,9 +749,7 @@ void CGamestage0::show_baclground_selected(int s) {
 	}
 	else if (s == 1) {
 		background.SetFrameIndexOfBitmap(1);
-
 	}
-
 }
 
 void CGamestage0::lightning_move(vector<CMovingBitmap> &item) {
@@ -756,11 +785,7 @@ void CGamestage0::lightning_move(vector<CMovingBitmap> &item) {
 	}
 };
 
-
-
-
 void CGamestage0::monster_reset(CMovingBitmap &item) {
-
 
 	int min = -1450;
 	int max = 1450;
@@ -778,7 +803,6 @@ void CGamestage0::monster_reset(CMovingBitmap &item) {
 	else {
 		item.set_limit_start_end(0, 9);
 		item.SetFrameIndexOfBitmap(item.limit_frame_start);
-
 	}
 
 	if (isDown(character, item) && (item.GetLeft() > 365 && item.GetLeft() < 580)) {
@@ -788,8 +812,6 @@ void CGamestage0::monster_reset(CMovingBitmap &item) {
 	else {
 		item.SetFrameIndexOfBitmap(item.limit_frame_start);
 	}
-
-
 };
 
 

@@ -104,12 +104,13 @@ namespace game_framework {
 
 		////////////////////////
 		vector<CMovingBitmap> magnet;
+		CMovingBitmap bomb;
 //share
 
 		vector<CMovingBitmap> monster;
 		vector<CMovingBitmap> monster_vanish;
 		CMovingBitmap blood;
-		
+
 		vector<CMovingBitmap> big_monster;
 		vector<CMovingBitmap> big_monster_vanish;
 		vector<CMovingBitmap> big_monster_blood;
@@ -121,13 +122,14 @@ namespace game_framework {
 		int item_stdax;
 		int item_stday;
 
-		//CMovingBitmap timer_express;
-		//clock_t a, b;
-
 		int timer = 0;
 		int magnet_timer = 0;
 		int magnet_trigger = 0;
 		int magnet_once = 0;
+
+		int bomb_timer = 0;
+		int bomb_trigger = 0;
+		int bomb_once = 0;
 
 		int h[4] = { -30, -60, 30, 60 };
 		int k[4] = { -70, -100, -70, -100 };
@@ -135,7 +137,6 @@ namespace game_framework {
 		int x_move[4] = { -5, -5, 5, 5 };
 
 		int dead_monster = 0;
-
 
 	};
 

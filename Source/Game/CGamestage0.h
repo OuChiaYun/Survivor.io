@@ -59,27 +59,20 @@ namespace game_framework {
 		void show_text();
 		void show_img();
 
-
 		/////////////////////////////update data/////////////////
 		void set_share_obj_data(CMovingBitmap &tmp_background, CMovingBitmap &tmp_character, CMovingBitmap &tmp_opera, CMovingBitmap &tmp_blood_bar, CMovingBitmap &tmp_energy_bar,
 			vector <CMovingBitmap> &tmp_dart, vector<CMovingBitmap> &tmp_bullet, vector<CMovingBitmap> &tmp_bricks, vector<CMovingBitmap> &tmp_lightning);
-
-
 
 		void move_share_obj_data(CMovingBitmap &tmp_background, CMovingBitmap &tmp_character, CMovingBitmap &tmp_opera, CMovingBitmap &tmp_blood_bar, CMovingBitmap &tmp_energy_bar,
 			vector <CMovingBitmap> &tmp_dart, vector<CMovingBitmap> &tmp_bullet, vector<CMovingBitmap> &tmp_bricks, vector<CMovingBitmap> &tmp_lightning);
 		//move data = run
 
 		void get_data(); // move now data to run with pointer
-
 		void share_data();
 		//move data to point to run
 		int select = 0;
-
 		int run = 1;
-
 		int open_stat2 = 0;
-
 
 	private:
 
@@ -105,29 +98,28 @@ namespace game_framework {
 
 		////////////////////////
 		vector<CMovingBitmap> magnet;
+		CMovingBitmap bomb;
 		//share
 
 		vector<CMovingBitmap> monster;
 		vector<CMovingBitmap> monster_vanish;
 		CMovingBitmap blood;
 
-	//	vector<CMovingBitmap> big_monster;
-	//	vector<CMovingBitmap> big_monster_vanish;
-
 		vector<CMovingBitmap> heart;
-
 		vector <CMovingBitmap> energy;
 		int axay[4][2] = { {-2,2},{2,2},{-2,-2},{2,-2} };
 		int item_stdax;
 		int item_stday;
 
-		//CMovingBitmap timer_express;
-		//clock_t a, b;
 
 		int timer = 0;
 		int magnet_timer = 0;
 		int magnet_trigger = 0;
 		int magnet_once = 0;
+
+		int bomb_timer = 0;
+		int bomb_trigger = 0;
+		int bomb_once = 0;
 
 		int h[4] = { -30, -60, 30, 60 };
 		int k[4] = { -70, -100, -70, -100 };
@@ -135,8 +127,6 @@ namespace game_framework {
 		int x_move[4] = { -5, -5, 5, 5 };
 
 		int dead_monster = 0;
-
-
 	};
 
 };

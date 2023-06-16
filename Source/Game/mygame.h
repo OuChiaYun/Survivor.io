@@ -114,7 +114,6 @@ namespace game_framework {
 		CMovingBitmap character_logo;
 		CMovingBitmap comunicate_logo;
 		CMovingBitmap com_bg;		
-		CMovingBitmap com_text;
 		CMovingBitmap com_no;
 
 		int show_text = 0;

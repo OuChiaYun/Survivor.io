@@ -31,9 +31,6 @@ void CGameStateInit::OnInit()
 	com_bg.LoadBitmapByString({ "Resources/UI/com_bg.bmp" },RGB(255,255,255));
 	com_bg.SetTopLeft(70, 305);
 
-	com_text.LoadBitmapByString({ "Resources/character/text.bmp" },RGB(0,0,0));
-	com_text.SetTopLeft(180, 310);
-
 	com_no.LoadBitmapByString({ "Resources/UI/no.bmp" ,"Resources/UI/no_2.bmp" }, RGB(255, 255, 255));
 	com_no.SetTopLeft(860, 320);
 

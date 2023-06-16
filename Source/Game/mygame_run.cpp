@@ -81,7 +81,8 @@ void CGameStateRun::OnMove()							// 移動遊戲元素
 {
 	if (suspend == 0) {
 		b = clock();
-		current_t = (int)(b - a) / CLOCKS_PER_SEC;
+		current_t = (int)(b - a - (suspend_end - suspend_start)) / CLOCKS_PER_SEC;
+
 
 		if (current_t - pre_boss_t > 30) {
 			t0.run = 0;
@@ -223,16 +224,6 @@ void CGameStateRun::OnInit()  								// 遊戲的初值及圖形設定
 	not_dead_logo.SetTopLeft(1065 - suspend_logo.GetWidth() - not_dead_logo.GetWidth()-30, 10);
 	not_dead_logo.SetFrameIndexOfBitmap(0);
 
-	/*
-	CMovingBitmap background;
-	CMovingBitmap character;
-	CMovingBitmap opera;
-	CMovingBitmap blood_bar;
-	CMovingBitmap energy_bar;
-	vector <CMovingBitmap> dart;
-	vector<CMovingBitmap> bullet;
-	share with other class
-	*/
 	lightning.size();
 
 	t0.set_share_obj_data(background, character, opera, blood_bar, energy_bar, dart, bullet, bricks, lightning);
@@ -479,7 +470,6 @@ void CGameStateRun::show_baclground_selected() {
 	
 	background.SetFrameIndexOfBitmap(get_init_background_value());
 }
-
 
 void CGameStateRun::set_over_data() {
 	b = clock();

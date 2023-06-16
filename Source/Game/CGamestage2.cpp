@@ -23,6 +23,12 @@ void CGamestage2::OnBeginState() {
 	magnet_trigger = 0;
 	magnet[0].SetFrameIndexOfBitmap(0);
 
+	bomb_trigger = 0;
+	bomb_timer = 0;
+	bomb.SetFrameIndexOfBitmap(0);
+	bomb.set_limit_start_end(0, 0);
+	bomb.SetTopLeft(1000, 1000);
+
 	dead_monster = 0;
 	int min = -1450;
 	int max = 1450;
@@ -182,6 +188,16 @@ void CGamestage2::OnInit() {
 	magnet[0].LoadBitmapByString({ "Resources/props/magnet.bmp" , "Resources/ignore.bmp" }, RGB(255, 255, 255));
 	magnet[0].SetTopLeft(character.GetLeft() - 300, character.GetTop() - 300);
 
+	bomb.LoadBitmapByString({ "Resources/weapon/bomb.bmp" }, RGB(255, 255, 255));
+	bomb.LoadBitmapByString({ "Resources/weapon/flamethrower_1_1.bmp", "Resources/weapon/flamethrower_1_2.bmp", "Resources/weapon/flamethrower_1_3.bmp",
+		"Resources/weapon/flamethrower_1_4.bmp" }, RGB(255, 255, 255));
+	bomb.LoadBitmapByString({ "Resources/ignore.bmp" }, RGB(255, 255, 255));
+
+	bomb.SetFrameIndexOfBitmap(0);
+	bomb.SetTopLeft(1000, 1000);
+	bomb.set_limit_start_end(0, 0);
+	bomb.SetAnimation(100, false);
+
 }
 
 void CGamestage2::OnKeyDown(UINT, UINT, UINT) {};
@@ -299,6 +315,26 @@ void CGamestage2::OnMove() {
 		}
 	}
 
+	item_move(bomb);
+
+	if (character.IsOverlap(character, bomb) && bomb.GetFrameIndexOfBitmap() == 0) {
+		bomb_trigger = 1;
+		bomb.set_limit_start_end(1, 4);
+	}
+
+	if (bomb_trigger == 1 && bomb_once == 0) {
+
+		bomb_timer += 1;
+		bomb.dart_hit_monster(bomb, monster, monster_vanish);
+
+		if (bomb_timer > 110) {
+			bomb_trigger = 0;
+			bomb_timer = 0;
+			bomb.SetFrameIndexOfBitmap(0);
+			bomb.set_limit_start_end(0, 0);
+			bomb.SetTopLeft(rand() % 1000 - 1000, rand() % 1000 - 1000);
+		}
+	}
 
 	monster_all();
 
@@ -425,7 +461,11 @@ void CGamestage2::show_img() {
 	}
 
 	magnet[0].ShowBitmap();
+	if (bomb.GetFrameIndexOfBitmap() >= bomb.limit_frame_end) {
+		bomb.SetFrameIndexOfBitmap(bomb.limit_frame_start);
+	}
 
+	bomb.ShowBitmap();
 	blood.ShowBitmap();
 	blood_bar.ShowBitmap();
 	opera.ShowBitmap();

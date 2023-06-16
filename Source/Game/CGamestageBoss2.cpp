@@ -293,7 +293,6 @@ void CGamestageBoss2::show_text() {
 	}
 
 	CDDraw::ReleaseBackCDC();
-
 }
 
 

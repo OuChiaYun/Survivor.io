@@ -194,7 +194,9 @@ void CGamestageBoss1::OnMove() {
 	lightning_move(lightning);
 
 
-	if(timmer > 150){
+	if(timmer > 200){
+
+
 		boss1_bullet_move();
 		boss1_character_attack();
 		blood_bar_progress(blood_bar_boss1, boss1);
