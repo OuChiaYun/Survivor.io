@@ -9,6 +9,10 @@
 #include <string.h>
 #include "audio.h"
 #include "gameutil.h"
+//#include "../Game/CGamestage1.h"
+//#include"../Game/CGamestageSelect.h"
+//#include "../Game/CGamestageBoss1.h"
+#include "../Game/CGamestage_all.h"
 #include "gamecore.h"
 #include "Shlwapi.h"
 #include "../Game/config.h"

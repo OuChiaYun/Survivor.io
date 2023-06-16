@@ -108,23 +108,56 @@ namespace game_framework {
 		void set_center(int x, int y);
 		void set_timer(int t);
 		void set_hp(int blood);
+		void set_hp_max(int blood);
+		void set_energy(int energy_v);
+		void set_limit_start_end(int start,int end);
+		void set_hit_x(int x, int index);
+		void set_hit_y(int y, int index);
+		void set_hurted(int b);
 
 		int get_center_x();
 		int get_center_y();
 		int get_timer();
 		int get_hp();
+		int get_hp_max();
+		int get_energy();
+		int get_hit_x(int index);
+		int get_hit_y(int index);
+
+		int ishurted();
 
 		void add_timer(int s);
 		void add_sub_hp(int blood);
+		void add_energy(int energy_v);
+
+		void dart_hit_monster(CMovingBitmap &dart, vector<CMovingBitmap> &monster, vector<CMovingBitmap> &monster_vanish);
+		void dart_hit_monster (vector<CMovingBitmap> &dart, vector<CMovingBitmap> &monster, vector<CMovingBitmap> &monster_vanish);
+		void item_hit(CMovingBitmap &character, vector<CMovingBitmap> &item);
+		void item_hit_energy(CMovingBitmap &character, vector<CMovingBitmap> &item, CMovingBitmap &energy_bar);
 
 
-		void dart_hit_monster (vector<CMovingBitmap> &dart, vector<CMovingBitmap> &monster);
-		void item_hit(CMovingBitmap &character, CMovingBitmap &item);
-		
 		int center_x = 0;
 		int center_y = 0;
 		int timer = 0;
 		int hp = 0;
+		int hp_max = 0;
+		int limit_frame_start = 0;
+		int limit_frame_end = 0;
+		int ax = 0;
+		int ay = 0;
+		int energy = 0;
+		int stdx = 0;
+		int stdy = 0;
+
+		vector<int> boss1_hit_x = { 0, 0, 0 };
+		vector<int> boss1_hit_y = { 0, 0, 0 };
+		vector<int> boss3_hit_x = { 0, 0, 0 };
+		vector<int> boss3_hit_y = { 0, 0, 0 };
+
+		int ram_n = 0;
+		int set_end = 0;
+		int hurted = 0;
+
 		//////////////
 		/* Getter */
 		int   GetFrameIndexOfBitmap();
@@ -163,6 +196,7 @@ namespace game_framework {
 		bool isOnce = false;
 		vector<CRect>    locations;			// location of the bitmap
 		vector<unsigned> surfaceID;
+
 		clock_t last_time = clock();
 		//! 儲存物件讀取的圖片路徑
 		string   imageFileName = "";
@@ -178,6 +212,13 @@ namespace game_framework {
 	public:
 		void static Print(CDC *pdc, int x, int y, string str);
 		void static ChangeFontLog(CDC *pdc, int size, string fontName, COLORREF fontColor, int weight = 500);
+	};
+
+
+	class a : public CMovingBitmap {
+
+
+
 	};
 
 }

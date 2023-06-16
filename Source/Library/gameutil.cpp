@@ -9,6 +9,8 @@
 #include <string.h>
 #include "audio.h"
 #include "gameutil.h"
+
+#include "../Game/CGamestage_all.h"
 #include "gamecore.h"
 #include "Shlwapi.h"
 #include "../Game/config.h"
@@ -457,13 +459,58 @@ namespace game_framework {
 		hp = blood;
 	}
 
+	void CMovingBitmap::set_hp_max(int blood) {
+		hp_max = blood;
+	}
+
+	void CMovingBitmap::set_hurted(int b) {
+		hurted = b;
+	};
+
 	int CMovingBitmap::get_hp(){
 		return hp;
+	};
+
+	int CMovingBitmap::get_hp_max() {
+		return hp_max;
 	};
 
 	void CMovingBitmap::add_sub_hp(int blood) {
 		hp = hp + blood;
 	}
+
+	void CMovingBitmap::set_energy(int energy_v) {
+		energy = energy_v;
+	}
+	int CMovingBitmap::get_energy() {
+		return energy;
+	};
+	void CMovingBitmap::add_energy(int energy_v) {
+		energy += energy_v;
+	}
+
+	void CMovingBitmap::set_hit_x(int x, int index) {
+		boss1_hit_x[index] = x;
+	}
+	void CMovingBitmap::set_hit_y(int y, int index) {
+		boss1_hit_y[index] = y;
+	}
+
+	int CMovingBitmap::get_hit_x(int index) {
+		return boss1_hit_x[index];
+	};
+	int CMovingBitmap::get_hit_y(int index) {
+		return boss1_hit_y[index];
+	};
+
+	int CMovingBitmap::ishurted() {
+		if (hurted == 0) {
+			return 0;
+		}
+		else {
+			return 1;
+		}
+	};
 
 	/////////////////////////////
 
